@@ -1,4 +1,4 @@
-# Creational Design Patters
+# Creational Design Patterns
 
 **_Singleton_**
 
