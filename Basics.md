@@ -98,5 +98,7 @@ class Example {
 Output:
 
 Static Method
+
 Instance Block
+
 Constructor
