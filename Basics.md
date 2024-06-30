@@ -40,5 +40,7 @@ class Example {
 ```
 Output : 
 Static Initialization Block
+
 Instance Initialization Block
+
 Constructor
