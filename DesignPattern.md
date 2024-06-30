@@ -21,6 +21,11 @@ public final class Singleton {
     public String value;
 
     private Singleton(String value) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
         this.value = value;
     }
 
@@ -31,4 +36,23 @@ public final class Singleton {
         return instance;
     }
 }
+```
+Client Code
+
+```
+public class DemoSingleThread {
+    public static void main(String[] args) {
+        System.out.println("If you see the same value, then singleton is reused" + "\n" +
+                "If you see different values, then not" + "\n\n" +
+                "RESULT:" + "\n");
+        Singleton singleton = Singleton.getInstance("FOO");
+        Singleton anotherSingleton = Singleton.getInstance("BAR");
+        System.out.println(singleton.value);
+        System.out.println(anotherSingleton.value);
+    }
+}
+```
+
+Naïve Singleton (multithreaded)
+
 ```
