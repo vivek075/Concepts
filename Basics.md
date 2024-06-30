@@ -44,3 +44,59 @@ Static Initialization Block
 Instance Initialization Block
 
 Constructor
+# What happens if there is an exception in a static initialization block?
+If an exception occurs in a static initialization block, it prevents the class from being loaded, resulting in a `ExceptionInInitializerError`. This error occurs the first time the class is accessed.
+
+```
+class Example {
+    static {
+        System.out.println("Static Block");
+        if (true) {
+            throw new RuntimeException("Exception in static block");
+        }
+    }
+    
+    public static void main(String[] args) {
+        try {
+            new Example();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+}
+```
+Output:
+
+Static Block
+java.lang.ExceptionInInitializerError
+Caused by: java.lang.RuntimeException: Exception in static block
+    at Example.<clinit>(Example.java:6)
+# Can you access instance variables in a static initialization block?
+No, instance variables cannot be accessed directly in a static initialization block because static blocks do not belong to an instance of the class. They are executed when the class is loaded and no instance exists at that point.
+# Can you call a static method in an instance initialization block?
+Yes, you can call a static method in an instance initialization block since static methods belong to the class and can be accessed without an instance.
+```
+class Example {
+    static void staticMethod() {
+        System.out.println("Static Method");
+    }
+    
+    {
+        staticMethod(); // Calling static method
+        System.out.println("Instance Block");
+    }
+    
+    Example() {
+        System.out.println("Constructor");
+    }
+    
+    public static void main(String[] args) {
+        new Example();
+    }
+}
+```
+Output:
+
+Static Method
+Instance Block
+Constructor
