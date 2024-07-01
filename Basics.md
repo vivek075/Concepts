@@ -95,6 +95,38 @@ Extension class loader: It is a child of the bootstrap class loader. It loads th
 
 System/Application class loader: It is a child of the extension class loader. It is responsible to load classes from the application classpath. It internally uses Environment Variable which mapped to java.class.path. It is also implemented in Java by the sun.misc.Launcher$AppClassLoader class.
 
+JVM follows the `Delegation-Hierarchy principle` to load classes. System class loader delegate load request to extension class loader and extension class loader delegate request to the bootstrap class loader. If a class found in the boot-strap path, the class is loaded otherwise request again transfers to the extension class loader and then to the system class loader. At last, if the system class loader fails to load class, then we get run-time exception java.lang.ClassNotFoundException. 
+
+**JVM Memory **
+
+Method area: In the method area, all class level information like class name, immediate parent class name, methods and variables information etc. are stored, including static variables. There is only one method area per JVM, and it is a shared resource. 
+
+Heap area: Information of all objects is stored in the heap area. There is also one Heap Area per JVM. It is also a shared resource.
+
+Stack area: For every thread, JVM creates one run-time stack which is stored here. Every block of this stack is called activation record/stack frame which stores methods calls. All local variables of that method are stored in their corresponding frame. After a thread terminates, its run-time stack will be destroyed by JVM. It is not a shared resource.
+
+PC Registers: Store address of current execution instruction of a thread. Obviously, each thread has separate PC Registers.
+
+Native method stacks: For every thread, a separate native stack is created. It stores native method information. 
+
+**Execution Engine**
+
+Execution engine executes the “.class” (bytecode). It reads the byte-code line by line, uses data and information present in various memory area and executes instructions. It can be classified into three parts:
+
+Interpreter: It interprets the bytecode line by line and then executes. The disadvantage here is that when one method is called multiple times, every time interpretation is required.
+
+Just-In-Time Compiler(JIT) : It is used to increase the efficiency of an interpreter. It compiles the entire bytecode and changes it to native code so whenever the interpreter sees repeated method calls, JIT provides direct native code for that part so re-interpretation is not required, thus efficiency is improved.
+
+Garbage Collector: It destroys un-referenced objects. For more on Garbage Collector, refer Garbage Collector.
+
+Java Native Interface (JNI) : 
+
+It is an interface that interacts with the Native Method Libraries and provides the native libraries(C, C++) required for the execution. It enables JVM to call C/C++ libraries and to be called by C/C++ libraries which may be specific to hardware.
+
+Native Method Libraries : 
+
+It is a collection of the Native Libraries(C, C++) which are required by the Execution Engine.
+
 # Shallow Copy
 - It is fast as no new memory is allocated.
 - Changes in one entity is reflected in other entity.
