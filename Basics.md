@@ -103,6 +103,7 @@ Instance Block
 
 Constructor
 
+``Example`` :
 ```
 class ExampleBlock {
     {
