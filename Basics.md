@@ -102,3 +102,47 @@ Static Method
 Instance Block
 
 Constructor
+
+```
+class ExampleBlock {
+    {
+        System.out.println("ExampleBlock : Instance Initialization Block - 1");
+    }
+    static {
+        System.out.println("ExampleBlock : Static Instance Initialization Block - 1");
+    }
+    ExampleBlock() {
+        System.out.println("ExampleBlock : Default Constructor");
+    }
+}
+class SubExampleBlock extends ExampleBlock {
+    {
+        System.out.println("SubExampleBlock : Instance Initialization Block - 1");
+    }
+    static {
+        System.out.println("SubExampleBlock : Static Instance Initialization Block - 1");
+    }
+    SubExampleBlock() {
+        System.out.println("SubExampleBlock : Default Constructor");
+    }
+}
+
+public class StaticInitializationBlockEx {
+    public static void main(String[] args) {
+        ExampleBlock subExampleBlock = new SubExampleBlock();
+    }
+}
+```
+Output:
+
+ExampleBlock : Static Instance Initialization Block - 1
+
+SubExampleBlock : Static Instance Initialization Block - 1
+
+ExampleBlock : Instance Initialization Block - 1
+
+ExampleBlock : Default Constructor
+
+SubExampleBlock : Instance Initialization Block - 1
+
+SubExampleBlock : Default Constructor
