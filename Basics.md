@@ -276,3 +276,79 @@ ExampleBlock : Default Constructor
 SubExampleBlock : Instance Initialization Block - 1
 
 SubExampleBlock : Default Constructor
+
+---
+
+### Suppose We Have a Circular Reference (Two Objects That Reference Each Other). Could Such Pair of Objects Become Eligible for Garbage Collection and Why?
+
+Yes, in Java, a pair of objects with a circular reference can become eligible for garbage collection. The eligibility for garbage collection depends on whether the objects are reachable from any live thread or root references in the program. Here’s a detailed explanation:
+
+**Garbage Collection in Java**
+Java's garbage collection is based on the concept of reachability. An object is considered reachable if it can be accessed, directly or indirectly, from a set of root references known as GC roots. GC roots include:
+
+References from currently active threads
+
+Static references
+
+References from active methods
+
+**Circular References in Java**
+A circular reference occurs when two or more objects reference each other, forming a cycle. For example:
+
+```
+class Node {
+    Node reference;
+}
+
+// Create two nodes that reference each other
+Node node1 = new Node();
+Node node2 = new Node();
+node1.reference = node2;
+node2.reference = node1;
+```
+
+Here, node1 and node2 reference each other, creating a circular reference.
+
+**Reachability Analysis in Java**
+Java's garbage collector (GC) performs reachability analysis to determine which objects can be collected:
+
+- Root Set Identification: The GC starts by identifying a set of root references (GC roots).
+
+- Mark Phase: The GC traverses the object graph, starting from the GC roots, and marks all reachable objects.
+
+- Sweep Phase: The GC identifies objects that are not marked as reachable and reclaims their memory.
+
+**Circular References and Garbage Collection**
+
+Even if node1 and node2 reference each other, they can still become eligible for garbage collection if they are not reachable from any GC roots. Here’s how:
+
+- External References Removed: Suppose the only references to node1 and node2 are their mutual references, and no other object or root references node1 or node2.
+  
+- Unreachable Cycle: Since no GC root can reach node1 or node2, the entire cycle formed by node1 and node2 is unreachable.
+
+- Eligible for Collection: The garbage collector, upon detecting that node1 and node2 are not reachable from any GC roots, will mark them for collection and reclaim their memory.
+
+```
+public class CircularReferenceDemo {
+    static class Node {
+        Node reference;
+    }
+
+    public static void main(String[] args) {
+        // Create two nodes that reference each other
+        Node node1 = new Node();
+        Node node2 = new Node();
+        node1.reference = node2;
+        node2.reference = node1;
+
+        // Remove external references
+        node1 = null;
+        node2 = null;
+
+        // At this point, node1 and node2 are only reachable through each other.
+        // Java's garbage collector will detect this circular reference and collect the objects.
+    }
+}
+```
+
+In this example, after setting `node1` and `node2` to `null`, the objects they referenced are no longer reachable from any GC roots. Despite the circular reference, Java’s garbage collector can detect that node1 and node2 are unreachable and will collect them.
