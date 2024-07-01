@@ -62,6 +62,7 @@ On compilation Java compiler generates .class from .java files with same name as
 Responsible for three activities. 
 
 - Loading
+
 The Class loader reads the “.class” file, generate the corresponding binary data and save it in the method area. For each “.class” file, JVM stores the following information in the method area.
 
 The fully qualified name of the loaded class and its immediate parent class.
