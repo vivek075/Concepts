@@ -97,7 +97,7 @@ System/Application class loader: It is a child of the extension class loader. It
 
 JVM follows the `Delegation-Hierarchy principle` to load classes. System class loader delegate load request to extension class loader and extension class loader delegate request to the bootstrap class loader. If a class found in the boot-strap path, the class is loaded otherwise request again transfers to the extension class loader and then to the system class loader. At last, if the system class loader fails to load class, then we get run-time exception java.lang.ClassNotFoundException. 
 
-**JVM Memory **
+**JVM Memory**
 
 Method area: In the method area, all class level information like class name, immediate parent class name, methods and variables information etc. are stored, including static variables. There is only one method area per JVM, and it is a shared resource. 
 
