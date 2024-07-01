@@ -47,6 +47,9 @@ An implementation is a computer program that meets the requirements of the JVM s
 A Runtime instance of JVM is created, whenever we write a java command on the command prompt to run the java class
 JVM is responsible for executing the java program line by line, hence it is also known as an interpreter.
 
+# How JVM Works
+
+
 
 # Shallow Copy
 - It is fast as no new memory is allocated.
