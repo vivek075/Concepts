@@ -1,3 +1,40 @@
+# JDK, JRE & JVM
+**Java Development Kit** (JDK) is a software development environment used for developing Java applications and applets. 
+It includes:
+    - Java Runtime Environment (JRE), 
+    - Interpreter/loader (Java), 
+    - Compiler (javac), 
+    - Archiver (jar), 
+    - Documentation generator (Javadoc), 
+    - Other tools needed in Java development.
+JDK (Java Development Kit) is a Kit that provides the environment to develop and execute(run) the Java program. 
+JDK is a kit(or package) that includes two things
+a) Development Tools(to provide an environment to develop your java programs)
+b) JRE (to execute your java program).
+
+**JRE** stands for “Java Runtime Environment”
+The Java Runtime Environment provides the minimum requirements for executing a Java application; 
+Consists of the Java Virtual Machine (JVM), core classes, and supporting files. 
+
+JRE (Java Runtime Environment) is an installation package that provides an environment to only run(not develop) the java program(or application)onto your machine.
+
+Components of JRE are as follows:
+
+Deployment technologies: Including deployment, Java Web Start, and Java Plug-in.
+User interface toolkits: Including Abstract Window Toolkit (AWT), Swing, Java 2D, Image I/O, Print Service, Sound, drag, and drop (DnD).
+Integration libraries: Including Interface Definition Language (IDL), Java Database Connectivity (JDBC), Java Naming and Directory Interface (JNDI), Remote Method Invocation (RMI), Remote Method Invocation Over Internet Inter-Orb Protocol (RMI-IIOP), and scripting.
+Other base libraries: Including international support, input/output (I/O), extension mechanism, Beans, Java Management Extensions (JMX), Java Native Interface (JNI), Math, Networking, Override Mechanism, Security, Serialization, and Java for XML Processing (XML JAXP).
+Lang and util base libraries: Including lang and util, management, versioning, zip, instrument, reflection, Collections, Concurrency Utilities, Java Archive (JAR), Logging, Preferences API, Ref Objects, and Regular Expressions.
+Java Virtual Machine (JVM): Including Java HotSpot Client and Server Virtual Machines.
+
+**JVM**, which stands out for java virtual machines. It is as follows:
+A specification where the working of Java Virtual Machine is specified. But implementation provider is independent to choose the algorithm. 
+Its implementation has been provided by Sun and other companies.
+An implementation is a computer program that meets the requirements of the JVM specification.
+Runtime Instance Whenever we write a java command on the command prompt to run the java class, an instance of JVM is created.
+Java program we run using JRE or JDK goes into JVM and JVM is responsible for executing the java program line by line, hence it is also known as an interpreter.
+
+
 # Shallow Copy
 - It is fast as no new memory is allocated.
 - Changes in one entity is reflected in other entity.
