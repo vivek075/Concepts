@@ -277,6 +277,52 @@ SubExampleBlock : Instance Initialization Block - 1
 
 SubExampleBlock : Default Constructor
 
+**Another Example:**
+
+```
+public class Superclass {
+    {
+        System.out.println("Superclass Instance Initialization block");
+    }
+    static {
+        System.out.println("Superclass static Initialization block");
+    }
+    Superclass() {
+        System.out.println("Superclass default constructor");
+    }
+}
+class Subclass extends Superclass {
+    {
+        System.out.println("Subclass Instance Initialization block");
+    }
+    static {
+        System.out.println("Subclass static Initialization block");
+    }
+    Subclass() {
+        this("hi");
+        System.out.println("Subclass default constructor");
+    }
+
+    public Subclass(String hi) {
+        System.out.println("Subclass parametrized constructor");
+    }
+}
+class Demo {
+    public static void main(String[] args) {
+        Superclass obj = new Subclass();
+    }
+}
+```
+``Output:``
+
+Superclass static Initialization block
+Subclass static Initialization block
+Superclass Instance Initialization block
+Superclass default constructor
+Subclass Instance Initialization block
+Subclass parametrized constructor
+Subclass default constructor
+
 ---
 
 ### Suppose We Have a Circular Reference (Two Objects That Reference Each Other). Could Such Pair of Objects Become Eligible for Garbage Collection and Why?
