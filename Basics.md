@@ -354,3 +354,7 @@ public class CircularReferenceDemo {
 In this example, after setting `node1` and `node2` to `null`, the objects they referenced are no longer reachable from any GC roots. Despite the circular reference, Java’s garbage collector can detect that node1 and node2 are unreachable and will collect them.
 
 In summary, in Java, circular references do not prevent garbage collection. The garbage collector is capable of detecting cycles of unreachable objects and reclaiming their memory. The key factor is reachability from GC roots. If the objects involved in the circular reference are not reachable from any GC roots, they will be collected, regardless of their mutual references.
+
+# Access Modifier
+
+![image info](./AccessModifier.jpg)
