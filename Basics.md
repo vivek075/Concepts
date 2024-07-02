@@ -316,11 +316,17 @@ class Demo {
 ``Output:``
 
 Superclass static Initialization block
+
 Subclass static Initialization block
+
 Superclass Instance Initialization block
+
 Superclass default constructor
+
 Subclass Instance Initialization block
+
 Subclass parametrized constructor
+
 Subclass default constructor
 
 ---
