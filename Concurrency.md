@@ -119,5 +119,16 @@ class SConsumer implements Runnable {
         }
     }
 }
-
+Output :
+semaphoreProducer permit=1 | semaphoreConsumer permit=0
+Produced : 1
+Consumed : 1
+Produced : 2
+Consumed : 2
+Produced : 3
+Consumed : 3
+Produced : 4
+Consumed : 4
+Produced : 5
+Consumed : 5
 ```
