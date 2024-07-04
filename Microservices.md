@@ -1,5 +1,5 @@
 
-![image info](./microservices.jpg)
+![image info](./images/microservices.jpg)
 
 # Principles of Microservices Architecture
 
