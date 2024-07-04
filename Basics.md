@@ -55,7 +55,7 @@ Java applications are called WORA (Write Once Run Anywhere).
 
 On compilation Java compiler generates .class from .java files with same name as in .java file. This .class file goes into various steps when we run it. These steps together describe the whole JVM. 
 
-![image info](./JVM.png)
+![image info](./images/JVM.png)
 
 **Class Loader Subsystem**
 
