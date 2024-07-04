@@ -146,7 +146,7 @@ public class PaymentService {
 }
 Explanation: PaymentService depends on the PaymentProcessor interface rather than a concrete class, making it easier to switch between different payment processors.
 ```
-
+---
 # Creational Design Patterns
 
 **_Singleton_**
