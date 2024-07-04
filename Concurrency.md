@@ -18,7 +18,7 @@ This value can be negative, in which case releases must occur before any acquire
 
 If permits is 1, then only one threads that can access shared resource at a time.
 
-_Semaphore(int permits, boolean fair) _
+_Semaphore(int permits, boolean fair)_
 
 permits is the initial number of permits available.
 
