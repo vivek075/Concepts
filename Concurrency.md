@@ -59,3 +59,65 @@ _void release(int permits)_
 
   Releases permits number of permits and increases the number of available permits by permits.
   For releasing lock by calling release(int permits) method it’s not mandatory that thread must have acquired permit by calling acquire()/acquire(int permit) method.
+
+```
+import java.util.concurrent.Semaphore;
+
+public class ProducerConsumerSemaphoreExample {
+    public static void main(String[] args) {
+        Semaphore semaphoreProducer=new Semaphore(1);
+        Semaphore semaphoreConsumer=new Semaphore(0);
+        System.out.println("semaphoreProducer permit=1 | semaphoreConsumer permit=0");
+
+        SProducer producer=new SProducer(semaphoreProducer,semaphoreConsumer);
+        SConsumer consumer=new SConsumer(semaphoreConsumer,semaphoreProducer);
+
+        Thread producerThread = new Thread(producer, "ProducerThread");
+        Thread consumerThread = new Thread(consumer, "ConsumerThread");
+
+        producerThread.start();
+        consumerThread.start();
+    }
+}
+class SProducer implements Runnable {
+    Semaphore semaphoreProducer;
+    Semaphore semaphoreConsumer;
+    public SProducer(Semaphore semaphoreProducer,Semaphore semaphoreConsumer) {
+        this.semaphoreProducer=semaphoreProducer;
+        this.semaphoreConsumer=semaphoreConsumer;
+    }
+    @Override
+    public void run() {
+        for(int i=1;i<=5;i++){
+            try {
+                semaphoreProducer.acquire();
+                System.out.println("Produced : "+i);
+                semaphoreConsumer.release();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+class SConsumer implements Runnable {
+    Semaphore semaphoreProducer;
+    Semaphore semaphoreConsumer;
+    public SConsumer(Semaphore semaphoreConsumer,Semaphore semaphoreProducer) {
+        this.semaphoreProducer=semaphoreProducer;
+        this.semaphoreConsumer=semaphoreConsumer;
+    }
+    @Override
+    public void run() {
+        for(int i=1;i<=5;i++){
+            try {
+                semaphoreConsumer.acquire();
+                System.out.println("Consumed : "+i);
+                semaphoreProducer.release();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+```
