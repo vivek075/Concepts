@@ -409,4 +409,4 @@ In summary, in Java, circular references do not prevent garbage collection. The 
 
 # Access Modifier
 
-![image info](./AccessModifier.jpg)
+![image info](./images/AccessModifier.jpg)
