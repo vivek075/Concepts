@@ -52,3 +52,65 @@ Teams are cross-functional, organized around business capabilities, and own the 
 12. Event-Driven Architecture
 
 Microservices often use event-driven architecture for asynchronous communication between services. This can improve performance and resilience by decoupling services and enabling them to react to events in real-time.
+
+---
+
+Querying data from multiple databases in a microservices architecture can be challenging due to the decentralized data management principle. However, several strategies and patterns can be employed to effectively query and aggregate data from multiple microservices:
+
+1. API Composition
+API Composition involves an API gateway or a dedicated service that calls multiple microservices and aggregates the results. This approach is suitable for simple aggregations and read operations.
+
+API Gateway: Acts as a single entry point for client requests, orchestrating calls to multiple microservices and aggregating the results.
+Backend for Frontend (BFF): A specific type of API gateway tailored to the needs of a particular client interface.
+
+2. Database Per Service with Data Replication
+Each microservice owns its own database, but certain data can be replicated across services to reduce the need for cross-service queries.
+
+Event-Driven Data Replication: Use an event-driven architecture to replicate data between services. Services publish events when their data changes, and other services subscribe to these events to update their own data stores.
+
+```
+// Service A publishes an event
+public void updateDataA(DataA dataA) {
+    dataRepository.save(dataA);
+    eventPublisher.publishEvent(new DataAUpdatedEvent(dataA));
+}
+
+// Service B listens for the event
+@EventListener
+public void handleDataAUpdated(DataAUpdatedEvent event) {
+    dataBRepository.updateWithDataA(event.getDataA());
+}
+```
+3. CQRS (Command Query Responsibility Segregation)
+CQRS separates the read and write operations, allowing for optimized data retrieval and updates. Read models can aggregate data from multiple sources.
+
+Command Side: Handles write operations.
+Query Side: Handles read operations, often using a different data model optimized for queries.
+
+```
+// Command Handler
+public class CreateOrderCommandHandler {
+    public void handle(CreateOrderCommand command) {
+        // Handle command logic
+    }
+}
+
+// Query Handler
+public class OrderQueryHandler {
+    public OrderDTO getOrder(String orderId) {
+        // Retrieve data from multiple sources and aggregate
+        Order order = orderRepository.findById(orderId);
+        Customer customer = customerRepository.findByOrderId(orderId);
+        return new OrderDTO(order, customer);
+    }
+}
+```
+4. Database Views and Joins
+In some cases, you can use database views or federated queries to aggregate data from multiple databases, especially if using a multi-model database that supports such operations.
+
+Federated Queries: Queries that span multiple databases, often used in data warehousing.
+
+5. GraphQL
+GraphQL can be used as an API layer to aggregate data from multiple microservices. It allows clients to request exactly the data they need and can efficiently compose data from multiple sources.
+
+Note : Querying data from multiple databases in a microservices architecture requires careful planning and design. The choice of strategy depends on the specific requirements, such as the need for real-time data, the complexity of the queries, and the consistency requirements. Using a combination of API composition, data replication, CQRS, federated queries, and GraphQL can help achieve efficient and scalable data retrieval across multiple microservices.
