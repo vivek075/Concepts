@@ -161,7 +161,6 @@ Singleton examples in Java core libraries:
 
 `java.lang.System#getSecurityManager()`
 
----
 **Naïve Singleton (single-threaded)**
 
 ```
@@ -287,3 +286,4 @@ public class DemoMultiThread {
 }
 
 ```
+---
