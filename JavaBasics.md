@@ -47,6 +47,7 @@ An implementation is a computer program that meets the requirements of the JVM s
 A Runtime instance of JVM is created, whenever we write a java command on the command prompt to run the java class
 JVM is responsible for executing the java program line by line, hence it is also known as an interpreter.
 
+---
 # How JVM Works
 
 JVM(Java Virtual Machine) acts as a run-time engine to run Java applications. JVM is the one that actually calls the main method present in a Java code. JVM is a part of JRE(Java Runtime Environment).
@@ -127,6 +128,7 @@ Native Method Libraries :
 
 It is a collection of the Native Libraries(C, C++) which are required by the Execution Engine.
 
+---
 # Shallow Copy
 - It is fast as no new memory is allocated.
 - Changes in one entity is reflected in other entity.
@@ -139,6 +141,8 @@ It is a collection of the Native Libraries(C, C++) which are required by the Exe
 - In order to make the clone() method support the deep copy, one has to override the clone() method.
 - Deep copy is highly expensive.
 - Cloned object and the original object are disjoint.
+
+---
 # What is the order of execution of instance initialization blocks, static initialization blocks, and constructors?
 The order of execution is:
 - Static initialization blocks (when the class is loaded).
@@ -173,6 +177,8 @@ Static Initialization Block
 Instance Initialization Block
 
 Constructor
+
+---
 # What happens if there is an exception in a static initialization block?
 If an exception occurs in a static initialization block, it prevents the class from being loaded, resulting in a `ExceptionInInitializerError`. This error occurs the first time the class is accessed.
 
@@ -407,6 +413,7 @@ In this example, after setting `node1` and `node2` to `null`, the objects they r
 
 In summary, in Java, circular references do not prevent garbage collection. The garbage collector is capable of detecting cycles of unreachable objects and reclaiming their memory. The key factor is reachability from GC roots. If the objects involved in the circular reference are not reachable from any GC roots, they will be collected, regardless of their mutual references.
 
+---
 # Access Modifier
 
 ![image info](./images/AccessModifier.jpg)
