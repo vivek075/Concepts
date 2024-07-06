@@ -724,7 +724,7 @@ Example:
 G1 GC with Pause Time Goals:
 `java -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -jar MyApp.jar`
 
-3. Examples of GC Tuning
+**3. Examples of GC Tuning**
 
 Example 1: High Throughput Application
 
@@ -767,7 +767,7 @@ Reduce Initial Mark Pause: `java -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupa
 
 Monitor and Adjust: Use GC logs to monitor and adjust. `java -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly -Xms3g -Xmx3g -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:gc.log -jar RealTimeAnalyticsApp.jar`
 
-4. Monitoring and Profiling
+**4. Monitoring and Profiling**
 
 Monitoring Tools:
 
