@@ -134,7 +134,7 @@ Consumed : 5
 ```
 
 ---
-# Java Program demostrating deadlock
+# Java Program demonstrating deadlock
 ```
 public class DeadlockExample {
     public static void main(String[] args) {
