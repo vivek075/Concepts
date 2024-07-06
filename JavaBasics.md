@@ -872,6 +872,14 @@ Shared Resource Coordination: These methods are used to coordinate access to sha
 
 Flexibility and Consistency: Placing these methods in the Object class provides flexibility and maintains consistency with the concept of intrinsic locks and monitors.
 
+**Important Point:**
+
+We call wait (), notify () or notifyAll method in Java from synchronized method or synchronized block in Java to avoid:
+
+1) IllegalMonitorStateException in Java which will occur if we don't call wait (), notify () or notifyAll () method from synchronized context.
+
+2) Any potential race condition between wait and notify method in Java.
+
 ---
 # Why String is immutable in java
 
