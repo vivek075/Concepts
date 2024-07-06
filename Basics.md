@@ -410,3 +410,78 @@ In summary, in Java, circular references do not prevent garbage collection. The 
 # Access Modifier
 
 ![image info](./images/AccessModifier.jpg)
+
+---
+# How do you implement custom annotations in Java?
+Implementing custom annotations in Java involves several steps: defining the annotation, specifying its target, retention policy, and using it in code.
+
+1. Define the Annotation
+
+Annotations are defined using the @interface keyword. You can specify elements within the annotation that act like attributes.
+
+```
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+// Define the annotation
+@Retention(RetentionPolicy.RUNTIME) // Specifies that the annotation will be available at runtime
+@Target(ElementType.METHOD) // Specifies that the annotation can be applied to methods
+public @interface MyCustomAnnotation {
+    String value();
+}
+```
+2. Use the Annotation
+
+You can apply the annotation to methods, classes, or fields depending on the specified target.
+```
+public class MyClass {
+
+    @MyCustomAnnotation(value = "Hello, World!")
+    public void myMethod() {
+        System.out.println("This is my method.");
+    }
+
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.myMethod();
+    }
+}
+```
+
+3. Process the Annotation
+
+To process annotations at runtime, you typically use reflection.
+```
+import java.lang.reflect.Method;
+
+public class AnnotationProcessor {
+
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+
+        // Get all methods of MyClass
+        Method[] methods = obj.getClass().getMethods();
+
+        // Iterate through all methods
+        for (Method method : methods) {
+            // Check if the method is annotated with MyCustomAnnotation
+            if (method.isAnnotationPresent(MyCustomAnnotation.class)) {
+                // Get the annotation
+                MyCustomAnnotation annotation = method.getAnnotation(MyCustomAnnotation.class);
+                // Print the value of the annotation
+                System.out.println("Method " + method.getName() + " has annotation value: " + annotation.value());
+            }
+        }
+    }
+}
+```
+
+Summary
+
+- Define the annotation: Use @interface, specify the retention policy and target.
+  
+- Use the annotation: Apply the annotation to methods, classes, or fields.
+  
+- Process the annotation: Use reflection to read and process the annotation values.
