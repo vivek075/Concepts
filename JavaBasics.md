@@ -946,3 +946,7 @@ The immutability of the `String` class in Java is a deliberate design choice tha
 # What is the difference between wait() and sleep() in Java?
 
 `wait()` is used in synchronized context to release the lock and wait until notified, while `sleep()` pauses the thread execution for a specified time without releasing the lock.
+
+---
+# What is a thread pool and why is it used?
+A thread pool is a collection of pre-instantiated reusable threads that can execute tasks, improving performance by reducing the overhead of creating and destroying threads.
