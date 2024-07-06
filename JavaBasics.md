@@ -698,14 +698,17 @@ Example:
 Parallel GC for Throughput: Use for applications requiring high throughput.
 
 `java -XX:+UseParallelGC -jar MyApp.jar`
+
 G1 GC for Low Pause Times: Use for applications requiring low pause times and predictable performance.
 `java -XX:+UseG1GC -jar MyApp.jar`
 
 b. Tuning Heap Size
+
 Setting appropriate initial and maximum heap sizes can prevent frequent resizing and improve GC efficiency.
 `java -Xms2g -Xmx2g -jar MyApp.jar`
 
 c. Tuning Young and Old Generation Sizes
+
 Adjusting the sizes of the young and old generations can optimize GC performance based on object allocation patterns.
 
 Example:
@@ -722,15 +725,19 @@ G1 GC with Pause Time Goals:
 `java -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -jar MyApp.jar`
 
 3. Examples of GC Tuning
+
 Example 1: High Throughput Application
+
 Scenario: An application with high throughput requirements and large heap usage.
 
 Tuning Steps:
 
 - Select Parallel GC:
 `java -XX:+UseParallelGC -Xms4g -Xmx4g -jar HighThroughputApp.jar`
+
 - Adjust GC Threads:
 `java -XX:+UseParallelGC -XX:ParallelGCThreads=8 -Xms4g -Xmx4g -jar HighThroughputApp.jar`
+
 - Monitor and Adjust: Use GC logs to monitor performance and adjust settings.
 `java -XX:+UseParallelGC -XX:ParallelGCThreads=8 -Xms4g -Xmx4g -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:gc.log -jar HighThroughputApp.jar`
 
@@ -749,6 +756,7 @@ Monitor and Adjust: Use GC logs to monitor and fine-tune.
 `java -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1HeapRegionSize=16m -Xms2g -Xmx2g -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:gc.log -jar LowLatencyApp.jar`
 
 Example 3: Real-time Analytics Application
+
 Scenario: An application requiring both high throughput and low pause times.
 
 Tuning Steps:
@@ -760,6 +768,7 @@ Reduce Initial Mark Pause: `java -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupa
 Monitor and Adjust: Use GC logs to monitor and adjust. `java -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly -Xms3g -Xmx3g -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:gc.log -jar RealTimeAnalyticsApp.jar`
 
 4. Monitoring and Profiling
+
 Monitoring Tools:
 
 Java VisualVM: Monitor GC activity and memory usage.
