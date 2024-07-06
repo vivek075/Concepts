@@ -906,6 +906,7 @@ Example:
 int hashCode = s.hashCode(); // The hash code is cached for future use.`
 
 5. Consistency and Predictability
+
 Immutability ensures that a string remains constant and predictable throughout its lifetime. This simplifies reasoning about code behavior and helps prevent bugs.
 
 Example:
