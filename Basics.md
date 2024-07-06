@@ -485,3 +485,92 @@ Summary
 - Use the annotation: Apply the annotation to methods, classes, or fields.
   
 - Process the annotation: Use reflection to read and process the annotation values.
+
+---
+# What is the Optional class in Java 8 and how is it used?
+
+The `Optional` class in Java 8 is a container object used to represent the presence or absence of a value. It is a more expressive alternative to using `null` to indicate that a value is missing. `Optional` helps to avoid `NullPointerException` and provides a clear way to handle situations where a value may be absent.
+
+**Key Methods of the Optional Class**
+
+Here are some of the main methods provided by the Optional class:
+
+`empty()`: Returns an empty Optional instance.
+
+`of(T value)`: Returns an Optional with the specified present non-null value.
+
+`ofNullable(T value)`: Returns an Optional describing the specified value, if non-null, otherwise returns an empty Optional.
+
+`isPresent()`: Returns true if there is a value present, otherwise false.
+
+`ifPresent(Consumer<? super T> consumer)`: If a value is present, performs the given action with the value, otherwise does nothing.
+
+`orElse(T other)`: Returns the value if present, otherwise returns other.
+
+`orElseGet(Supplier<? extends T> other)`: Returns the value if present, otherwise invokes and returns the result produced by the supplying function.
+
+`orElseThrow(Supplier<? extends X> exceptionSupplier)`: Returns the contained value, if present, otherwise throws an exception to be created by the provided supplier.
+
+Examples of Using Optional
+
+Creating an Optional
+```
+import java.util.Optional;
+
+public class OptionalExample {
+
+    public static void main(String[] args) {
+        // Creating an Optional with a non-null value
+        Optional<String> optionalValue = Optional.of("Hello, World!");
+        
+        // Creating an empty Optional
+        Optional<String> emptyOptional = Optional.empty();
+        
+        // Creating an Optional that can hold a null value
+        Optional<String> nullableOptional = Optional.ofNullable(null);
+    }
+}
+```
+Using Optional Methods
+```
+import java.util.Optional;
+
+public class OptionalExample {
+
+    public static void main(String[] args) {
+        Optional<String> optionalValue = Optional.of("Hello, World!");
+
+        // Check if value is present
+        if (optionalValue.isPresent()) {
+            System.out.println("Value is present: " + optionalValue.get());
+        }
+
+        // Using ifPresent to perform an action if value is present
+        optionalValue.ifPresent(value -> System.out.println("Value using ifPresent: " + value));
+
+        // Using orElse to provide a default value if Optional is empty
+        String defaultValue = optionalValue.orElse("Default Value");
+        System.out.println("Value or default: " + defaultValue);
+
+        // Using orElseGet to provide a value using a Supplier if Optional is empty
+        String suppliedValue = optionalValue.orElseGet(() -> "Supplied Value");
+        System.out.println("Value or supplied: " + suppliedValue);
+
+        // Using orElseThrow to throw an exception if Optional is empty
+        try {
+            String exceptionValue = optionalValue.orElseThrow(() -> new IllegalArgumentException("Value is not present"));
+            System.out.println("Value or exception: " + exceptionValue);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+```
+
+Summary
+
+`Optional` is a container object which may or may not contain a non-null value.
+
+It provides methods to handle the presence or absence of values explicitly.
+
+It helps in avoiding `NullPointerException` and makes the code more readable and expressive.
