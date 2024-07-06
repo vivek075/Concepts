@@ -420,6 +420,7 @@ In summary, in Java, circular references do not prevent garbage collection. The 
 
 ---
 # How do you implement custom annotations in Java?
+Annotations provide metadata about the code and can be used for various purposes such as compilation instructions, runtime processing, and documentation.
 Implementing custom annotations in Java involves several steps: defining the annotation, specifying its target, retention policy, and using it in code.
 
 1. Define the Annotation
