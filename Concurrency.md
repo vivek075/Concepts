@@ -132,3 +132,46 @@ Consumed : 4
 Produced : 5
 Consumed : 5
 ```
+
+---
+# Java Program demostrating deadlock
+```
+public class DeadlockExample {
+    public static void main(String[] args) {
+        final Object resource1 = "Resource1";
+        final Object resource2 = "Resource2";
+        // Thread 1 tries to lock resource1 then resource2
+        Thread t1 = new Thread(() -> {
+            synchronized (resource1) {
+                System.out.println("Thread 1: locked resource 1");
+                try {
+                    // Adding delay so that both threads can start trying to lock resources
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (resource2) {
+                    System.out.println("Thread 1: locked resource 2");
+                }
+            }
+        });
+        // Thread 2 tries to lock resource2 then resource1
+        Thread t2 = new Thread(() -> {
+            synchronized (resource2) {
+                System.out.println("Thread 2: locked resource 2");
+                try {
+                    // Adding delay so that both threads can start trying to lock resources
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (resource1) {
+                    System.out.println("Thread 2: locked resource 1");
+                }
+            }
+        });
+        t1.start();
+        t2.start();
+    }
+}
+```
