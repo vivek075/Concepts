@@ -776,3 +776,91 @@ Java VisualVM: Monitor GC activity and memory usage.
 JConsole: Real-time monitoring of memory, threads, and GC.
 
 GC Logs: Analyze GC logs to identify patterns and tune settings.
+
+---
+# Why Wait, Notify, and NotifyAll are in Object Class
+
+In Java, the `wait()`, `notify()`, and `notifyAll()` methods are part of the Object class rather than the Thread class. This design choice stems from the fact that these methods are used for communication between threads that are synchronized on the same object. Here’s a detailed explanation:
+
+1. Synchronization on Objects
+
+Synchronization: In Java, threads can synchronize on any object. This means that any object can be used as a monitor (a mutual exclusion lock).
+Object-level Synchronization: Since synchronization happens at the object level, it makes sense to place the methods that control waiting and notifying on the Object class.
+
+2. Thread Communication
+
+Shared Resource: The wait(), notify(), and notifyAll() methods are used to coordinate access to a shared resource. The resource is represented by an object, not a thread.
+Wait/Notify Mechanism: When a thread calls wait(), it must hold the lock on the object and will release the lock until it is notified. Another thread must call notify() or notifyAll() on the same object to wake up the waiting thread(s).
+
+3. Flexibility
+
+Any Object as Monitor: By placing these methods in the Object class, Java allows any object to be used as a monitor. This provides greater flexibility compared to restricting synchronization mechanisms to threads only.
+
+4. Conceptual Consistency
+
+Locks and Monitors: The concept of locks and monitors in concurrent programming is associated with objects, not threads. Threads are the entities that perform actions, while objects are the entities on which actions are performed.
+
+Consistency in Synchronization: Keeping wait(), notify(), and notifyAll() in the Object class maintains consistency, as these methods are directly related to the intrinsic lock associated with each object.
+
+Example to Illustrate the Concept
+
+Here’s an example that demonstrates why wait(), notify(), and notifyAll() are in the Object class:
+```
+class SharedResource {
+    public synchronized void waitForCondition() throws InterruptedException {
+        while (!condition) {
+            wait();
+        }
+    }
+
+    public synchronized void changeCondition() {
+        condition = true;
+        notify();
+    }
+
+    private boolean condition = false;
+}
+
+public class WaitNotifyExample {
+    public static void main(String[] args) {
+        SharedResource sharedResource = new SharedResource();
+
+        Thread t1 = new Thread(() -> {
+            try {
+                sharedResource.waitForCondition();
+                System.out.println("Condition met, thread 1 proceeding.");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            try {
+                Thread.sleep(1000); // Simulate some work
+                sharedResource.changeCondition();
+                System.out.println("Condition changed, thread 2 notifying.");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+In this example:
+
+wait() and notify() are called on the sharedResource object.
+
+The SharedResource object acts as the monitor.
+
+The threads (t1 and t2) synchronize on the sharedResource object.
+
+Summary
+
+Object-level Synchronization: Synchronization in Java is at the object level, so methods for thread communication (wait(), notify(), notifyAll()) are in the Object class.
+
+Shared Resource Coordination: These methods are used to coordinate access to shared resources, which are represented by objects.
+
+Flexibility and Consistency: Placing these methods in the Object class provides flexibility and maintains consistency with the concept of intrinsic locks and monitors.
