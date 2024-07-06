@@ -940,3 +940,8 @@ map.put("key", "value");
 // The key's hash code remains consistent, ensuring correct behavior of the map.`
 
 The immutability of the `String` class in Java is a deliberate design choice that offers multiple benefits, including enhanced security, better memory management through string pooling, inherent thread safety, improved performance, and predictable behavior. By making strings immutable, Java ensures that they can be used safely and efficiently in a wide range of applications.
+
+---
+# What is the difference between wait() and sleep() in Java?
+
+`wait()` is used in synchronized context to release the lock and wait until notified, while `sleep()` pauses the thread execution for a specified time without releasing the lock.
