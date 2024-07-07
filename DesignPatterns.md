@@ -148,6 +148,7 @@ Explanation: PaymentService depends on the PaymentProcessor interface rather tha
 ```
 ---
 # Creational Design Patterns
+This design pattern is all about class instantiation. How to effectively create the objects and reuse it and also expalins how to control the object creation.
 
 **_Singleton_**
 
@@ -284,5 +285,20 @@ public class DemoMultiThread {
         }
     }
 }
-
 ```
+
+**_Factory Design Pattern_**
+
+In factory pattern, we create object without exposing the creation logic to the client and refer to newly created object using a common interface.
+
+In simple words, if we have a super class and sub-classes, based on data provided, we have to return the object of one of the sub-classes, we use a factory pattern.
+
+The basic principle behind this pattern is that at run time, we get an object of similar type based on the parameter we pass.
+
+If object creation code is spread in whole application, and if we need to change the process of object creation then you need to go in each and every place to make necessary changes.
+
+**_Object Pool Pattern_**
+
+Object Pool pattern offer a mechanism to reuse objects and share objects that are expensive to create.
+
+Improve the performance
