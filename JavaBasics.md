@@ -1014,3 +1014,9 @@ The immutability of the `String` class in Java is a deliberate design choice tha
 ---
 # What is a thread pool and why is it used?
 A thread pool is a collection of pre-instantiated reusable threads that can execute tasks, improving performance by reducing the overhead of creating and destroying threads.
+
+---
+# Map vs FlatMap
+- `map()` and `flatMap()` both returns Stream<R>.
+- `map()` produces one output value for one input value whereas `flatMap()` provide one or more values for each input value. In simple words, a mapis for transformation while flatmap is a combination of transformation and flattening.
+  flatMap() = map()+flattening
