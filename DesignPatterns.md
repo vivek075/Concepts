@@ -148,7 +148,7 @@ Explanation: PaymentService depends on the PaymentProcessor interface rather tha
 ```
 ---
 # Creational Design Patterns
-This design pattern is all about class instantiation. How to effectively create the objects and reuse it and also expalins how to control the object creation.
+This design pattern is all about class instantiation. How to effectively create the objects and reuse it and also explains how to control the object creation.
 
 **_Singleton_**
 
