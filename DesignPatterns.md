@@ -306,3 +306,9 @@ Improve the performance
 **_Abstract Factory Pattern_**
 
 Abstract Factory pattern is a super-factory which creates other factories. This factory is also called as Factory of factories.
+
+**_Prototype Pattern_**
+
+The Prototype design pattern is used for creating the new objects (instances) by cloning (copying) other existing objects and this way we can improve the performance. This pattern uses java cloning to copy the object.
+
+This pattern is used when creation of object is costly or complex. For example, a object is to be created after a costly database operation. We can cache the objet, returns its clone on next request. Once we get the cloned object we can modify according to our needs.
