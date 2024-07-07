@@ -143,6 +143,70 @@ It is a collection of the Native Libraries(C, C++) which are required by the Exe
 - Cloned object and the original object are disjoint.
 
 ---
+# Abstract Class VS Interface
+![image info](./images/abstract-vs-interface.jpg)
+
+Definition:
+
+- Abstract Class: A class that cannot be instantiated on its own and can include both abstract methods (without a body) and concrete methods (with a body).
+- Interface: A reference type in Java that can contain only constants, method signatures, default methods, static methods, and nested types. Method bodies exist only for default and static methods.
+
+Default Method Implementation:
+
+- Abstract Class: Can provide implementations for some methods, which can be used by subclasses.
+- Interface: From Java 8 onwards, interfaces can have default and static methods with implementations.
+
+Field Declarations:
+
+- Abstract Class: Can have fields with various access modifiers.
+- Interface: Fields are implicitly public, static, and final.
+
+Multiple Inheritance:
+
+- Abstract Class: Java does not support multiple inheritance for classes, so a class can only extend one abstract class.
+- Interface: A class can implement multiple interfaces.
+
+Constructor:
+
+- Abstract Class: Can have constructors that can be called when an instance of a subclass is created.
+- Interface: Cannot have constructors.
+
+Access Modifiers for Methods:
+
+- Abstract Class: Methods can have any access modifier.
+- Interface: Methods are implicitly public (up to Java 8). From Java 9 onwards, methods can have private access modifier.
+
+Use Case:
+
+- Abstract Class: Used when you have a base class with common code that should be shared across multiple related classes.
+- Interface: Used to define a contract that multiple classes can implement, often for unrelated classes.
+
+Inheritance:
+
+- Abstract Class: A class can extend only one abstract class.
+- Interface: A class can implement multiple interfaces, promoting flexibility.
+
+Static Methods:
+
+- Abstract Class: Can include static methods.
+- Interface: Can include static methods since Java 8.
+
+Instance Variables:
+
+- Abstract Class: Can have instance variables.
+- Interface: Cannot have instance variables; can only have constants.
+
+Speed:
+
+- Abstract Class: Generally faster due to being closer to the class mechanism.
+- Interface: May introduce a slight performance overhead due to the indirection layer.
+
+Extend vs Implement:
+
+- Abstract Class: Use the `extends` keyword.
+- Interface: Use the `implements` keyword.
+
+---
 # What is the order of execution of instance initialization blocks, static initialization blocks, and constructors?
 The order of execution is:
 - Static initialization blocks (when the class is loaded).
