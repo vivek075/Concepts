@@ -302,3 +302,7 @@ If object creation code is spread in whole application, and if we need to change
 Object Pool pattern offer a mechanism to reuse objects and share objects that are expensive to create.
 
 Improve the performance
+
+**_Abstract Factory Pattern_**
+
+Abstract Factory pattern is a super-factory which creates other factories. This factory is also called as Factory of factories.
