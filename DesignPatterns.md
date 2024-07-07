@@ -312,3 +312,9 @@ Abstract Factory pattern is a super-factory which creates other factories. This 
 The Prototype design pattern is used for creating the new objects (instances) by cloning (copying) other existing objects and this way we can improve the performance. This pattern uses java cloning to copy the object.
 
 This pattern is used when creation of object is costly or complex. For example, a object is to be created after a costly database operation. We can cache the objet, returns its clone on next request. Once we get the cloned object we can modify according to our needs.
+
+**_Builder Pattern_**
+
+Builder Pattern builds a complex object using simple objects and using a step by step approach.
+
+The process of constructing an complex object should be generic so that the same process can be used to create different representations of same complex object.
