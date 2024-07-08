@@ -175,3 +175,36 @@ public class DeadlockExample {
     }
 }
 ```
+
+---
+# How do you handle concurrent modifications to a Collection in Java?
+
+Concurrent modifications to a collection in Java can cause different issues, such as unexpected behavior, non-deterministic results, or even throwing a ConcurrentModificationException. To handle concurrent modifications to a collection in Java, you can use one of the following approaches:
+
+_Use synchronized collections_: One way to handle concurrent modifications to a collection is to use a synchronized collection. A synchronized collection is a thread-safe collection that ensures only one thread can modify the collection at a time. We can create a synchronized collection by calling the Collections.synchronizedCollection() method, passing in the collection you want to synchronize. For example
+```
+List<String> list = new ArrayList<>();
+List<String> synchronizedList = Collections.synchronizedList(list);
+```
+
+_Use concurrent collections_: Another way to handle concurrent modifications to a collection is to use a concurrent collection. A concurrent collection is a thread-safe collection that allows multiple threads to modify the collection concurrently without external synchronization. The (java.util.concurrent) package provides a range of concurrent collection classes, such as `ConcurrentHashMap`, `ConcurrentLinkedDeque`, and `ConcurrentSkipListSet`.
+
+_Use explicit locking_: We can also handle concurrent modifications to a collection by using explicit locking. We can use the synchronized keyword or the (java.util.concurrent.locks) package to lock the collection when modifying it. For example
+```
+List<String> list = new ArrayList<>();
+synchronized(list) {
+ list.add(“test”);
+}
+```
+
+`Use iterators`: When iterating over a collection, we should use the `Iterator` interface to avoid concurrent modifications. If you modify the collection while iterating over it using an iterator, we will get a ConcurrentModificationException. Instead, can use the `remove()` method of the iterator to remove elements from the collection while iterating over it. For example
+```
+List<String> list = new ArrayList<>();
+Iterator<String> iterator = list.iterator();
+while (iterator.hasNext()) {
+ String element = iterator.next();
+ if (someCondition) {
+ iterator.remove(); // safe way to remove an element from the list
+ }
+}
+```
