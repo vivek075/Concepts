@@ -129,6 +129,89 @@ Native Method Libraries :
 It is a collection of the Native Libraries(C, C++) which are required by the Execution Engine.
 
 ---
+# ClassNotFoundException vs NoClassDefFoundError
+In Java, both `ClassNotFoundException` and `NoClassDefFoundError` are related to issues with class loading, but they occur in different scenarios and have different causes. Here’s a detailed explanation of each, along with examples:
+
+**ClassNotFoundException**
+- What is it?
+
+  ClassNotFoundException is a `checked exception` that occurs when an application tries to load a class through its fully qualified name (e.g., using `Class.forName()`, `ClassLoader.loadClass()`, or `ClassLoader.findSystemClass()`) and the class cannot be found in the classpath.
+
+- When does it occur?
+
+  This exception typically occurs at runtime when the specified class is not available in the classpath.
+
+```
+public class ClassNotFoundExceptionExample {
+    public static void main(String[] args) {
+        try {
+            // Attempt to load a class that doesn't exist
+            Class.forName("com.example.NonExistentClass");
+        } catch (ClassNotFoundException e) {
+            System.out.println("ClassNotFoundException caught: " + e.getMessage());
+        }
+    }
+}
+Output:
+ClassNotFoundException caught: com.example.NonExistentClass
+```
+
+**NoClassDefFoundError**
+
+- What is it?
+
+  NoClassDefFoundError is an unchecked error (a subclass of LinkageError) that occurs when the Java Virtual Machine (JVM) or a classloader tries to load the definition of a class (i.e., during the linking phase when the class has been referenced by another class) and the definition of the class is not found.
+
+- When does it occur? This error typically occurs when a class was present during the compile-time, but for some reason, it is not available during the runtime. It can also occur if a class is not properly initialized.
+
+```
+public class NoClassDefFoundErrorExample {
+    public static void main(String[] args) {
+        try {
+            ExampleClass example = new ExampleClass();
+            example.printMessage();
+        } catch (NoClassDefFoundError e) {
+            System.out.println("NoClassDefFoundError caught: " + e.getMessage());
+        }
+    }
+}
+
+class ExampleClass {
+    static {
+        // Simulate class initialization failure
+        if (true) {
+            throw new RuntimeException("Simulated class initialization failure");
+        }
+    }
+
+    public void printMessage() {
+        System.out.println("Hello, world!");
+    }
+}
+Output:
+Exception in thread "main" java.lang.ExceptionInInitializerError
+Caused by: java.lang.RuntimeException: Simulated class initialization failure
+    at ExampleClass.<clinit>(NoClassDefFoundErrorExample.java:13)
+    at NoClassDefFoundErrorExample.main(NoClassDefFoundErrorExample.java:6)
+```
+
+Key Differences
+Type:
+
+- ClassNotFoundException is a checked exception.
+- NoClassDefFoundError is an unchecked error.
+
+When it Occurs:
+
+- ClassNotFoundException occurs when a class is dynamically loaded (e.g., using Class.forName()) and is not found in the classpath.
+- NoClassDefFoundError occurs when a class that was present at compile-time is not found at runtime or fails to initialize properly.
+
+Cause:
+
+- ClassNotFoundException is often due to a missing class in the classpath when attempting to load it dynamically.
+- NoClassDefFoundError is often due to a classpath issue where the class is not found when the JVM or classloader tries to load it, or due to a failure in static initialization blocks.
+
+---
 # Shallow Copy
 - It is fast as no new memory is allocated.
 - Changes in one entity is reflected in other entity.
