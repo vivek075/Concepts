@@ -1103,3 +1103,22 @@ A thread pool is a collection of pre-instantiated reusable threads that can exec
 - `map()` and `flatMap()` both returns Stream<R>.
 - `map()` produces one output value for one input value whereas `flatMap()` provide one or more values for each input value. In simple words, a mapis for transformation while flatmap is a combination of transformation and flattening.
   flatMap() = map()+flattening
+
+---
+# How can you implement a custom ClassLoader in Java, and what are the potential use cases?
+
+To implement a custom ClassLoader in Java, you typically extend the ClassLoader class and override the findClass() method. This method is called after the parent ClassLoader fails to find the class in its classpath.
+
+The key steps typically include the following: 
+
+- Convert the binary name of the class to a file name. 
+- Read that file into a byte array. 
+- Call defineClass() to convert the byte array into a Class object.
+
+Use cases for a custom ClassLoader could include:
+
+- Loading classes dynamically from sources other than the classpath, such as a network location or a database.
+- Implementing hot-swapping of classes in a running JVM.
+- Isolating or sandboxing specific parts of an application by controlling class loading behavior.
+
+Creating a custom ClassLoader should be done with caution due to the complexity involved.
