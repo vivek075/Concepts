@@ -268,3 +268,12 @@ public class ThreadPoolExecutorExample {
     }
 }
 ```
+Key Points in the Example
+
+Core Pool Size and Maximum Pool Size: The executor starts with 2 core threads and can grow to 4 threads.
+
+Keep-Alive Time: Threads beyond the core size will terminate after being idle for 60 seconds.
+
+Work Queue: A LinkedBlockingQueue with a capacity of 2 is used to hold tasks before execution.
+
+Rejection Policy: If the work queue is full and no more threads can be created, the AbortPolicy will throw a RejectedExecutionException.
