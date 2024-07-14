@@ -23,6 +23,11 @@ public class ComparatorExamples {
 // Sort a list of employees by their salary using a Comparator.
         List<Employee> newSalEmployees = Arrays.asList(new Employee("Rohan", 50000.0), new Employee("Mohan", 60000.0), new Employee("Sohan", 40000.0));
         newSalEmployees.sort(Comparator.comparingDouble(Employee::getSalary));
+// Find 2nd largest from array
+        int[] nums = {1, 2, 3, 1, 2, 4, 5};
+        Integer integer = IntStream.of(nums).boxed().sorted(Comparator.reverseOrder())
+                .collect(Collectors.toCollection(LinkedHashSet::new))
+                .stream().skip(1).findFirst().get();
     }
 }
 class Employee {
