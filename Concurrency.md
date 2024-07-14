@@ -208,3 +208,6 @@ while (iterator.hasNext()) {
  }
 }
 ```
+
+# Explain the synchronized keyword in Java.
+The synchronized keyword in Java is used to control access to a block of code or method by multiple threads, ensuring that only one thread can execute the synchronized block or method at a time.
