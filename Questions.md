@@ -277,3 +277,74 @@ Keep-Alive Time: Threads beyond the core size will terminate after being idle fo
 Work Queue: A LinkedBlockingQueue with a capacity of 2 is used to hold tasks before execution.
 
 Rejection Policy: If the work queue is full and no more threads can be created, the AbortPolicy will throw a RejectedExecutionException.
+
+# What are the changes of pegmen in JDK 8. (PermGen and Meta)
+
+In JDK 8, significant changes were made regarding the management of class metadata, which was previously stored in the Permanent Generation (PermGen) space. Here’s an overview of these changes:
+
+PermGen Removal and Metaspace Introduction
+
+1. **PermGen (Permanent Generation):**
+
+JDK 7 and earlier: The Permanent Generation, part of the Java heap, stored class metadata, interned strings, and static variables.
+
+Issues with PermGen: It had a fixed maximum size, leading to potential OutOfMemoryError: PermGen space errors, especially in applications with a large number of classes (e.g., applications that dynamically load classes or use a lot of frameworks).
+
+2. **Metaspace:**
+
+Introduced in JDK 8: The Permanent Generation was replaced with Metaspace, a native memory area (outside the Java heap) used for storing class metadata.
+
+Benefits of Metaspace:
+
+Dynamic Sizing: Unlike PermGen, Metaspace can grow dynamically based on application needs, reducing the likelihood of running out of space for class metadata.
+
+Elimination of Fixed Limits: This removes the need for tuning the size of the PermGen space, making it easier to manage memory.
+
+Improved Garbage Collection: Metaspace helps improve garbage collection efficiency, as class metadata is no longer part of the heap.
+
+Key Differences and Improvements
+
+Memory Allocation:
+
+PermGen: Allocated within the Java heap, with a fixed maximum size specified by the -XX:MaxPermSize option.
+
+Metaspace: Allocated in native memory, with a default initial size and dynamic growth. The maximum size can be controlled with the -XX:MaxMetaspaceSize option, though it typically does not need to be set.
+
+Garbage Collection:
+
+PermGen: Collected during full garbage collections, which could be a performance bottleneck.
+
+Metaspace: Managed separately from the Java heap, leading to more efficient garbage collection.
+
+Configuration Options:
+
+PermGen: -XX:PermSize (initial size) and -XX:MaxPermSize (maximum size).
+
+Metaspace:
+-XX:MetaspaceSize: Initial size of Metaspace.
+
+-XX:MaxMetaspaceSize: Maximum size of Metaspace.
+
+-XX:MinMetaspaceFreeRatio and -XX:MaxMetaspaceFreeRatio: Control the amount of free space in Metaspace.
+
+Here’s an example of how you might configure Metaspace in a Java application:
+```
+java -XX:MetaspaceSize=128M -XX:MaxMetaspaceSize=512M -XX:MinMetaspaceFreeRatio=50 -XX:MaxMetaspaceFreeRatio=80 -jar myapp.jar
+```
+In this example:
+
+`-XX:MetaspaceSize=128M`: Sets the initial Metaspace size to 128 MB.
+
+`-XX:MaxMetaspaceSize=512M`: Sets the maximum Metaspace size to 512 MB.
+
+`-XX:MinMetaspaceFreeRatio=50`: Ensures that at least 50% of the Metaspace remains free after GC.
+
+`-XX:MaxMetaspaceFreeRatio=80`: Allows up to 80% of the Metaspace to be free before resizing
+
+Monitoring Metaspace Usage
+
+Monitoring Metaspace usage can help in understanding the memory footprint of class metadata and in tuning memory settings if necessary. Tools like jstat or VisualVM can be used for monitoring:
+
+`jstat -gc <pid>`
+
+The transition from PermGen to Metaspace in JDK 8 was a significant change aimed at improving the management of class metadata, reducing configuration complexity, and enhancing performance and reliability. By leveraging native memory for class metadata, Metaspace offers a more flexible and robust solution compared to the fixed-size PermGen.
