@@ -452,3 +452,71 @@ Find the ranks of students in all department in ascending order
                                     .collect(Collectors.groupingBy(Student::getDepartmantName,Collectors.collectingAndThen(Collectors.toList(), list -> list.stream()
                                     .sorted(Comparator.comparing(Student::getRank))
                                     .collect(Collectors.toList()))));`
+
+Count the occurrences of each word in a Array of strings using streams
+
+`Map<String, Long> collect = Arrays.asList(words).stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));`
+
+find the longest string in a list of strings using streams
+
+`Optional<String> max = list.stream().max(Comparator.comparingInt(String::length));`
+
+Given a list of integers, remove duplicates and keep them in the descending order using streams
+
+`List<Integer> collect = numbers.stream().distinct().sorted(Comparator.comparingInt(Integer::intValue).reversed()).collect(Collectors.toList());`
+
+Find the average of a list of doubles using streams
+
+`OptionalDouble average = doubles.stream().mapToDouble(Double::doubleValue).average();`
+
+Merge two lists of integers and remove duplicates using streams
+
+`List<Integer> collect = Stream.concat(list1.stream(), list2.stream()).distinct().collect(Collectors.toList());`
+
+Given a list of strings, concatenate them into a single string using streams
+
+`String collect = list.stream().collect(Collectors.joining());`
+
+find the first non-repeating character in a string using streams
+
+`Optional<Character> firstNonRepeatingChar = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .filter(e -> e.getValue() == 1)
+                .map(Map.Entry::getKey)
+                .findFirst();`
+
+Given a list of strings, remove all strings that contain a specific character using streams
+
+`List<String> collect = list.stream().filter(s->!s.contains(String.valueOf(specificChar))).collect(Collectors.toList());`
+
+Given a list of integers, partition them into two groups: odd and even, using streams
+
+`Map<Boolean, List<Integer>> oddEvenPartition = numbers.stream()
+                                     .collect(Collectors.partitioningBy(n -> n % 2 == 0));`
+
+Given an array of integers, find the kth largest element
+
+`Integer num = list.stream().sorted(Comparator.reverseOrder()).limit(k).skip(k - 1).findFirst().orElse(-1);`
+
+Write a program to perform cube on list elements and filter numbers greater than 50
+
+`integerList.stream()
+                  .map(i -> i*i*i)
+                  .filter(i -> i>50)
+                  .forEach(System.out::println);`
+
+find the count of strings starting with a vowels
+
+`long count = list.stream().filter(s -> "aeiouAEIOU".contains(String.valueOf(s.charAt(0)))).count();`
+
+Given a list of strings, find the longest palindrome string
+
+`String str = list.stream().filter(s -> new StringBuilder(s).reverse().toString().equalsIgnoreCase(s))
+    .max(Comparator.comparingInt(String::length)).orElse("");`
+
+Given a list of integers, find the product of all non-negative integers
+
+`long longNumber = integerList.stream().filter(num -> num >= 0).mapToLong(Integer::longValue).reduce(1, (a, b) -> a * b);`
