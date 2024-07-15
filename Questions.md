@@ -351,48 +351,60 @@ The transition from PermGen to Metaspace in JDK 8 was a significant change aimed
 
 # Java 8 Streams Examples
 Group the students by department names
+
 `Map<String, List<Student>> collect = list.stream().collect(Collectors.groupingBy(Student::getDepartmantName));`
 
 Find the count of students in each department
+
 `Map<String, Long> collect = list.stream().collect(Collectors.groupingBy(Student::getDepartmantName,Collectors.counting()));`
 
 Find all departments names
+
 `List<String> deptName = list.stream().map(t -> t.getDepartmantName()).distinct().collect(Collectors.toList());`
 
-Find the list of students whose age is less than 20.
+Find the list of students whose age is less than 20
+
 `List<Student> collect = list.stream().filter(t -> t.getAge() < 20).collect(Collectors.toList());`
 
 Find the max age of students
+
 `OptionalInt max = list.stream().mapToInt(t -> t.getAge()).max();`
 
 Find the average age of male and female students
+
 `Map<String, Double> collect = list.stream().collect(Collectors.groupingBy(Student::getGender, Collectors.averagingInt(Student::getAge)));`
 
 Find the youngest student in all departments
+
 `int min = list.stream().mapToInt(Student::getAge)
           .min()
           .getAsInt();`
+
 `Student student = list.stream()
                     .min(Comparator.comparing(Student::getAge))
                     .get();`
 
 Find the senior female student in all departments
+
 `int seniorStudent = list.stream()
                     .filter(t -> t.getGender().equals("Female"))
                     .mapToInt(Student::getAge)
                     .max()
                     .getAsInt();`
+
 `Student student = list.stream()
                     .filter(t -> t.getGender().equals("Female"))
                     .max(Comparator.comparing(Student::getAge))
                     .get();`
 
 Find the list of students whose rank is between 50 and 100
+
 `List<Student> collect = list.stream()
                         .filter(t -> t.getRank() > 50 && t.getRank() < 100)
                         .collect(Collectors.toList());`
 
 Find the department who is having maximum number of students
+
 `Entry<String, Long> entry = list.stream()
                            .collect(Collectors.groupingBy(Student::getDepartmantName, Collectors.counting()))
                            .entrySet()
@@ -401,34 +413,41 @@ Find the department who is having maximum number of students
                            .get();`
 
 Find the Students who stays in Mumbai and sort them by their names
+
 `List<Student> collect = list.stream()
                         .filter(t -> t.getCity().equals("Mumbai"))
                         .sorted(Comparator.comparing(Student::getFirstName))
                         .collect(Collectors.toList());`
 
 Find the total count of students
+
 `long count = list.stream().count();`
 
 Find the average rank in all departments
+
 `Map<String, Double> collect = list.stream()
                               .collect(Collectors.groupingBy(Student::getDepartmantName, Collectors.averagingInt(Student::getRank)));`
 
 Find the highest rank in each department
+
 `Map<String, Optional<Student>> collect = list.stream()
                                         .collect(Collectors.groupingBy(Student::getDepartmantName,Collectors.minBy(Comparator.comparing(Student::getRank))));`
 
 Find the list of students , which are sorted by their rank
+
 `List<Student> collect = list.stream()
                         .sorted(Comparator.comparing(Student::getRank))
                         .collect(Collectors.toList());`
 
 Find the second highest rank student
+
 `Student student = list.stream()
                   .sorted(Comparator.comparing(Student::getRank))
                   .skip(1).findFirst()
                   .get();`
 
 Find the ranks of students in all department in ascending order
+
 `Map<String, List<Student>> collect = list.stream()
                                     .collect(Collectors.groupingBy(Student::getDepartmantName,Collectors.collectingAndThen(Collectors.toList(), list -> list.stream()
                                     .sorted(Comparator.comparing(Student::getRank))
