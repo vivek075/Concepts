@@ -729,8 +729,8 @@ Summary
 It provides methods to handle the presence or absence of values explicitly.
 
 It helps in avoiding `NullPointerException` and makes the code more readable and expressive.
-
 ---
+# Profiling
 **Profiling** and optimizing a Java application involves identifying performance bottlenecks, understanding memory usage, and making adjustments to improve overall performance.
 
 1. Profiling a Java Application
