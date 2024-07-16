@@ -1101,7 +1101,7 @@ A thread pool is a collection of pre-instantiated reusable threads that can exec
 ---
 # Map vs FlatMap
 - `map()` and `flatMap()` both returns Stream<R>.
-- `map()` produces one output value for one input value whereas `flatMap()` provide one or more values for each input value. In simple words, a mapis for transformation while flatmap is a combination of transformation and flattening.
+- `map()` produces one output value for one input value whereas `flatMap()` provide one or more values for each input value. In simple words, a map is for transformation while flatmap is a combination of transformation and flattening.
   flatMap() = map()+flattening
 
 ---
