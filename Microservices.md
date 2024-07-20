@@ -57,16 +57,35 @@ Microservices often use event-driven architecture for asynchronous communication
 
 Querying data from multiple databases in a microservices architecture can be challenging due to the decentralized data management principle. However, several strategies and patterns can be employed to effectively query and aggregate data from multiple microservices:
 
-1. API Composition
+**1. API Composition**
 API Composition involves an API gateway or a dedicated service that calls multiple microservices and aggregates the results. This approach is suitable for simple aggregations and read operations.
 
-API Gateway: Acts as a single entry point for client requests, orchestrating calls to multiple microservices and aggregating the results.
-Backend for Frontend (BFF): A specific type of API gateway tailored to the needs of a particular client interface.
+- API Gateway: Acts as a single entry point for client requests, orchestrating calls to multiple microservices and aggregating the results.
+- Backend for Frontend (BFF): A specific type of API gateway tailored to the needs of a particular client interface.
+```
+@RestController
+public class CompositeController {
+    
+    @Autowired
+    private ServiceAClient serviceAClient;
+    
+    @Autowired
+    private ServiceBClient serviceBClient;
+    
+    @GetMapping("/composite")
+    public CompositeResponse getCompositeData() {
+        DataA dataA = serviceAClient.getDataA();
+        DataB dataB = serviceBClient.getDataB();
+        return new CompositeResponse(dataA, dataB);
+    }
+}
+```
 
-2. Database Per Service with Data Replication
+**2. Database Per Service with Data Replication**
+
 Each microservice owns its own database, but certain data can be replicated across services to reduce the need for cross-service queries.
 
-Event-Driven Data Replication: Use an event-driven architecture to replicate data between services. Services publish events when their data changes, and other services subscribe to these events to update their own data stores.
+- Event-Driven Data Replication: Use an event-driven architecture to replicate data between services. Services publish events when their data changes, and other services subscribe to these events to update their own data stores.
 
 ```
 // Service A publishes an event
@@ -81,11 +100,12 @@ public void handleDataAUpdated(DataAUpdatedEvent event) {
     dataBRepository.updateWithDataA(event.getDataA());
 }
 ```
-3. CQRS (Command Query Responsibility Segregation)
+**3. CQRS (Command Query Responsibility Segregation)**
+
 CQRS separates the read and write operations, allowing for optimized data retrieval and updates. Read models can aggregate data from multiple sources.
 
-Command Side: Handles write operations.
-Query Side: Handles read operations, often using a different data model optimized for queries.
+- Command Side: Handles write operations.
+- Query Side: Handles read operations, often using a different data model optimized for queries.
 
 ```
 // Command Handler
