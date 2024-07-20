@@ -577,3 +577,126 @@ Lightweight Applications: For simple web applications or microservices, a web se
 Enterprise Applications: For applications requiring robust features like distributed transactions, messaging, and complex security, a full-fledged application server like JBoss EAP, IBM WebSphere, or Oracle WebLogic is more appropriate.
 
 Microservices Architecture: Modern microservices architectures often prefer lightweight servers or containerized environments, reducing the reliance on traditional heavyweight application servers.
+
+# Techniques for Session Persistence
+To ensure that subsequent requests after login go to the same web server, especially in a distributed or load-balanced environment, several techniques can be used. This is crucial for maintaining session state and ensuring a seamless user experience. Here’s a breakdown of how this can be achieved:
+
+**1. Sticky Sessions (Session Affinity)**
+
+Description: Sticky sessions, also known as session affinity, direct all requests from a particular user to the same web server instance after the initial login.
+
+Implementation: Load balancers can be configured to use sticky sessions by setting a special cookie (like JSESSIONID in Java applications) to identify the user's session and route their requests accordingly.
+
+Pros: Simple to implement and works well for applications with low to moderate traffic.
+
+Cons: Can lead to uneven load distribution, as some servers might become overloaded while others are underutilized.
+
+**2. Distributed Sessions (Session Replication)**
+
+Description: Session data is replicated across all servers in the cluster so that any server can handle subsequent requests.
+
+Implementation: Application servers like Apache Tomcat, JBoss, and others support session replication. They share session state across the cluster, ensuring consistency.
+
+Pros: Ensures high availability and fault tolerance.
+
+Cons: Can introduce overhead due to session replication traffic, potentially affecting performance.
+
+Examples with Apache Tomcat:
+```
+<Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster">
+    <Manager className="org.apache.catalina.ha.session.DeltaManager"
+             expireSessionsOnShutdown="false"
+             notifyListenersOnReplication="true"/>
+    <Channel className="org.apache.catalina.tribes.group.GroupChannel">
+        <Membership className="org.apache.catalina.tribes.membership.McastService"
+                    address="228.0.0.4"
+                    port="45564"
+                    frequency="500"
+                    dropTime="3000"/>
+        <Sender className="org.apache.catalina.tribes.transport.ReplicationTransmitter">
+            <Transport className="org.apache.catalina.tribes.transport.nio.PooledParallelSender"/>
+        </Sender>
+        <Receiver className="org.apache.catalina.tribes.transport.nio.NioReceiver"
+                  address="auto"
+                  port="4000"
+                  autoBind="100"
+                  selectorTimeout="5000"
+                  maxThreads="6"/>
+        <Interceptor className="org.apache.catalina.tribes.group.interceptors.TcpFailureDetector"/>
+        <Interceptor className="org.apache.catalina.tribes.group.interceptors.MessageDispatch15Interceptor"/>
+    </Channel>
+</Cluster>
+```
+
+**3. External Session Stores**
+
+Description: Store session data in an external datastore such as a database, Redis, or another distributed cache.
+
+Implementation: Sessions are stored in an external system, allowing any server to retrieve the session state.
+
+Pros: Decouples session management from the application server, improving scalability and fault tolerance.
+
+Cons: Adds latency due to external storage access and requires additional infrastructure.
+
+Example with Spring Session and Redis:
+
+`
+<dependency>
+    <groupId>org.springframework.session</groupId>
+    <artifactId>spring-session-data-redis</artifactId>
+</dependency>
+`
+
+Configuration:
+`
+@Configuration
+@EnableRedisHttpSession
+public class RedisConfig {
+
+    @Bean
+    public LettuceConnectionFactory connectionFactory() {
+        return new LettuceConnectionFactory();
+    }
+}
+`
+
+**4. Token-Based Authentication (Stateless Sessions)**
+
+Description: Use JWT (JSON Web Tokens) or similar tokens for stateless authentication. Each request includes a token that contains all the necessary user information.
+
+Implementation: After login, the server issues a token to the client. The client includes this token in the Authorization header of each subsequent request.
+
+Pros: Scalability is improved as no session state is stored on the server.
+
+Cons: Managing token security and invalidation can be complex.
+
+Spring Security and JWT:
+`
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.9.1</version>
+</dependency>
+`
+
+`@RestController
+public class AuthController {
+
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        // Authentication logic
+        String jwt = generateToken(authentication);
+        return ResponseEntity.ok(new JwtResponse(jwt));
+    }
+}
+`
+
+**Summary**:
+
+Sticky Sessions: Simple, but can lead to uneven load distribution.
+
+Distributed Sessions: Ensures availability and fault tolerance but can introduce replication overhead.
+
+External Session Stores: Decouples session management but adds latency and requires additional infrastructure.
+
+Token-Based Authentication: Improves scalability but requires careful management of token security and invalidation.
