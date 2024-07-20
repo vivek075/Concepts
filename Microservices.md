@@ -240,3 +240,23 @@ public class RiskAssessmentService {
 }
 ```
 
+---
+# What are some of the most important considerations when designing a RESTful API?
+
+There are several important considerations when designing a RESTful API, 
+
+including URL structure, 
+
+HTTP methods, 
+
+media types, 
+
+hypermedia links and data formats. 
+
+The URL structure is very important because it determines how users access the API. I prefer using URLs that are easy for humans to read so they can understand the purpose of the resource. 
+
+HTTP methods are also important because they determine which actions are available on the API. For example, if there’s no POST method, then users cannot create new resources. 
+
+Media types are important because they define the format of the data being sent or received. 
+
+Hypermedia links are important because they allow users to navigate between different resources without having to know all possible routes beforehand.
