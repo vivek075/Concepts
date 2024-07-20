@@ -520,3 +520,60 @@ Given a list of strings, find the longest palindrome string
 Given a list of integers, find the product of all non-negative integers
 
 `long longNumber = integerList.stream().filter(num -> num >= 0).mapToLong(Integer::longValue).reduce(1, (a, b) -> a * b);`
+
+# Difference Between Web Server and Application Server
+**Web Server**:
+
+A web server is designed to _serve static content such as HTML, CSS, JavaScript, and images to the client_. It handles HTTP requests and responses, and it _can also serve dynamic content using server-side scripts, but it primarily focuses on serving web pages_.
+
+- Primary Function: Serve static content and handle HTTP requests.
+- Examples: Apache HTTP Server, Nginx, Microsoft IIS.
+- Use Cases: Hosting websites, serving static files, reverse proxying.
+
+**Application Server**:
+
+An application server _provides a runtime environment for executing business logic and dynamic content_. It _supports a variety of services such as transaction management, messaging, security, and resource pooling_. It can also serve web content, but its primary role is to host and manage applications.
+
+- Primary Function: Serve dynamic content, manage business logic, and provide various enterprise-level services.
+- Examples: Apache Tomcat, JBoss EAP, IBM WebSphere, Oracle WebLogic, GlassFish.
+- Use Cases: Enterprise applications, backend services, complex business logic, multi-tier applications.
+
+**When to Use Which Server**:
+
+Web Server:
+
+Simple websites with static content.
+
+When you need to serve content quickly with minimal processing.
+
+Use cases include static sites, serving media files, load balancing, and reverse proxying.
+
+**Application Server**:
+
+Complex, enterprise-level applications requiring business logic execution.
+
+Applications needing transaction management, security, messaging, etc.
+
+Use cases include e-commerce platforms, enterprise resource planning (ERP) systems, and customer relationship management (CRM) systems.
+
+**Examples of Servers**:
+
+1. Apache HTTP Server (Web Server): Widely used, open-source web server known for its flexibility and rich feature set.
+
+2. Nginx (Web Server): High-performance web server and reverse proxy server known for its speed and scalability.
+
+3. Apache Tomcat (Application Server): Open-source application server for Java Servlets and JSP, often used for lightweight Java web applications.
+
+4. JBoss EAP (Application Server): Enterprise-level Java application server with robust features for large-scale applications.
+
+5. IBM WebSphere (Application Server): Comprehensive application server with extensive enterprise features for critical business applications.
+
+**Do We Still Require an Application Server for Java Development?**
+
+The need for an application server in Java development depends on the complexity and requirements of the application:
+
+Lightweight Applications: For simple web applications or microservices, a web server like Apache Tomcat or even an embedded server (like Spring Boot's embedded Tomcat) may be sufficient.
+
+Enterprise Applications: For applications requiring robust features like distributed transactions, messaging, and complex security, a full-fledged application server like JBoss EAP, IBM WebSphere, or Oracle WebLogic is more appropriate.
+
+Microservices Architecture: Modern microservices architectures often prefer lightweight servers or containerized environments, reducing the reliance on traditional heavyweight application servers.
