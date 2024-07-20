@@ -2,7 +2,8 @@
 
 The SOLID principles are a set of five design principles in object-oriented programming that aim to make software designs more understandable, flexible, and maintainable.
 
-1. Single Responsibility Principle (SRP)
+**1. Single Responsibility Principle (SRP)**
+
 A class should have only one reason to change, meaning it should have only one job or responsibility.
 
 ```
@@ -27,7 +28,8 @@ public class InvoiceRepository {
 }
 Explanation: In this example, Invoice is responsible for invoice calculations, InvoicePrinter handles printing, and InvoiceRepository manages database operations. Each class has a single responsibility.
 ```
-2. Open/Closed Principle (OCP)
+**2. Open/Closed Principle (OCP)**
+
 Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.
 ```
 public abstract class Shape {
@@ -69,7 +71,8 @@ public class AreaCalculator {
 }
 Explanation: New shapes can be added by extending the Shape class without modifying existing code. This adheres to the OCP.
 ```
-3. Liskov Substitution Principle (LSP)
+**3. Liskov Substitution Principle (LSP)**
+
 Objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program.
 ```
 public class Bird {
@@ -86,7 +89,8 @@ public class Ostrich extends Bird {
 }
 Explanation: This example violates LSP because an Ostrich cannot fly, and thus cannot be substituted for a Bird. A better design would avoid such a hierarchy.
 ```
-4. Interface Segregation Principle (ISP)
+**4. Interface Segregation Principle (ISP)**
+
 Clients should not be forced to depend on methods they do not use. It is better to have multiple specific interfaces than a single general-purpose interface.
 ```
 public interface Printer {
@@ -114,7 +118,8 @@ public class SimplePrinter implements Printer {
 }
 Explanation: Instead of one large interface, separate Printer and Scanner interfaces are created. MultiFunctionPrinter implements both, while SimplePrinter implements only Printer.
 ```
-5. Dependency Inversion Principle (DIP)
+**5. Dependency Inversion Principle (DIP)**
+
 High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
 ```
 public interface PaymentProcessor {
