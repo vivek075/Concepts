@@ -640,15 +640,15 @@ Cons: Adds latency due to external storage access and requires additional infras
 
 Example with Spring Session and Redis:
 
-`
+```
 <dependency>
     <groupId>org.springframework.session</groupId>
     <artifactId>spring-session-data-redis</artifactId>
 </dependency>
-`
+```
 
 Configuration:
-`
+```
 @Configuration
 @EnableRedisHttpSession
 public class RedisConfig {
@@ -658,7 +658,7 @@ public class RedisConfig {
         return new LettuceConnectionFactory();
     }
 }
-`
+```
 
 **4. Token-Based Authentication (Stateless Sessions)**
 
@@ -671,15 +671,16 @@ Pros: Scalability is improved as no session state is stored on the server.
 Cons: Managing token security and invalidation can be complex.
 
 Spring Security and JWT:
-`
+```
 <dependency>
     <groupId>io.jsonwebtoken</groupId>
     <artifactId>jjwt</artifactId>
     <version>0.9.1</version>
 </dependency>
-`
+```
 
-`@RestController
+```
+@RestController
 public class AuthController {
 
     @PostMapping("/login")
@@ -689,7 +690,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
 }
-`
+```
 
 **Summary**:
 
