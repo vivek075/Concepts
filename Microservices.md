@@ -265,6 +265,7 @@ Hypermedia links are important because they allow users to navigate between diff
 # API Gateway
 An API Gateway is a key component in system design, particularly in microservices architectures and modern web applications. It serves as a centralized entry point for managing and routing requests from clients to the appropriate microservices or backend services within a system.
 ![image info](./images/api-gateway.jpg)
+
 API Gateway is a service that sits between clients and backend services, acting as a reverse proxy to accept incoming requests from clients, perform various operations such as routing, authentication, and rate limiting, and then forward those requests to the appropriate backend services.
 _It serves as a single entry point for clients to access multiple services, providing a unified interface and abstracting the complexities of the underlying architecture._
 
