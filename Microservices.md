@@ -315,3 +315,138 @@ API Gateways can introduce several challenges, especially in complex environment
 - Security risks: Misconfigured API Gateways can introduce security vulnerabilities, such as improper authentication, authorization, or exposure of sensitive information. Regular security audits and updates are essential to mitigate these risks.
 - Scalability challenges: Scaling an API Gateway can be challenging, especially in dynamic environments with fluctuating traffic. Load balancing and horizontal scaling strategies are essential to ensure scalability.
 - Monitoring and logging: Monitoring and logging the API Gateway’s performance and behavior can be complex, especially when dealing with a large number of requests and services. Proper monitoring and logging tools are crucial for maintaining visibility into the Gateway’s operation.
+
+---
+# JWT
+JWT (JSON Web Token) is an open standard (RFC 7519) for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA.
+
+**JWT is used for authorization and information exchange.**
+1. Authorization: This is the most common scenario for using JWT. Once the user is logged in, each subsequent request will include the JWT, allowing the user to access routes, services, and resources that are permitted with that token.
+2. Information Exchange: JWTs are a good way to securely transmit information between parties. Since JWTs can be signed, the information is trusted and verified.
+
+**When to Use JWT**
+1. Stateless Authentication: JWT is ideal for stateless authentication where the server does not need to maintain session information. Each request from the client contains the JWT, which the server can validate and then grant access accordingly.
+2. Scalability: When building scalable applications, especially in microservices architectures, JWT helps in maintaining stateless authentication across different services.
+3. Mobile and Single Page Applications (SPA): JWT is commonly used in mobile apps and SPAs where maintaining a session on the server is not feasible.
+
+**When Not to Use JWT**
+1. Sensitive Data: Do not use JWT to store sensitive data directly, as it is only base64url encoded, not encrypted.
+2. Large Payloads: If the payload is too large, it will increase the size of the token, which can cause performance issues, especially in network latency.
+3. Short-Lived Information: If the data is very short-lived and constantly changing, it might not be ideal to use JWT.
+
+**How JWT Works**
+
+A JWT is composed of three parts: Header, Payload, and Signature.
+
+- Header: Contains metadata about the token, such as the type of token (JWT) and the signing algorithm (e.g., HMAC SHA256 or RSA).
+- Payload: Contains the claims, which are statements about an entity (typically, the user) and additional data. Claims are typically statements about a resource (like user ID or roles).
+- Signature: Used to verify that the sender of the JWT is who it says it is and to ensure that the message wasn’t changed along the way. The signature is created by taking the encoded header, the encoded payload, a secret, and the algorithm specified in the header, and signing that.
+
+```
+    +-------------------+       +------------------+       +-------------------+
+    |                   |       |                  |       |                   |
+    |     Header        |  +--> |     Payload      |  +--> |     Signature     |
+    |                   |       |                  |       |                   |
+    +-------------------+       +------------------+       +-------------------+
+          Base64Url                    Base64Url                    Signature
+        Encode Header               Encode Payload             Sign with Secret
+```
+
+**Using JWT in Spring Application**
+To use JWT in a Spring application, you typically need to follow these steps:
+
+- Add Dependencies: Include necessary dependencies like spring-boot-starter-security, jjwt (Java JWT: JSON Web Token for Java and Android).
+- Configure Security: Set up a security configuration class to enable JWT authentication.
+- JWT Utility Class: Create a utility class for generating and validating JWT tokens.
+- Custom Filters: Implement custom filters for JWT authentication and authorization.
+- Controller: Secure your endpoints using annotations like @PreAuthorize or @Secured.
+
+Example in Spring Boot
+```
+// build.gradle
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+}
+
+// SecurityConfig.java
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/authenticate").permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+}
+
+// JwtUtil.java
+public class JwtUtil {
+    private String secret = "secret";
+
+    public String generateToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+    }
+
+    public String extractUsername(String token) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+}
+
+// JwtRequestFilter.java
+public class JwtRequestFilter extends OncePerRequestFilter {
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+        final String authorizationHeader = request.getHeader("Authorization");
+
+        String username = null;
+        String jwt = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = authorizationHeader.substring(7);
+            username = jwtUtil.extractUsername(jwt);
+        }
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            if (jwtUtil.validateToken(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken
+                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
+        }
+        chain.doFilter(request, response);
+    }
+}
+
+// Controller
+@RestController
+public class HelloWorldController {
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hello World";
+    }
+}
+```
