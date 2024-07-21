@@ -138,63 +138,45 @@ Note : Querying data from multiple databases in a microservices architecture req
 ---
 # Bounded Contexts in Microservices
 
-Bounded contexts are a core concept in Domain-Driven Design (DDD) and play a crucial role in the architecture of microservices. They help in defining clear boundaries within which a particular domain model is valid and consistent, ensuring that each microservice has a well-defined scope and responsibility.
+Bounded contexts are a `core concept in Domain-Driven Design (DDD)` and play a crucial role in the architecture of microservices. They `help in defining clear boundaries` within which a particular `domain model is valid and consistent`, ensuring that each microservice has a well-defined scope and responsibility.
 
-A bounded context represents a specific responsibility and area of a larger domain. Within a bounded context, all models, logic, and data are consistent and follow the same rules. It helps to avoid ambiguity and conflicts that might arise from having multiple models and interpretations of the same concepts in different parts of the system.
+A bounded context `represents a specific responsibility` and area of a larger domain. Within a bounded context, all models, logic, and data are `consistent` and follow the same rules. It `helps to avoid ambiguity and conflicts` that might arise from having multiple models and interpretations of the same concepts in different parts of the system.
 
 **Benefits of Bounded Contexts in Microservices**
 
-Clear Boundaries: Ensures that each microservice has a clear, well-defined responsibility.
-
-Modularity: Promotes modularity and independence between services, allowing easier maintenance and scalability.
-
-Consistency: Maintains consistency within each bounded context by avoiding the overlap of domain logic and data.
-
-Decoupling: Encourages loose coupling between different parts of the system, making the overall architecture more flexible and resilient to changes.
+- Clear Boundaries: Ensures that each microservice has a clear, well-defined responsibility.
+- Modularity: Promotes modularity and independence between services, allowing easier maintenance and scalability.
+- Consistency: Maintains consistency within each bounded context by avoiding the overlap of domain logic and data.
+- Decoupling: Encourages loose coupling between different parts of the system, making the overall architecture more flexible and resilient to changes.
 
 **Bounded Contexts in a Banking Trading System**
 
 In a banking trading system, the application can be divided into several bounded contexts, each representing a distinct area of functionality. Here are some examples of bounded contexts:
 
-1. Trade Execution Context:
+**1. Trade Execution Context**:
+- Responsibility: Handling the execution of trades.
+- Entities: Trade, Order, ExecutionReport.
+- Services: TradeExecutionService, OrderService.
 
-Responsibility: Handling the execution of trades.
+**2. Risk Management Context**:
+- Responsibility: Managing risk associated with trades.
+- Entities: RiskAssessment, Position, Exposure.
+- Services: RiskAssessmentService, PositionService.
 
-Entities: Trade, Order, ExecutionReport.
+**3. Settlement Context**:
+- Responsibility: Settling trades after execution.
+- Entities: Settlement, Payment, Ledger.
+- Services: SettlementService, PaymentService.
 
-Services: TradeExecutionService, OrderService.
+**4. Market Data Context**:
+- Responsibility: Providing market data such as prices and rates.
+- Entities: MarketData, Price, Rate.
+- Services: MarketDataService, PriceService.
 
-2. Risk Management Context:
-
-Responsibility: Managing risk associated with trades.
-
-Entities: RiskAssessment, Position, Exposure.
-
-Services: RiskAssessmentService, PositionService.
-
-3. Settlement Context:
-
-Responsibility: Settling trades after execution.
-
-Entities: Settlement, Payment, Ledger.
-
-Services: SettlementService, PaymentService.
-
-4. Market Data Context:
-
-Responsibility: Providing market data such as prices and rates.
-
-Entities: MarketData, Price, Rate.
-
-Services: MarketDataService, PriceService.
-
-5. Compliance Context:
-
-Responsibility: Ensuring trades comply with regulatory requirements.
-
-Entities: ComplianceCheck, Report, AuditTrail.
-
-Services: ComplianceService, ReportingService.
+**5. Compliance Context**:
+- Responsibility: Ensuring trades comply with regulatory requirements.
+- Entities: ComplianceCheck, Report, AuditTrail.
+- Services: ComplianceService, ReportingService.
 
 Interactions Between Bounded Contexts
 
