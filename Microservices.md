@@ -61,7 +61,7 @@ public class CompositeController {
 
 Each microservice owns its own database, but certain data can be replicated across services to reduce the need for cross-service queries.
 
-- Event-Driven Data Replication: Use an event-driven architecture to replicate data between services. Services publish events when their data changes, and other services subscribe to these events to update their own data stores.
+- **Event-Driven Data Replication**: Use an event-driven architecture to replicate data between services. Services publish events when their data changes, and other services subscribe to these events to update their own data stores.
 
 ```
 // Service A publishes an event
@@ -79,9 +79,8 @@ public void handleDataAUpdated(DataAUpdatedEvent event) {
 **3. CQRS (Command Query Responsibility Segregation)**
 
 CQRS separates the read and write operations, allowing for optimized data retrieval and updates. Read models can aggregate data from multiple sources.
-
-- Command Side: Handles write operations.
-- Query Side: Handles read operations, often using a different data model optimized for queries.
+- **Command Side**: Handles write operations.
+- **Query Side**: Handles read operations, often using a different data model optimized for queries.
 
 ```
 // Command Handler
@@ -101,12 +100,12 @@ public class OrderQueryHandler {
     }
 }
 ```
-4. Database Views and Joins
+4. **Database Views and Joins**
 In some cases, you can use database views or federated queries to aggregate data from multiple databases, especially if using a multi-model database that supports such operations.
 
 Federated Queries: Queries that span multiple databases, often used in data warehousing.
 
-5. GraphQL
+5. **GraphQL**
 GraphQL can be used as an API layer to aggregate data from multiple microservices. It allows clients to request exactly the data they need and can efficiently compose data from multiple sources.
 
 Note : Querying data from multiple databases in a microservices architecture requires careful planning and design. The choice of strategy depends on the specific requirements, such as the need for real-time data, the complexity of the queries, and the consistency requirements. Using a combination of API composition, data replication, CQRS, federated queries, and GraphQL can help achieve efficient and scalable data retrieval across multiple microservices.
