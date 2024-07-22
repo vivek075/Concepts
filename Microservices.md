@@ -5,41 +5,29 @@
 
 Microservices architecture is an architectural style that structures an application as a collection of loosely coupled services. Each service is highly maintainable, testable, independently deployable, and organized around business capabilities. Here are the key principles of microservices architecture:
 
-1. Single Responsibility Principle
-Each microservice should have a single, well-defined purpose and should perform one specific function or a small group of related functions. This helps to ensure that services remain small, manageable, and focused.
+**1. Single Responsibility Principle** : Each microservice should have a single, well-defined purpose and should perform one specific function or a small group of related functions. This helps to ensure that services remain small, manageable, and focused.
 
-2. Decentralized Data Management
-Microservices favor decentralized data management, meaning each service manages its own database. This avoids the complexities and performance issues associated with a single, centralized database.
+**2. Decentralized Data Management** : Microservices favor decentralized data management, meaning each service manages its own database. This avoids the complexities and performance issues associated with a single, centralized database.
 
-3. Independent Deployability
-Microservices can be developed, deployed, and scaled independently. This allows for continuous deployment and faster iterations since changes to one service do not require the redeployment of the entire application.
+**3. Independent Deployability** : Microservices can be developed, deployed, and scaled independently. This allows for continuous deployment and faster iterations since changes to one service do not require the redeployment of the entire application.
 
-4. API-based Communication
-Services communicate with each other through well-defined APIs, typically over HTTP/REST or messaging queues. This ensures clear, decoupled interactions between services.
+**4. API-based Communication** : Services communicate with each other through well-defined APIs, typically over HTTP/REST or messaging queues. This ensures clear, decoupled interactions between services.
 
-5. Decentralized Governance
-Microservices architecture supports decentralized governance, allowing teams to choose the best tools and technologies for their specific needs. This encourages innovation and the use of the right tool for the right job.
+**5. Decentralized Governance** : Microservices architecture supports decentralized governance, allowing teams to choose the best tools and technologies for their specific needs. This encourages innovation and the use of the right tool for the right job.
 
-6. Automated Deployment and DevOps
-Automated deployment processes and DevOps practices are essential for managing microservices. Continuous integration and continuous deployment (CI/CD) pipelines help streamline the deployment process, reduce errors, and improve deployment frequency.
+**6. Automated Deployment and DevOps** : Automated deployment processes and DevOps practices are essential for managing microservices. Continuous integration and continuous deployment (CI/CD) pipelines help streamline the deployment process, reduce errors, and improve deployment frequency.
 
-7. Failure Isolation
-Microservices are designed to handle failure gracefully. The failure of one service should not impact the entire system. Techniques such as circuit breakers, retries, and failover mechanisms are often used to achieve this.
+**7. Failure Isolation** : Microservices are designed to handle failure gracefully. The failure of one service should not impact the entire system. Techniques such as circuit breakers, retries, and failover mechanisms are often used to achieve this.
 
-8. Polyglot Programming
-Microservices architecture allows the use of different programming languages, frameworks, and technologies for different services. This flexibility enables teams to use the best tools for their specific needs.
+**8. Polyglot Programming** : Microservices architecture allows the use of different programming languages, frameworks, and technologies for different services. This flexibility enables teams to use the best tools for their specific needs.
 
-9. Business Capability Alignment
-Each microservice should align with a specific business capability, making it easier to evolve and scale the system in response to changing business requirements.
+**9. Business Capability Alignment** : Each microservice should align with a specific business capability, making it easier to evolve and scale the system in response to changing business requirements.
 
-10. Scalability
-Microservices can be scaled independently. If a particular service requires more resources due to increased demand, it can be scaled out without affecting other services.
+**10. Scalability** : Microservices can be scaled independently. If a particular service requires more resources due to increased demand, it can be scaled out without affecting other services.
 
-11. Organized around Business Capabilities
-Teams are cross-functional, organized around business capabilities, and own the lifecycle of the service. This aligns the development process with business objectives and improves overall efficiency.
+**11. Organized around Business Capabilities** : Teams are cross-functional, organized around business capabilities, and own the lifecycle of the service. This aligns the development process with business objectives and improves overall efficiency.
 
-12. Event-Driven Architecture
-Microservices often use event-driven architecture for asynchronous communication between services. This can improve performance and resilience by decoupling services and enabling them to react to events in real-time.
+**12. Event-Driven Architecture** : Microservices often use event-driven architecture for asynchronous communication between services. This can improve performance and resilience by decoupling services and enabling them to react to events in real-time.
 
 ---
 
@@ -272,21 +260,17 @@ Overall, the API Gateway simplifies the client-server communication by providing
 **Benefits of using an API Gateway**
 
 - Centralized Entry Point
-
 An API Gateway acts as a single entry point, meaning that clients send their requests to the gateway, and the gateway takes responsibility for routing those requests to the appropriate services.
 
 - Routing and Load Balancing
-
 API Gateways analyze incoming requests and determine which backend service should handle them based on various factors such as the request’s URL, headers, or even the content of the request.
 
 Additionally, they can distribute incoming requests evenly across multiple instances of the same service to ensure load balancing.
 
 - Authentication and Authorization
-
 They can enforce authentication, ensuring that only authorized users or applications can access the services behind the gateway.
 
 - Request and Response Transformation
-
 API Gateways can transform requests and responses as they pass through.
 
 For example, they can convert data formats (e.g., from JSON to XML or vice versa) to ensure compatibility between different parts of the system.
@@ -435,6 +419,203 @@ public class HelloWorldController {
     @GetMapping("/hello")
     public String hello() {
         return "Hello World";
+    }
+}
+```
+
+---
+# Saga Pattern
+
+The Saga Pattern is a design pattern used to `manage and coordinate transactions across multiple microservices`. In simple terms, it `helps ensure that a series of related operations either all succeed or all fail`, keeping data consistent across different services. Here's a simplified explanation:
+
+1. **Choreography-Based Saga:**
+- Each service involved in the transaction performs its work and then triggers the next service in the chain.
+- If any service fails, each service that has already completed its work must undo its changes (compensating transactions).
+
+2. **Orchestration-Based Saga:**
+- A central coordinator (orchestrator) tells each service what to do and keeps track of the progress.
+- If something goes wrong, the orchestrator directs the services to undo their work.
+
+Imagine you are ordering a product online:
+- Step 1: Deduct money from your account.
+- Step 2: Reserve the product in the inventory.
+- Step 3: Arrange shipping for the product.
+
+If Step 2 fails (product is out of stock), the system will:
+- Add the money back to your account (compensating transaction for Step 1).
+- Cancel any other pending actions.
+
+The Saga Pattern helps maintain consistency and ensures that your data remains correct, even if something goes wrong in the middle of the process.
+
+Let's break down the Saga Pattern using a banking transaction example in Spring Boot, illustrating both the choreography-based and orchestration-based approaches. Here, we'll consider a simplified scenario of transferring money between two accounts.
+
+**Choreography-Based Saga**
+
+In this approach, each service listens for events and performs its actions accordingly. If a step fails, compensating transactions are triggered to roll back the changes.
+
+Steps:
+- Debit Service: Deducts money from the sender's account.
+- Credit Service: Adds money to the receiver's account.
+- Notification Service: Sends a notification of the transaction.
+
+If any step fails, each preceding service must undo its changes.
+
+```
+[Transaction Started]
+       |
+       v
+[Debit Service] ---> [Event: Money Debited] ---> [Credit Service] ---> [Event: Money Credited] ---> [Notification Service]
+       |                                                   |                                           |
+[Event: Debit Failed] <--- [Compensating Transaction: Refund Money] <--- [Compensating Transaction: Undo Credit]
+```
+
+**Orchestration-Based Saga**
+
+In this approach, a central orchestrator coordinates the entire transaction process, making it easier to handle compensations.
+
+Steps:
+- Transaction Orchestrator: Starts the transaction.
+- Debit Service: Deducts money from the sender's account.
+- Credit Service: Adds money to the receiver's account.
+- Notification Service: Sends a notification of the transaction.
+
+If any step fails, the orchestrator triggers compensating transactions.
+
+```
+[Transaction Orchestrator]
+       |
+       v
+[Debit Service] <------ [Orchestrator: Compensate Debit] <------ [Compensation Trigger]
+       |
+       v
+[Credit Service] <------ [Orchestrator: Compensate Credit] <------ [Compensation Trigger]
+       |
+       v
+[Notification Service]
+```
+
+**Choreography-Based Saga Example**:
+
+Debit Service:
+```
+@RestController
+@RequestMapping("/debit")
+public class DebitController {
+
+    @PostMapping("/deduct")
+    public ResponseEntity<String> deduct(@RequestBody TransactionRequest request) {
+        // Deduct money logic
+        if (success) {
+            // Publish event
+            publishEvent(new MoneyDebitedEvent(request));
+            return ResponseEntity.ok("Money Debited");
+        } else {
+            // Publish failure event
+            publishEvent(new DebitFailedEvent(request));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Debit Failed");
+        }
+    }
+}
+```
+
+Credit Service:
+```
+@RestController
+@RequestMapping("/credit")
+public class CreditController {
+
+    @EventListener
+    public void handleMoneyDebitedEvent(MoneyDebitedEvent event) {
+        // Add money logic
+        if (success) {
+            // Publish event
+            publishEvent(new MoneyCreditedEvent(event.getRequest()));
+        } else {
+            // Publish failure event
+            publishEvent(new CreditFailedEvent(event.getRequest()));
+        }
+    }
+}
+```
+
+Notification Service:
+```
+@RestController
+@RequestMapping("/notify")
+public class NotificationController {
+
+    @EventListener
+    public void handleMoneyCreditedEvent(MoneyCreditedEvent event) {
+        // Send notification logic
+    }
+}
+```
+
+**Orchestration-Based Saga Example**:
+
+Transaction Orchestrator:
+```
+@RestController
+@RequestMapping("/orchestrator")
+public class TransactionOrchestrator {
+
+    @PostMapping("/transfer")
+    public ResponseEntity<String> transfer(@RequestBody TransactionRequest request) {
+        try {
+            // Step 1: Debit
+            debitService.deduct(request);
+            // Step 2: Credit
+            creditService.add(request);
+            // Step 3: Notify
+            notificationService.send(request);
+            return ResponseEntity.ok("Transaction Successful");
+        } catch (Exception e) {
+            // Compensate
+            debitService.compensate(request);
+            creditService.compensate(request);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Transaction Failed");
+        }
+    }
+}
+```
+
+Debit Service:
+```
+@Service
+public class DebitService {
+
+    public void deduct(TransactionRequest request) {
+        // Deduct money logic
+    }
+
+    public void compensate(TransactionRequest request) {
+        // Refund money logic
+    }
+}
+```
+
+Credit Service:
+```
+@Service
+public class CreditService {
+
+    public void add(TransactionRequest request) {
+        // Add money logic
+    }
+
+    public void compensate(TransactionRequest request) {
+        // Undo credit logic
+    }
+}
+```
+
+Notification Service:
+```
+@Service
+public class NotificationService {
+
+    public void send(TransactionRequest request) {
+        // Send notification logic
     }
 }
 ```
