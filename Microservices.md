@@ -619,3 +619,172 @@ public class NotificationService {
     }
 }
 ```
+
+---
+Implementing authentication and authorization in Spring Boot microservices typically involves using OAuth 2.0 and JWT (JSON Web Tokens). Here's a step-by-step explanation:
+
+**Components Involved**:
+1. **Authentication Service**: Manages user authentication and issues JWT tokens.
+2. **API Gateway**: Acts as an entry point for all client requests, validating JWT tokens and forwarding requests to the appropriate microservices.
+3. **Resource Services (Microservices)**: Handle business logic and resource access, validating JWT tokens for authorization.
+
+**Step-by-Step Implementation**:
+
+1. **Authentication Service**
+
+Dependencies:
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-client</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-oauth2-jose</artifactId>
+</dependency>
+```
+
+Configuration:
+```
+@Configuration
+@EnableAuthorizationServer
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        clients.inMemory()
+                .withClient("client-id")
+                .secret("{noop}client-secret")
+                .authorizedGrantTypes("password", "refresh_token")
+                .scopes("read", "write")
+                .accessTokenValiditySeconds(3600)
+                .refreshTokenValiditySeconds(36000);
+    }
+
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        endpoints.authenticationManager(authenticationManager);
+    }
+}
+```
+User Details Service:
+```
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+    }
+}
+```
+2. **API Gateway**
+
+Dependencies:
+```
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-gateway</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+</dependency>
+```
+
+Configuration:
+```
+@Configuration
+public class GatewayConfig {
+
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        http
+            .authorizeExchange(exchanges -> exchanges
+                .pathMatchers("/auth/**").permitAll()
+                .anyExchange().authenticated()
+            )
+            .oauth2ResourceServer(OAuth2ResourceServerSpec::jwt);
+        return http.build();
+    }
+}
+```
+
+3. **Resource Services (Microservices)**
+
+Dependencies:
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+</dependency>
+```
+
+Configuration:
+```
+@Configuration
+public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+                .antMatchers("/public/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+            .oauth2ResourceServer()
+                .jwt();
+    }
+}
+```
+Putting It All Together
+
+User Authentication:
+- Clients (e.g., web or mobile apps) send authentication requests (with username and password) to the Authentication Service.
+- The Authentication Service validates the credentials and issues a JWT token.
+
+API Gateway:
+- Clients send requests to the API Gateway, including the JWT token in the Authorization header.
+- The API Gateway validates the JWT token. If valid, it forwards the request to the appropriate microservice.
+
+Microservices:
+- Each microservice receives the request and validates the JWT token again (for added security).
+- The microservice processes the request based on the user's roles and permissions embedded in the JWT token.
+
+A JWT token typically contains user information and claims like this:
+```
+{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "roles": ["ROLE_USER", "ROLE_ADMIN"],
+  "iat": 1516239022,
+  "exp": 1516242622
+}
+```
+
+Summary
+- **Authentication Service** handles user authentication and token issuance.
+- **API Gateway** validates tokens and forwards requests.
+- **Resource Services** (microservices) handle business logic and authorize actions based on the token's claims.
