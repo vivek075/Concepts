@@ -758,17 +758,17 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     }
 }
 ```
-Putting It All Together
+Putting it all together
 
-User Authentication:
+**User Authentication**:
 - Clients (e.g., web or mobile apps) send authentication requests (with username and password) to the Authentication Service.
 - The Authentication Service validates the credentials and issues a JWT token.
 
-API Gateway:
+**API Gateway**:
 - Clients send requests to the API Gateway, including the JWT token in the Authorization header.
 - The API Gateway validates the JWT token. If valid, it forwards the request to the appropriate microservice.
 
-Microservices:
+**Microservices**:
 - Each microservice receives the request and validates the JWT token again (for added security).
 - The microservice processes the request based on the user's roles and permissions embedded in the JWT token.
 
