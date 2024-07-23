@@ -620,7 +620,7 @@ public class NotificationService {
 ```
 
 ---
-Implementing <ins>authentication and authorization</ins> in Spring Boot microservices typically involves using OAuth 2.0 and JWT (JSON Web Tokens). Here's a step-by-step explanation:
+Implementing <ins>**authentication and authorization**</ins> in Spring Boot microservices typically involves using OAuth 2.0 and JWT (JSON Web Tokens). Here's a step-by-step explanation:
 
 **Components Involved**:
 1. **Authentication Service**: Manages user authentication and issues JWT tokens.
