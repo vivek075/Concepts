@@ -169,3 +169,7 @@
 31. Given a list of integers, find the product of all non-negative integers
 
 `long longNumber = integerList.stream().filter(num -> num >= 0).mapToLong(Integer::longValue).reduce(1, (a, b) -> a * b);`
+
+32. How do you find frequency of each character in a string using Java 8 streams?
+
+`inputString.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));`
