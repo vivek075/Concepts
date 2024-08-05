@@ -188,3 +188,7 @@
 
 `listOfIntegers.stream().sorted().limit(3).forEach(System.out::println)`
 `listOfIntegers.stream().sorted(Comparator.reverseOrder()).limit(3).forEach(System.out::println)`
+
+36. Find sum of all digits of a number in Java 8?
+
+`Stream.of(String.valueOf(i).split("")).collect(Collectors.summingInt(Integer::parseInt))`
