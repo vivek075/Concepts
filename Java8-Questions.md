@@ -173,3 +173,18 @@
 32. How do you find frequency of each character in a string using Java 8 streams?
 
 `inputString.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));`
+
+33. Given a list of integers, find maximum and minimum of those numbers?
+
+`listOfIntegers.stream().max(Comparator.naturalOrder()).get()`
+
+`listOfIntegers.stream().min(Comparator.naturalOrder()).get()`
+
+34. How do you merge two unsorted arrays into single sorted array without duplicates?
+
+`IntStream.concat(Arrays.stream(a), Arrays.stream(b)).sorted().distinct().toArray()`
+
+35. How do you get three maximum numbers and three minimum numbers from the given list of integers?
+
+`listOfIntegers.stream().sorted().limit(3).forEach(System.out::println)`
+`listOfIntegers.stream().sorted(Comparator.reverseOrder()).limit(3).forEach(System.out::println)`
