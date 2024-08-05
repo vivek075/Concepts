@@ -149,7 +149,7 @@ public class CustomParallelStream {
 ```
 In this example, a custom Fork/Join pool with 4 threads is used to process the parallel stream. This allows for greater control over the parallel execution behavior.
 
-# what is internal working of thread pool executor ?
+# What is internal working of thread pool executor ?
 
 The `ThreadPoolExecutor` is the most commonly used implementation of the `ExecutorService` interface in Java. It manages a pool of worker threads to execute tasks concurrently. Here's an in-depth look at how ThreadPoolExecutor manages its threads, including how it keeps track of active and dead threads.
 
