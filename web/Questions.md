@@ -59,3 +59,15 @@ Using HTTP exposes data to potential interception and tampering by attackers, as
 HTTP caching reduces the need to repeatedly fetch resources from the server by storing copies of responses on the client or intermediate proxies. This reduces latency, decreases server load, and speeds up page load times.
 # What are HTTP headers, and why are they important?
 HTTP headers are key-value pairs sent in HTTP requests and responses. They provide essential information about the request or response, such as content type, content length, server details, and caching directives, allowing for more efficient and secure communication.
+
+---
+# What is the purpose of the Host header in HTTP/1.1?
+The `Host` header specifies the domain name of the server (and optionally the port number) to which the request is being sent. It is required in HTTP/1.1 to support virtual hosting, where multiple domains are hosted on a single IP address.
+# What is the `Referer` header used for?
+The `Referer` header indicates the URL of the previous web page from which a request was made. It can be used for analytics, logging, and improving user experience by understanding navigation paths.
+# Describe the purpose of the User-Agent header.
+The `User-Agent` header contains information about the client software (e.g., browser, operating system) making the request. This information can be used for content negotiation, logging, and optimizing responses based on client capabilities.
+# What is HTTP/3 and what improvements does it bring?
+HTTP/3 is the latest version of the HTTP protocol, built on the QUIC transport layer protocol. It improves performance by reducing latency, providing faster connection establishment, and enhancing error correction mechanisms.
+# What are HTTP cookies, and how are they set?
+HTTP cookies are small pieces of data stored on the client side and used to maintain stateful information. They are set using the `Set-Cookie` header in the server's response and sent back to the server with subsequent requests via the `Cookie` header.
