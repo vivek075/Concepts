@@ -39,3 +39,23 @@ An HTTP proxy acts as an intermediary between a client and a server. It can be u
 WebSockets provide a full-duplex communication channel over a single TCP connection. Unlike HTTP, which is a request-response protocol, WebSockets allow for real-time communication between a client and server with lower latency and overhead.
 # What is a RESTful API?
 A RESTful API is an API that adheres to the principles of REST (Representational State Transfer). It uses standard HTTP methods, is stateless, and typically communicates using JSON or XML. RESTful APIs are designed to be simple, scalable, and easily accessible.
+
+---
+# How would you troubleshoot a 404 Not Found error?
+A 404 Not Found error indicates that the requested resource could not be found on the server. Troubleshooting steps include:
+ - Verifying the URL for typos.
+ - Checking if the resource exists on the server.
+ - Reviewing server logs for more details.
+ - Ensuring the server is correctly configured to serve the requested resource.
+# Explain what a 500 Internal Server Error means and how to resolve it.
+A 500 Internal Server Error indicates that the server encountered an unexpected condition that prevented it from fulfilling the request. Resolving it may involve:
+ - Checking server logs for specific error messages.
+ - Reviewing recent changes to the server configuration or code.
+ - Ensuring that server resources (CPU, memory) are not exhausted.
+ - Validating server scripts and dependencies.
+# What are the security implications of using HTTP instead of HTTPS?
+Using HTTP exposes data to potential interception and tampering by attackers, as it is transmitted in plain text. HTTPS encrypts the data, providing confidentiality, integrity, and authentication, thereby mitigating these risks.
+# How can HTTP caching improve web performance?
+HTTP caching reduces the need to repeatedly fetch resources from the server by storing copies of responses on the client or intermediate proxies. This reduces latency, decreases server load, and speeds up page load times.
+# What are HTTP headers, and why are they important?
+HTTP headers are key-value pairs sent in HTTP requests and responses. They provide essential information about the request or response, such as content type, content length, server details, and caching directives, allowing for more efficient and secure communication.
