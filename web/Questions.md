@@ -14,6 +14,7 @@ HTTP methods define the action to be performed on a resource. Common methods inc
  OPTIONS: Discover the HTTP methods that the server supports.
 # What is an HTTP status code?
 HTTP status codes are issued by a server in response to a client's request made to the server. They indicate whether a specific HTTP request has been successfully completed.
+
 ---
 # What is a persistent connection in HTTP?
 Persistent connections, also known as keep-alive connections, allow multiple requests and responses to be sent over a single TCP connection, reducing the overhead of establishing new connections for each request.
@@ -26,6 +27,7 @@ A cookie is a small piece of data sent from a server and stored on a client's br
 A session is a way to store information on the server side to track user interactions with a web application across multiple requests. Sessions are often maintained using cookies containing session identifiers.
 # What is CORS (Cross-Origin Resource Sharing)?
 CORS is a security feature implemented by web browsers to prevent web pages from making requests to a different domain than the one that served the web page. It allows servers to specify who can access their resources and how.
+
 ---
 # What is HTTP/2 and how does it improve upon HTTP/1.1?
 HTTP/2 is a major revision of the HTTP protocol that improves performance by allowing multiple concurrent exchanges on the same connection (multiplexing), compressing headers, and reducing latency through improved request and response prioritization.
