@@ -256,3 +256,20 @@ public final class Color extends java.lang.Enum<Color> {
 }
 ```
 
+# Explain the thread safety of enum instances in Java.
+Enum instances are inherently thread-safe because:
+
+They are singleton and created at class-loading time.
+
+Class loading in Java is thread-safe, ensuring that the enum constants are initialized only once.
+
+Example Use Case:
+```
+enum SingletonEnum {
+    INSTANCE;
+
+    public void performAction() {
+        System.out.println("Thread-safe action performed!");
+    }
+}
+```
