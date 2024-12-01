@@ -221,3 +221,38 @@ colors[0] = null; // Will only affect this copy, not the original array
 Why Is `values()` Not in java.lang.Enum?
 
 The `values()` method is specific to each enum class, not the Enum class. If it were in java.lang.Enum, it would require generics or reflection to determine the correct enum type dynamically. Adding it per enum simplifies the implementation and allows type safety.
+
+# How are enums compiled into bytecode? What does the .class file for an enum look like?
+
+The compiler generates a class file for the enum. Each constant is represented as a public static final instance.
+
+The enum class contains:
+
+A static block for initializing constants.
+
+Methods like values() and valueOf().
+
+The enum constructor is private.
+
+Example Bytecode: For:
+```
+enum Color { RED, GREEN }
+```
+Bytecode might include:
+```
+public final class Color extends java.lang.Enum<Color> {
+    public static final Color RED;
+    public static final Color GREEN;
+
+    private static final Color[] VALUES;
+    
+    static {
+        RED = new Color("RED", 0);
+        GREEN = new Color("GREEN", 1);
+        VALUES = new Color[] { RED, GREEN };
+    }
+
+    private Color(String name, int ordinal) { super(name, ordinal); }
+}
+```
+
