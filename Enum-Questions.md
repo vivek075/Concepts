@@ -67,3 +67,25 @@ Advantages of Type Safety in Enums
 - Readability: Using Day.MONDAY is more expressive than 1 or "Monday".
 
 - Maintainability: Enums are easier to refactor or extend without introducing subtle bugs.
+
+# How are enum constants internally represented in Java?
+
+Enum constants are represented as static final instances of the enum type.
+
+Internally, they are stored in a hidden array and initialized in the static block of the enum class.
+
+Example:
+```
+enum Color {
+    RED, GREEN, BLUE
+}
+
+// Internally:
+final class Color {
+    public static final Color RED = new Color();
+    public static final Color GREEN = new Color();
+    public static final Color BLUE = new Color();
+    private Color() { }
+}
+```
+
