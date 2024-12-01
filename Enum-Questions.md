@@ -89,3 +89,50 @@ final class Color {
 }
 ```
 
+When you define an enum like this:
+```
+enum Color {
+    RED, GREEN, BLUE
+}
+```
+
+Three instances of the Color enum are created.
+
+- Instance Creation for Enum Constants:
+
+Each enum constant (RED, GREEN, BLUE) is a static, final instance of the enum type Color.
+
+During class loading, the JVM creates exactly one instance for each enum constant.
+
+This is part of the enum's implementation in the JVM, ensuring that enum constants are immutable and singleton.
+
+- Behind the Scenes: The above enum is equivalent to:
+```
+final class Color extends Enum<Color> {
+    public static final Color RED = new Color("RED", 0);
+    public static final Color GREEN = new Color("GREEN", 1);
+    public static final Color BLUE = new Color("BLUE", 2);
+
+    private Color(String name, int ordinal) {
+        super(name, ordinal);
+    }
+}
+```
+Here:
+
+The RED, GREEN, and BLUE constants are instances of the Color class.
+
+The constructor for Color is called exactly three times.
+
+- Enum Characteristics:
+
+Each constant is created once during class initialization and stored in a static array.
+
+The values() method in enums returns this array.
+```
+for (Color color : Color.values()) {
+    System.out.println(color);
+}
+```
+
+When you define an enum with three constants (RED, GREEN, BLUE), the JVM creates three unique instances of the enum, one for each constant. These instances are singleton and immutable, ensuring that no additional instances of the same enum constants are ever created.
