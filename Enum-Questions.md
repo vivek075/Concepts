@@ -860,3 +860,214 @@ The JVM guarantees that a class is loaded and initialized in a thread-safe manne
 Supplier:
 
 The supplier-based approach is thread-safe as long as the resource is immutable or the initialization logic does not depend on external mutable state.
+
+# How can you make an enum extensible?
+In Java, enums are inherently non-extensible because they are implicitly final. This design ensures that an enum type represents a fixed set of constants, maintaining their integrity and type safety. However, there are certain patterns and workarounds that simulate extensibility when it’s necessary to expand the behavior or values associated with an enum-like construct.
+
+Here’s how you can achieve a semblance of extensibility for enums:
+
+**1. Use a Combination of Enum and a Supporting Registry**
+
+You can maintain a registry or a mapping to extend the set of values dynamically at runtime. The registry holds additional values that mimic enum constants.
+```
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+public enum Status {
+    SUCCESS("Operation was successful"),
+    FAILURE("Operation failed");
+
+    private final String description;
+
+    private static final Map<String, Status> EXTENDED_STATUSES = new HashMap<>();
+
+    Status(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    // Method to register new "enum-like" statuses
+    public static void registerStatus(String name, String description) {
+        EXTENDED_STATUSES.put(name, new Status(description) {});
+    }
+
+    // Method to retrieve all statuses
+    public static Map<String, Status> getAllStatuses() {
+        Map<String, Status> statuses = new HashMap<>();
+        for (Status status : Status.values()) {
+            statuses.put(status.name(), status);
+        }
+        statuses.putAll(EXTENDED_STATUSES);
+        return Collections.unmodifiableMap(statuses);
+    }
+}
+```
+```
+public class Main {
+    public static void main(String[] args) {
+        // Access built-in enums
+        System.out.println(Status.SUCCESS.getDescription());
+
+        // Register a new status
+        Status.registerStatus("PENDING", "Operation is pending");
+
+        // Access all statuses, including the registered one
+        System.out.println(Status.getAllStatuses());
+    }
+}
+```
+**2. Use Interfaces for Extensible Behavior**
+
+Instead of relying on enums for extensibility, use an interface to define common behavior and allow enums or other implementations to extend it.
+```
+public interface ErrorCode {
+    String getCode();
+    String getMessage();
+}
+
+public enum StandardErrorCode implements ErrorCode {
+    NOT_FOUND("404", "Resource not found"),
+    SERVER_ERROR("500", "Internal server error");
+
+    private final String code;
+    private final String message;
+
+    StandardErrorCode(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+}
+
+// Custom implementation of ErrorCode
+public class CustomErrorCode implements ErrorCode {
+    private final String code;
+    private final String message;
+
+    public CustomErrorCode(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+}
+```
+```
+public class Main {
+    public static void main(String[] args) {
+        ErrorCode errorCode1 = StandardErrorCode.NOT_FOUND;
+        System.out.println(errorCode1.getMessage());
+
+        ErrorCode customCode = new CustomErrorCode("600", "Custom error");
+        System.out.println(customCode.getMessage());
+    }
+}
+```
+**3. Use Abstract Classes with a Static Registry**
+
+If more complex extensibility is required, you can use an abstract class with static methods for predefined constants and allow dynamic addition of new constants.
+```
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class ExtensibleEnum {
+    private final String name;
+
+    private static final Map<String, ExtensibleEnum> VALUES = new HashMap<>();
+
+    protected ExtensibleEnum(String name) {
+        this.name = name;
+        VALUES.put(name, this);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public static ExtensibleEnum valueOf(String name) {
+        return VALUES.get(name);
+    }
+
+    public static Map<String, ExtensibleEnum> values() {
+        return new HashMap<>(VALUES);
+    }
+}
+
+// Predefined constants
+class Color extends ExtensibleEnum {
+    public static final Color RED = new Color("RED");
+    public static final Color BLUE = new Color("BLUE");
+
+    private Color(String name) {
+        super(name);
+    }
+
+    public static void addColor(String name) {
+        new Color(name);
+    }
+}
+```
+```
+public class Main {
+    public static void main(String[] args) {
+        // Access predefined constants
+        System.out.println(Color.RED.getName());
+
+        // Add a custom constant
+        Color.addColor("GREEN");
+
+        // Access all constants
+        System.out.println(Color.values());
+    }
+}
+```
+**4. Use Enum with Polymorphic Behavior**
+
+You can use polymorphism within enums to provide extensible behavior, but this works only for predefined constants. For runtime extensions, consider combining with one of the above methods.
+```
+public enum Operation {
+    ADD {
+        @Override
+        public int apply(int x, int y) {
+            return x + y;
+        }
+    },
+    MULTIPLY {
+        @Override
+        public int apply(int x, int y) {
+            return x * y;
+        }
+    };
+
+    public abstract int apply(int x, int y);
+}
+```
+```
+public class Main {
+    public static void main(String[] args) {
+        int result = Operation.ADD.apply(3, 4);
+        System.out.println("Result: " + result);
+    }
+}
+```
