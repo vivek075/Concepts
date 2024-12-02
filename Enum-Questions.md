@@ -354,3 +354,114 @@ Here:
 The `data` field is mutable. Multiple threads can modify it concurrently, leading to potential issues like race conditions.
 
 To make this thread-safe, you would need to **synchronize** access to the mutable field or use a thread-safe collection (e.g., `CopyOnWriteArrayList`).
+
+# How can you associate fields and methods with enum constants? Provide an example.
+You can associate fields and methods by defining instance variables and constructors in the enum. Each constant can have its own associated data.
+```
+enum Day {
+    MONDAY("Start of the week"), 
+    FRIDAY("End of the work week");
+
+    private String description;
+
+    // Constructor
+    Day(String description) {
+        this.description = description;
+    }
+
+    // Getter
+    public String getDescription() {
+        return description;
+    }
+}
+
+System.out.println(Day.MONDAY.getDescription()); // Output: Start of the week
+```
+
+# What are the advantages of using a constructor in an enum?
+Custom Fields: Allows associating data with each constant.
+
+Initialization: Simplifies initialization of complex constants.
+
+Type-Safe Behavior: Constants can encapsulate behavior or properties.
+
+# How can you override methods for individual enum constants?
+You can override methods by defining the method in the enum and providing constant-specific implementations.
+```
+enum Operation {
+    ADD {
+        @Override
+        public int apply(int x, int y) {
+            return x + y;
+        }
+    },
+    MULTIPLY {
+        @Override
+        public int apply(int x, int y) {
+            return x * y;
+        }
+    };
+
+    public abstract int apply(int x, int y);
+}
+System.out.println(Operation.ADD.apply(2, 3)); // Output: 5
+```
+
+# Is it possible to have an abstract method in an enum? How would you implement it?
+Yes, enums can have abstract methods, which must be implemented by each constant.
+```
+enum Shape {
+    CIRCLE {
+        @Override
+        public double area(double radius) {
+            return Math.PI * radius * radius;
+        }
+    },
+    SQUARE {
+        @Override
+        public double area(double side) {
+            return side * side;
+        }
+    };
+
+    public abstract double area(double dimension);
+}
+```
+
+# Can enums implement interfaces? If so, provide an example.
+Yes, enums can implement interfaces, allowing them to conform to a common contract.
+```
+interface Drawable {
+    void draw();
+}
+
+enum Shape implements Drawable {
+    CIRCLE {
+        public void draw() { System.out.println("Drawing Circle"); }
+    },
+    SQUARE {
+        public void draw() { System.out.println("Drawing Square"); }
+    }
+}
+```
+
+# Can an enum extend another enum? Why or why not?
+No, enums cannot extend other enums because they implicitly extend java.lang.Enum. Java does not allow multiple inheritance.
+
+# How can you convert a string to an enum constant? What are the pitfalls of this approach?
+Use Enum.valueOf(Class<T>, String). A pitfall is that it throws IllegalArgumentException if the string doesn’t match any constant.
+```
+Day day = Day.valueOf("MONDAY");
+System.out.println(day); // Output: MONDAY
+```
+
+# Can you use enums in collections like HashMap or TreeSet? Why are they efficient?
+Yes, enums can be used because they implement `Comparable` and `hashCode()`.
+
+Efficiency comes from their immutable, unique nature and reduced hash collisions.
+
+# How do enums ensure type safety compared to integer constants?
+Enums are strongly typed and restrict valid values to predefined constants.
+
+# Are enums stored in the heap or the method area of JVM memory? Explain.
+Enums are stored in the method area, as they are constants initialized at class loading.
