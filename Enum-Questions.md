@@ -273,3 +273,84 @@ enum SingletonEnum {
     }
 }
 ```
+```
+enum Color {
+    RED, GREEN, BLUE;
+}
+```
+Only one instance of Color.RED, Color.GREEN, and Color.BLUE exists throughout the JVM lifecycle.
+
+These instances are created once and remain immutable and shared across all threads.
+
+**Immutability of Enum Constants**
+
+Immutability ensures that once an enum constant is created, it cannot be changed.
+
+Enums are implicitly final in Java, which means that the enum constants cannot be reassigned or modified after they are created. This immutability is a key reason why enum instances are thread-safe.
+
+Since enum constants cannot change after initialization, multiple threads can safely access them without worrying about synchronization.
+
+**Enum with Instance Fields**
+In some cases, an enum can have instance fields and methods. However, even then, thread safety is ensured as long as the fields are immutable.
+
+Consider this example:
+```
+enum Day {
+    MONDAY("First day"), TUESDAY("Second day");
+
+    private final String description;
+
+    Day(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+}
+```
+The `description` field is `final` and assigned at the time of enum constant creation.
+
+Once the enum constants are created, their **state cannot change**, so there are no concerns about thread-safety regarding the field values.
+
+**Use of Enum in Singleton Pattern**
+
+Enums are frequently used in singleton design patterns because they automatically ensure thread safety. Since the enum constants are guaranteed to be created only once and are globally accessible, enums provide a simple and effective way to implement a singleton pattern without needing additional synchronization.
+
+Example:
+```
+enum Singleton {
+    INSTANCE;
+
+    public void doSomething() {
+        System.out.println("Singleton instance method.");
+    }
+}
+```
+In this case, `Singleton.INSTANCE` is a thread-safe singleton. The JVM ensures that `INSTANCE` is created only once, and all threads that access it will see the same instance.
+
+**Thread-Safety and Enums with Mutable State**
+
+If an enum contains mutable state (fields that can be changed after the enum is initialized), then it can break thread safety.
+
+For example, **this is not thread-safe**:
+```
+enum UnsafeEnum {
+    INSTANCE;
+
+    private List<String> data = new ArrayList<>();
+
+    public void addData(String value) {
+        data.add(value);
+    }
+
+    public List<String> getData() {
+        return data;
+    }
+}
+```
+Here:
+
+The `data` field is mutable. Multiple threads can modify it concurrently, leading to potential issues like race conditions.
+
+To make this thread-safe, you would need to **synchronize** access to the mutable field or use a thread-safe collection (e.g., `CopyOnWriteArrayList`).
