@@ -1071,3 +1071,124 @@ public class Main {
     }
 }
 ```
+# Can enums have cyclic dependencies?
+Enums in Java can have cyclic dependencies, but these cycles must be resolved indirectly through references to shared data structures or external methods. Direct cyclic dependencies, where one enum constant directly refers to another during initialization, can lead to initialization order issues or NullPointerException at runtime due to incomplete initialization.
+
+Understanding Cyclic Dependencies in Enums
+
+**1. Direct Reference Cycle (Not Allowed During Initialization)**
+
+When an enum constant references another enum constant directly in its constructor or initialization, it can cause problems due to the order of initialization. During enum constant initialization, all enum constants are created in a defined order. If one constant tries to reference another before it is fully initialized, it will result in runtime issues.
+
+Example (Problematic):
+```
+enum Node {
+    A(B),  // Error: B is not initialized yet
+    B(A);
+
+    private final Node linkedNode;
+
+    Node(Node linkedNode) {
+        this.linkedNode = linkedNode;
+    }
+
+    public Node getLinkedNode() {
+        return linkedNode;
+    }
+}
+```
+Why It Fails:
+
+A tries to initialize with B, but B is not fully initialized yet.
+This leads to a NullPointerException.
+
+**2. Resolving Cyclic Dependencies Using Post-Initialization**
+
+You can resolve cyclic dependencies by deferring the initialization of dependent references until after the enum constants have been created. Use a separate method to set up the relationships.
+
+Example (Correct Approach):
+```
+enum Node {
+    A, B;
+
+    private Node linkedNode;
+
+    public void setLinkedNode(Node linkedNode) {
+        this.linkedNode = linkedNode;
+    }
+
+    public Node getLinkedNode() {
+        return linkedNode;
+    }
+
+    // Static block to establish relationships after initialization
+    static {
+        A.setLinkedNode(B);
+        B.setLinkedNode(A);
+    }
+}
+```
+```
+public class CyclicEnumExample {
+    public static void main(String[] args) {
+        System.out.println("A's linked node: " + Node.A.getLinkedNode());
+        System.out.println("B's linked node: " + Node.B.getLinkedNode());
+    }
+}
+```
+```
+A's linked node: B
+B's linked node: A
+```
+
+**3. Using External Structures for Cyclic Dependencies**
+
+Instead of embedding dependencies within the enum constants, you can use an external data structure like a Map to define relationships.
+```
+import java.util.EnumMap;
+
+enum Node {
+    A, B, C;
+
+    // Define relationships externally
+    private static final EnumMap<Node, Node> linkedNodes = new EnumMap<>(Node.class);
+
+    static {
+        linkedNodes.put(A, B);
+        linkedNodes.put(B, C);
+        linkedNodes.put(C, A); // Cycle: A -> B -> C -> A
+    }
+
+    public Node getLinkedNode() {
+        return linkedNodes.get(this);
+    }
+}
+```
+```
+public class ExternalDependencyExample {
+    public static void main(String[] args) {
+        System.out.println("A's linked node: " + Node.A.getLinkedNode());
+        System.out.println("B's linked node: " + Node.B.getLinkedNode());
+        System.out.println("C's linked node: " + Node.C.getLinkedNode());
+    }
+}
+```
+```
+A's linked node: B
+B's linked node: C
+C's linked node: A
+```
+**Key Considerations**
+
+Initialization Order:
+
+Enum constants are initialized in the order they are declared.
+Referencing another constant before it is fully initialized will cause issues.
+
+Thread Safety:
+
+If cyclic dependencies are resolved using post-initialization, ensure the setup is thread-safe if accessed concurrently.
+
+Design Simplicity:
+
+Use external structures like EnumMap to manage relationships for cleaner code and better maintainability.
