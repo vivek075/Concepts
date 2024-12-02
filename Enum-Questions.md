@@ -588,3 +588,168 @@ The JVM guarantees that enum constants are immutable and singleton.
 The `readResolve()` mechanism ensures that deserialization cannot create new instances.
 
 Reflection-based attacks are restricted because enum constructors are private, and attempting to create an enum instance via reflection throws a java.lang.IllegalArgumentException.
+
+# Explain how enums are used with annotations for input validation.
+Enums combined with annotations provide a powerful mechanism to enforce constraints and validate inputs at runtime or during compile-time checks. This approach is especially useful when the set of valid inputs is fixed and predefined.
+
+Here’s an in-depth exploration of how enums and annotations can be used together for input validation:
+
+**Why Use Enums with Annotations for Validation?**
+
+Enums Represent Fixed Sets: Enums are perfect for representing a fixed, predefined set of values (e.g., days of the week, payment methods, etc.). They ensure type safety and eliminate the risks of using plain strings or integers.
+
+Annotations Simplify Validation: Annotations make it easy to declare and enforce validation rules directly in the code without writing boilerplate validation logic in multiple places.
+
+Combining these two concepts:
+
+The enum provides the set of valid values.
+The annotation defines a validation rule that can be applied to fields or method parameters.
+
+**How to Use Enums with Custom Annotations for Validation**
+
+Step 1: Define an Enum
+
+Define an enum to represent the valid set of values.
+```
+public enum Color {
+    RED, GREEN, BLUE;
+}
+```
+Step 2 + 4: Create a Custom Annotation / Link Annotation with the Validator
+
+Define a custom annotation for validation that refers to the enum. & Associate the annotation with the validator class using @Constraint.
+```
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+
+@Documented
+@Constraint(validatedBy = ColorValidator.class)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ValidColor {
+    String message() default "Invalid color. Allowed values are RED, GREEN, BLUE.";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+}
+```
+
+Step 3: Implement the Validation Logic
+
+To validate the annotated field or parameter, implement a validator class.
+
+Use a library like Jakarta Bean Validation (JSR 380) with ConstraintValidator.
+
+Or, write a custom validation framework.
+
+Here’s an example using Bean Validation:
+```
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
+public class ColorValidator implements ConstraintValidator<ValidColor, String> {
+
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true; // Allow null values if required
+        }
+
+        try {
+            Color.valueOf(value.toUpperCase());
+            return true; // Valid if the value exists in the enum
+        } catch (IllegalArgumentException e) {
+            return false; // Invalid if the value is not in the enum
+        }
+    }
+}
+```
+
+Step 5: Use the Annotation
+
+Apply the annotation to fields or method parameters.
+```
+import jakarta.validation.constraints.NotNull;
+
+public class Product {
+    @NotNull
+    @ValidColor
+    private String color;
+
+    public Product(String color) {
+        this.color = color;
+    }
+
+    // Getter and Setter
+}
+```
+
+Step 6: Validate Inputs
+
+Use a validation framework like Hibernate Validator to validate the object.
+```
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+
+import java.util.Set;
+
+public class ValidationExample {
+    public static void main(String[] args) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Product product = new Product("YELLOW"); // Invalid color
+        Set<ConstraintViolation<Product>> violations = validator.validate(product);
+
+        if (!violations.isEmpty()) {
+            for (ConstraintViolation<Product> violation : violations) {
+                System.out.println(violation.getMessage());
+            }
+        } else {
+            System.out.println("Validation passed!");
+        }
+    }
+}
+```
+Output
+```
+Invalid color. Allowed values are RED, GREEN, BLUE.
+```
+
+**Benefits of Using Enums with Annotations**
+
+Type Safety: Enums eliminate risks of invalid inputs by restricting values to a predefined set.
+
+Reusable Validation: Once written, the validation logic can be reused across multiple fields or parameters.
+
+Readability: The combination of enums and annotations makes the code self-documenting.
+
+Ease of Maintenance: Any changes to the valid set of values (enum) automatically propagate to all annotated fields.
+
+Dependecies:
+```
+<dependencies>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>7.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.el</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+</dependencies>
+```
