@@ -753,3 +753,110 @@ Dependecies:
         </dependency>
 </dependencies>
 ```
+
+# How would you ensure lazy initialization of a resource inside an enum constant?
+Lazy initialization inside an enum constant is a useful technique to delay the creation of a resource until it is actually needed. This approach avoids unnecessary resource usage during the initialization of the enum constants.
+
+Here’s how you can ensure lazy initialization of a resource inside an enum constant in Java:
+
+Approach: Use a Lazy Holder or Supplier
+
+The recommended way to implement lazy initialization is to use a nested static holder class or a java.util.function.Supplier.
+
+**1. Using a Nested Static Holder Class**
+
+A static nested class provides a clean, thread-safe way to lazily initialize a resource. Since nested static classes are loaded only when they are first accessed, this ensures the resource is created only when needed.
+```
+enum ResourceEnum {
+    INSTANCE;
+
+    // Nested static class for lazy initialization
+    private static class ResourceHolder {
+        private static final Resource RESOURCE = new Resource();
+    }
+
+    // Getter for the resource
+    public Resource getResource() {
+        return ResourceHolder.RESOURCE;
+    }
+}
+
+class Resource {
+    public Resource() {
+        System.out.println("Resource initialized.");
+    }
+}
+```
+```
+public class LazyInitializationExample {
+    public static void main(String[] args) {
+        System.out.println("Before accessing resource.");
+        Resource resource = ResourceEnum.INSTANCE.getResource();
+        System.out.println("Resource accessed: " + resource);
+    }
+}
+```
+Output:
+```
+Before accessing resource.
+Resource initialized.
+Resource accessed: com.example.Resource@<hash>
+```
+
+Why It Works:
+
+The static `ResourceHolder` class is loaded only when `getResource()` is called for the first time. This ensures that `Resource` is initialized lazily and in a thread-safe manner.
+
+**2. Using a Supplier for Lazy Initialization**
+
+A Supplier is a functional interface that provides a lazy and thread-safe way to initialize resources.
+
+```
+import java.util.function.Supplier;
+
+enum ResourceEnum {
+    INSTANCE;
+
+    // Lazy resource initialization using Supplier
+    private final Supplier<Resource> resourceSupplier = this::createResource;
+
+    private Resource createResource() {
+        System.out.println("Resource initialized.");
+        return new Resource();
+    }
+
+    public Resource getResource() {
+        return resourceSupplier.get();
+    }
+}
+
+class Resource {
+    public Resource() {
+        System.out.println("Resource constructor called.");
+    }
+}
+```
+```
+public class LazyInitializationExample {
+    public static void main(String[] args) {
+        System.out.println("Before accessing resource.");
+        Resource resource = ResourceEnum.INSTANCE.getResource();
+        System.out.println("Resource accessed: " + resource);
+    }
+}
+```
+Output:
+```
+Before accessing resource.
+Resource initialized.
+Resource accessed: com.example.Resource@<hash>
+```
+Thread Safety of These Approaches
+
+Static Holder Class:
+
+The JVM guarantees that a class is loaded and initialized in a thread-safe manner. Therefore, using a nested static holder ensures thread safety without requiring synchronization.
+
+Supplier:
+
+The supplier-based approach is thread-safe as long as the resource is immutable or the initialization logic does not depend on external mutable state.
