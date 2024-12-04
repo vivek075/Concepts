@@ -278,7 +278,7 @@ Work Queue: A LinkedBlockingQueue with a capacity of 2 is used to hold tasks bef
 
 Rejection Policy: If the work queue is full and no more threads can be created, the AbortPolicy will throw a RejectedExecutionException.
 
-# What are the changes of pegmen in JDK 8. (PermGen and Meta)
+# What are the changes of permgen in JDK 8. (PermGen and Meta)
 
 In JDK 8, significant changes were made regarding the management of class metadata, which was previously stored in the Permanent Generation (PermGen) space. Here’s an overview of these changes:
 
