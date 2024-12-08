@@ -211,3 +211,60 @@ while (iterator.hasNext()) {
 
 # Explain the synchronized keyword in Java.
 The synchronized keyword in Java is used to control access to a block of code or method by multiple threads, ensuring that only one thread can execute the synchronized block or method at a time.
+
+# Callable
+`Callable` is a functional interface in Java that is part of the `java.util.concurrent` package.
+
+It allows you to define a task that:
+
+1. Can be executed in a separate thread.
+
+2. Returns a result (unlike Runnable).
+
+3. Can throw a checked exception.
+
+Goal:
+
+Create a task to calculate the square of a number using `Callable`.
+
+1. Create a Callable Task:
+  - Use a Callable to define a task that calculates the square of a number.
+2. Use an Executor Service:
+  - Submit the Callable task to an ExecutorService to execute it.
+3. Get the Result:
+  - The result is returned as a Future, which you can query or block to get the result.
+
+```
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class CallableExample {
+    public static void main(String[] args) {
+        // Step 1: Create a Callable task
+        Callable<Integer> task = () -> {
+            int number = 5; // Example number
+            System.out.println("Calculating square of " + number);
+            return number * number; // Return the square
+        };
+
+        // Step 2: Use an ExecutorService to run the task
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        try {
+            // Submit the task and get a Future
+            Future<Integer> future = executor.submit(task);
+
+            // Step 3: Get the result from the Future
+            Integer result = future.get(); // This blocks until the task completes
+            System.out.println("Square is: " + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Shut down the executor
+            executor.shutdown();
+        }
+    }
+}
+```
