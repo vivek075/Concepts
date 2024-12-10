@@ -268,3 +268,36 @@ public class CallableExample {
     }
 }
 ```
+
+Using Callable Without ExecutorService
+
+Since `Callable` cannot run directly in a thread (unlike `Runnable`), you can wrap it with a `FutureTask`. A `FutureTask` can be executed by a `Thread`.
+```
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
+
+public class CallableWithoutExecutor {
+    public static void main(String[] args) {
+        // Step 1: Create a Callable task
+        Callable<String> task = () -> {
+            Thread.sleep(1000); // Simulate some work
+            return "Task executed without ExecutorService!";
+        };
+
+        // Step 2: Wrap the Callable in a FutureTask
+        FutureTask<String> futureTask = new FutureTask<>(task);
+
+        // Step 3: Execute the FutureTask in a Thread
+        Thread thread = new Thread(futureTask);
+        thread.start();
+
+        try {
+            // Step 4: Get the result
+            String result = futureTask.get();
+            System.out.println("Result: " + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
