@@ -30,7 +30,7 @@ Components of JRE are as follows:
 
 Deployment technologies: Including deployment, Java Web Start, and Java Plug-in.
 
-User interface toolkits: Including Abstract Window Toolkit (AWT), Swing, Java 2D, Image I/O, Print Service, Sound, drag, and drop (DnD).
+User interface toolkits: Including Abstract Window Toolkit (AWT), Swing, Java 2D, Image I/O, Print Service, Sound, drag and drop (DnD).
 
 Integration libraries: Including Interface Definition Language (IDL), Java Database Connectivity (JDBC), Java Naming and Directory Interface (JNDI), Remote Method Invocation (RMI), Remote Method Invocation Over Internet Inter-Orb Protocol (RMI-IIOP), and scripting.
 
@@ -40,11 +40,16 @@ Lang and util base libraries: Including lang and util, management, versioning, z
 
 Java Virtual Machine (JVM): Including Java HotSpot Client and Server Virtual Machines.
 
-**JVM**, which stands out for java virtual machines. It is as follows:
+**JVM**, which stands out for java virtual machines. 
+
+It is as follows:
+
 A specification where the working of Java Virtual Machine is specified. But implementation provider is independent to choose the algorithm. 
+
 Its implementation has been provided by different vendors like Oracle, IBM, Amazon, RedHat and others.
-An implementation is a computer program that meets the requirements of the JVM specification.
+
 A Runtime instance of JVM is created, whenever we write a java command on the command prompt to run the java class
+
 JVM is responsible for executing the java program line by line, hence it is also known as an interpreter.
 
 ---
