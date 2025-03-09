@@ -1,6 +1,6 @@
-Spring Data JPA
+## Spring Data JPA
 
-Question: Spring Data JPA simplifies data access by providing:
+`Question: Spring Data JPA simplifies data access by providing:`
 
 a) Automatic repository implementations
 b) Direct database connections
@@ -9,7 +9,7 @@ d) XML configurations only
 
 Answer: a) Automatic repository implementations
 
-Question: What annotation is used to mark an entity in JPA?
+`Question: What annotation is used to mark an entity in JPA?`
 
 a) @Component
 b) @Service
@@ -18,7 +18,7 @@ d) @Repository
 
 Answer: c) @Entity
 
-Question: What annotation is used to define the primary key of an entity?
+`Question: What annotation is used to define the primary key of an entity?`
 
 a) @Column
 b) @Id
@@ -27,7 +27,7 @@ d) @PrimaryKey
 
 Answer: b) @Id
 
-Question: @GeneratedValue(strategy = GenerationType.IDENTITY) is used for:
+`Question: @GeneratedValue(strategy = GenerationType.IDENTITY) is used for:`
 
 a) Database-generated sequence values
 b) Database-generated auto-increment values
@@ -36,7 +36,7 @@ d) UUID generation
 
 Answer: b) Database-generated auto-increment values
 
-Question: What interface extends CrudRepository and provides JPA-specific methods?
+`Question: What interface extends CrudRepository and provides JPA-specific methods?`
 
 a) Repository
 b) JpaRepository
@@ -45,7 +45,7 @@ d) SimpleJpaRepository
 
 Answer: b) JpaRepository
 
-Question: What annotation is used to define a custom query in a Spring Data JPA repository?
+`Question: What annotation is used to define a custom query in a Spring Data JPA repository?`
 
 a) @Query
 b) @CustomQuery
@@ -54,11 +54,11 @@ d) @NativeQuery
 
 Answer: a) @Query
 
-Question: True/False: Spring Data JPA supports named queries.
+`Question: True/False: Spring Data JPA supports named queries.`
 
 Answer: True
 
-Question: What annotation is used for one-to-many relationships?
+`Question: What annotation is used for one-to-many relationships?`
 
 a) @OneToOne
 b) @ManyToOne
@@ -67,7 +67,7 @@ d) @ManyToMany
 
 Answer: c) @OneToMany
 
-Question: What annotation is used for many-to-many relationships?
+`Question: What annotation is used for many-to-many relationships?`
 
 a) @OneToOne
 b) @ManyToOne
@@ -76,7 +76,7 @@ d) @ManyToMany
 
 Answer: d) @ManyToMany
 
-Question: What annotation is used to specify a column name in a table?
+`Question: What annotation is used to specify a column name in a table?`
 
 a) @Field
 b) @Column
@@ -85,11 +85,11 @@ d) @Attribute
 
 Answer: b) @Column
 
-Question: True/False: Spring Data JPA supports pagination and sorting.
+`Question: True/False: Spring Data JPA supports pagination and sorting.`
 
 Answer: True
 
-Question: What interface is used for pagination?
+`Question: What interface is used for pagination?`
 
 a) Page
 b) List
@@ -98,7 +98,7 @@ d) Collection
 
 Answer: a) Page
 
-Question: What interface is used for sorting?
+`Question: What interface is used for sorting?`
 
 a) Sort
 b) Order
@@ -107,7 +107,7 @@ d) Collection
 
 Answer: a) Sort
 
-Question: What annotation is used to map a Java class to a database table?
+`Question: What annotation is used to map a Java class to a database table?`
 
 a) @Bean
 b) @Component
@@ -116,7 +116,7 @@ d) @Table
 
 Answer: d) @Table
 
-Question: What is the default transaction management strategy in Spring Data JPA?
+`Question: What is the default transaction management strategy in Spring Data JPA?`
 
 a) Manual
 b) Programmatic
@@ -125,7 +125,7 @@ d) No transactions
 
 Answer: c) Declarative
 
-Question: What annotation is used for transaction management?
+`Question: What annotation is used for transaction management?`
 
 a) @Transactional
 b) @Transaction
@@ -134,7 +134,7 @@ d) @TransactionManager
 
 Answer: a) @Transactional
 
-Question: What is the purpose of EntityManager?
+`Question: What is the purpose of EntityManager?`
 
 a) To manage bean creation
 b) To manage entity persistence
@@ -143,7 +143,7 @@ d) To manage security
 
 Answer: b) To manage entity persistence
 
-Question: What is the purpose of EntityManagerFactory?
+`Question: What is the purpose of EntityManagerFactory?`
 
 a) To create EntityManager instances
 b) To manage database connections
@@ -152,7 +152,7 @@ d) To manage web services
 
 Answer: a) To create EntityManager instances
 
-Question: What is the purpose of @NamedQuery?
+`Question: What is the purpose of @NamedQuery?`
 
 a) To define a custom SQL query in an entity
 b) To define a custom JPQL query in an entity
@@ -161,7 +161,7 @@ d) To define a custom bean
 
 Answer: b) To define a custom JPQL query in an entity
 
-Question: What is the purpose of @NativeQuery?
+`Question: What is the purpose of @NativeQuery?`
 
 a) To define a custom JPQL query
 b) To define a custom SQL query
