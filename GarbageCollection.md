@@ -88,3 +88,40 @@ Old Generation: Long-lived objects (Major GC here).
 Permanent Generation: (before Java 8) — class metadata.
 
 Objects promoted through generations after surviving multiple GCs.
+
+# 11. Common JVM options for GC tuning
+-Xms512m -Xmx4g
+-XX:+UseG1GC
+-XX:MaxGCPauseMillis=200
+-XX:+PrintGCDetails
+-XX:+PrintGCDateStamps
+-Xlog:gc*    # Java 9+
+
+# 12. Choosing GC Algorithm
+| App Type                    | GC Choice      | Why?                              |
+| --------------------------- | -------------- | --------------------------------- |
+| **Low-latency (trading)**   | ZGC/Shenandoah | Pause time minimization           |
+| **High-throughput (batch)** | Parallel GC    | Max CPU usage, large heap support |
+| **Mixed**                   | G1 GC          | Balanced performance              |
+
+
+# 13. How to analyze GC logs? Tools?
+Look for frequency of Full GCs, long pause times, promotion failures.
+
+Tools:
+
+GCViewer
+
+GCEasy.io
+
+jstat -gcutil
+
+VisualVM / JFR
+
+# 14. What is GC overhead error?
+Occurs when:
+GC takes >98% of time but recovers <2% heap
+
+Error: java.lang.OutOfMemoryError: GC overhead limit exceeded
+
+Fix: Tune heap size, reduce object allocation rate, optimize code.
