@@ -157,3 +157,21 @@ Reduces network bandwidth, increases throughput.
 Data replication across multiple brokers.
 
 Partition has leader and followers.
+
+## Q23. What is ISR (In-Sync Replicas)?
+
+Set of replicas that are fully caught up with the leader.
+
+min.insync.replicas defines minimum required for successful writes.
+
+## Q24. What happens when a Kafka broker goes down?
+
+Partition leaders are re-elected.
+
+Followers take over if in ISR.
+
+## Q25. How does Kafka handle data consistency?
+
+Configurable durability (acks, replication).
+
+Writes to leader are replicated to followers.
