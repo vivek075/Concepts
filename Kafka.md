@@ -81,3 +81,47 @@ Sends messages to a broker → broker appends message to topic partition.
 Can specify partition key (hash-based).
 
 Configurable retries, batching, acknowledgements.
+
+## Q12. What are Producer Acknowledgements (acks)?
+
+acks=0: Fire and forget, no guarantee.
+
+acks=1: Leader acknowledgment only.
+
+acks=all or acks=-1: All replicas acknowledge → strongest durability.
+
+## Q13. What is Idempotent Producer in Kafka?
+
+Ensures no duplicate messages when retries happen.
+
+Enabled via enable.idempotence=true.
+
+## Q14. What is Kafka Consumer Group?
+
+Group of consumers working together to consume from topic partitions.
+
+Each partition is consumed by only one consumer within the group.
+
+## Q15. What is Consumer Rebalance?
+
+Redistribution of partitions among consumers when a consumer joins/leaves.
+
+## Q16. How does Kafka achieve backpressure handling?
+
+Consumers pull messages at their own rate.
+
+If slow → lag builds up in consumer group.
+
+## Q17. How do Kafka consumers commit offsets?
+
+Automatic commit (default, periodic).
+
+Manual commit (developer-controlled for better reliability).
+
+# 4. Kafka Storage & Performance
+
+## Q18. How does Kafka store messages on disk?
+
+Sequential append-only log files per partition.
+
+Data files are segment-based for efficient cleanup.
