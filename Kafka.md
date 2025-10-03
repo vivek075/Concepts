@@ -6,7 +6,7 @@ Kafka is a distributed event streaming platform used for high-throughput, low-la
 
 Use cases: log aggregation, stream processing, messaging, event sourcing, microservices communication.
 
-# Q2. How is Kafka different from traditional messaging systems like JMS, RabbitMQ?
+## Q2. How is Kafka different from traditional messaging systems like JMS, RabbitMQ?
 
 Kafka is pull-based, whereas JMS is often push-based.
 
@@ -16,7 +16,7 @@ Kafka is designed for high throughput and can handle millions of messages/sec.
 
 Kafka decouples producers and consumers with scalable partitions.
 
-# Q3. What are Kafka Topics and Partitions?
+## Q3. What are Kafka Topics and Partitions?
 
 Topic = logical stream of messages.
 
@@ -24,13 +24,13 @@ Partition = split of a topic for parallelism.
 
 Each partition is an ordered immutable log.
 
-# Q4. What is an offset in Kafka?
+## Q4. What is an offset in Kafka?
 
 Offset = unique sequential ID assigned to each message in a partition.
 
 Consumers use offsets to track their position.
 
-# Q5. How does Kafka provide durability?
+## Q5. How does Kafka provide durability?
 
 Messages are persisted on disk.
 
@@ -40,7 +40,7 @@ Configurable acks and min.insync.replicas.
 
 # 2. Kafka Architecture
 
-# Q6. What are the main components of Kafka?
+## Q6. What are the main components of Kafka?
 
 Producer → publishes data.
 
@@ -52,29 +52,29 @@ Zookeeper (legacy) → manages metadata (replaced by KRaft in newer versions).
 
 Controller → leader election, partition reassignment.
 
-# Q7. What is a Kafka Broker?
+## Q7. What is a Kafka Broker?
 
 A Kafka server that handles storage and client requests.
 
 Cluster typically has multiple brokers for scalability.
 
-# Q8. What is a Kafka Cluster?
+## Q8. What is a Kafka Cluster?
 
 Group of brokers working together to provide distributed messaging.
 
-# Q9. What is the role of Zookeeper in Kafka?
+## Q9. What is the role of Zookeeper in Kafka?
 
 Manages cluster metadata, leader election, configuration.
 
 Newer versions of Kafka use KRaft (Kafka Raft Metadata mode), removing Zookeeper dependency.
 
-# Q10. What is the Kafka Controller?
+## Q10. What is the Kafka Controller?
 
 A special broker responsible for leader election of partitions.
 
 # 3. Producers & Consumers
 
-# Q11. How does a Kafka Producer work?
+## Q11. How does a Kafka Producer work?
 
 Sends messages to a broker → broker appends message to topic partition.
 
