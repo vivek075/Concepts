@@ -125,3 +125,35 @@ Manual commit (developer-controlled for better reliability).
 Sequential append-only log files per partition.
 
 Data files are segment-based for efficient cleanup.
+
+## Q19. What is Log Retention Policy in Kafka?
+
+Kafka can delete or compact old messages:
+
+Delete Policy → remove messages after retention.ms.
+
+Compact Policy → keep only latest message per key.
+
+## Q20. How does Kafka achieve high throughput?
+
+Sequential disk writes.
+
+Page cache usage.
+
+Zero-copy transfer (sendfile).
+
+Batching & compression.
+
+## Q21. What is Kafka Message Compression?
+
+Supported algorithms: gzip, snappy, lz4, zstd.
+
+Reduces network bandwidth, increases throughput.
+
+# 5. Replication & Fault Tolerance
+
+## Q22. How does Kafka achieve fault tolerance?
+
+Data replication across multiple brokers.
+
+Partition has leader and followers.
