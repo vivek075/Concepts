@@ -1,6 +1,6 @@
 # Kafka Basics
 
-# Q1. What is Apache Kafka and why is it used?
+## Q1. What is Apache Kafka and why is it used?
 
 Kafka is a distributed event streaming platform used for high-throughput, low-latency, real-time data pipelines and streaming applications.
 
