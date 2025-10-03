@@ -37,3 +37,47 @@ Messages are persisted on disk.
 Replication across multiple brokers.
 
 Configurable acks and min.insync.replicas.
+
+# 2. Kafka Architecture
+
+# Q6. What are the main components of Kafka?
+
+Producer → publishes data.
+
+Consumer → reads data.
+
+Broker → Kafka server, stores data.
+
+Zookeeper (legacy) → manages metadata (replaced by KRaft in newer versions).
+
+Controller → leader election, partition reassignment.
+
+# Q7. What is a Kafka Broker?
+
+A Kafka server that handles storage and client requests.
+
+Cluster typically has multiple brokers for scalability.
+
+# Q8. What is a Kafka Cluster?
+
+Group of brokers working together to provide distributed messaging.
+
+# Q9. What is the role of Zookeeper in Kafka?
+
+Manages cluster metadata, leader election, configuration.
+
+Newer versions of Kafka use KRaft (Kafka Raft Metadata mode), removing Zookeeper dependency.
+
+# Q10. What is the Kafka Controller?
+
+A special broker responsible for leader election of partitions.
+
+# 3. Producers & Consumers
+
+# Q11. How does a Kafka Producer work?
+
+Sends messages to a broker → broker appends message to topic partition.
+
+Can specify partition key (hash-based).
+
+Configurable retries, batching, acknowledgements.
