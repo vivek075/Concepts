@@ -175,3 +175,143 @@ Followers take over if in ISR.
 Configurable durability (acks, replication).
 
 Writes to leader are replicated to followers.
+
+# 6. Kafka Streams & Connect
+
+## Q26. What is Kafka Streams?
+
+A Java library for real-time stream processing on top of Kafka.
+
+Provides stateful operations (join, windowing, aggregation).
+
+## Q27. What is Kafka Connect?
+
+Framework to connect Kafka with external systems (DBs, cloud storage, Elasticsearch).
+
+Supports Source Connectors (import) and Sink Connectors (export).
+
+## Q28. Difference between Kafka Streams and Spark Streaming / Flink?
+
+Kafka Streams → lightweight, JVM-based, embedded library.
+
+Spark/Flink → heavy cluster frameworks with broader capabilities.
+
+# 7. Transactions, Exactly-Once, and DLQ
+
+## Q29. What is Exactly Once Semantics (EOS) in Kafka?
+
+Prevents message duplication and loss.
+
+Achieved using idempotent producer + transactional APIs.
+
+## Q30. What is a Dead Letter Queue (DLQ) in Kafka?
+
+A separate topic for failed/poison messages.
+
+Useful for debugging & retries.
+
+## Q31. How does Kafka ensure message ordering?
+
+Messages are ordered within a partition but not across partitions.
+
+# 8. Security
+
+## Q32. What security mechanisms does Kafka support?
+
+Authentication: SASL (PLAIN, SCRAM, Kerberos), SSL.
+
+Authorization: ACLs (topic-level, group-level).
+
+Encryption: SSL/TLS.
+
+## Q33. How do you secure Kafka in production?
+
+Enable TLS for encryption in transit.
+
+Use SASL for authentication.
+
+Use ACLs for access control.
+
+Enable auditing and monitoring.
+
+# 9. Monitoring & Operations
+
+## Q34. How do you monitor Kafka?
+
+Metrics via JMX.
+
+Prometheus + Grafana dashboards.
+
+Kafka Manager, Confluent Control Center.
+
+## Q35. What are common Kafka bottlenecks?
+
+Disk I/O.
+
+Network bandwidth.
+
+Under-replicated partitions.
+
+Large message sizes.
+
+## Q36. How to tune Kafka performance?
+
+Increase partition count.
+
+Use compression.
+
+Tune num.network.threads, num.io.threads.
+
+Batch messages in producer.
+
+# 10. Advanced & System Design
+
+## Q37. How do you design Kafka for high availability?
+
+Replication factor ≥ 3.
+
+Multi-broker, multi-rack setup.
+
+Enable rack awareness.
+
+## Q38. How do you handle Kafka message ordering across partitions?
+
+Use partition key to ensure same key always goes to same partition.
+
+## Q39. How to handle large messages in Kafka (>1MB)?
+
+Tune max.message.bytes.
+
+Use external storage (S3, HDFS) + store references in Kafka.
+
+## Q40. How to migrate Kafka without downtime?
+
+MirrorMaker (Kafka → Kafka replication).
+
+Dual-write strategy during migration.
+
+## Q41. How does Kafka support microservices?
+
+Event-driven communication.
+
+Loose coupling.
+
+Integration via Kafka Streams, Connect.
+
+## Q42. How does Kafka differ from databases?
+
+Kafka is a log-based storage (append-only).
+
+Not designed for random reads/updates.
+
+Used as a source of truth for events (event sourcing).
+
+## Q43. How do banks use Kafka in real-time systems?
+
+Trade processing.
+
+Payment settlements.
+
+Fraud detection (real-time anomaly detection).
+
+Audit and compliance logs.
