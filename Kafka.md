@@ -636,3 +636,41 @@ Use MirrorMaker for dual writes.
 Cut over consumers after data sync.
 
 Use topic renaming/versioning strategy.
+
+# 9. Real-World & Banking-Specific
+
+## Q41. How is Kafka used in trade settlement systems?
+
+Trades flow into Kafka from upstream systems.
+
+Consumers validate, enrich, and persist to settlement DB.
+
+Downstream risk/fraud detection also consumes from same topics.
+
+## Q42. How do you ensure order of trade events in Kafka across services?
+
+Partition by tradeId to guarantee ordering.
+
+Consumers maintain idempotency in case of retries.
+
+## Q43. In banking, how do you ensure Kafka messages are never lost due to compliance needs?
+
+Replication factor 3+.
+
+Archive topics to S3/HDFS for long-term storage.
+
+No unclean leader elections.
+
+## Q44. How do you integrate Kafka with legacy MQ (IBM MQ, TIBCO)?
+
+Use Kafka Connect source/sink connectors.
+
+Or custom bridges (Kafka consumer → MQ producer).
+
+## Q45. How do you test resiliency of Kafka in production?
+
+Chaos testing (kill brokers).
+
+Simulate network partitions.
+
+Test consumer lag recovery under stress.
