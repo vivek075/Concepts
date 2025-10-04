@@ -315,3 +315,38 @@ Payment settlements.
 Fraud detection (real-time anomaly detection).
 
 Audit and compliance logs.
+
+---
+---
+
+# 1. Kafka Architecture & Design
+
+## Q1. How does Kafka guarantee message durability in case of broker failure?
+Kafka persists messages on disk and replicates across brokers. Producers can use acks=all + min.insync.replicas to ensure messages are acknowledged by multiple brokers before being considered committed.
+
+## Q2. In production, how do you decide the number of partitions for a topic?
+
+Depends on throughput, parallelism, and consumer scaling.
+
+Rule of thumb: partitions = peak throughput / single partition throughput.
+
+Over-partitioning leads to overhead (open file handles, memory usage).
+
+## Q3. What is ISR (In-Sync Replica) and why is it critical?
+ISR = set of replicas fully caught up with the leader. Writes succeed only if min.insync.replicas is satisfied. If ISR shrinks below threshold, Kafka rejects writes to avoid data loss.
+
+## Q4. How would you design Kafka to achieve zero data loss?
+
+Producer: acks=all, enable.idempotence=true.
+
+Topic: replication factor ≥ 3, min.insync.replicas=2.
+
+Consumers: use manual commits after processing.
+
+Monitor ISR and avoid unclean leader election.
+
+## Q5. How does Kafka ensure ordering of messages?
+
+Kafka guarantees ordering only within a partition.
+
+To enforce order across events, use a partition key (e.g., accountId for payments).
