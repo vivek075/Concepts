@@ -386,3 +386,49 @@ Enable async commits for better throughput.
 Use manual offset commits only after processing is complete.
 
 Store processing status in external DB if exactly-once isn’t achievable.
+
+# 3. Storage, Performance & Retention
+
+## Q11. How does Kafka achieve high throughput compared to JMS/RabbitMQ?
+
+Sequential disk I/O.
+
+OS page cache.
+
+Zero-copy (sendfile).
+
+Partition-based parallelism.
+
+## Q12. How do you configure Kafka for long-term message storage?
+
+Use log.retention.hours, log.retention.bytes.
+
+Consider log compaction for compacted topics (e.g., latest account balance).
+
+For archival, use Kafka Connect → S3/HDFS.
+
+## Q13. What happens when a Kafka topic has too many small partitions?
+
+Metadata overhead on controller.
+
+Increased open file descriptors.
+
+Frequent rebalances take longer.
+
+Recommended: avoid > 200k partitions per cluster.
+
+## Q14. How do you monitor consumer lag effectively?
+
+Track records-lag-max via JMX.
+
+Use tools like Burrow or Kafka Exporter (Prometheus).
+
+High lag may indicate slow consumers or undersized partitions.
+
+## Q15. What are batch.size and linger.ms in producers?
+
+batch.size: max size of batch (bytes).
+
+linger.ms: wait time to accumulate more records before sending.
+
+Together, they help optimize throughput vs latency.
