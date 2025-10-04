@@ -564,3 +564,75 @@ Producer buffers fill (buffer.memory).
 max.block.ms may block producers.
 
 Eventually, RecordTooLargeException or dropped messages if retries disabled.
+
+# 8. Advanced System Design
+
+## Q32. How would you design a Kafka system to handle 1M+ messages/sec?
+
+Multiple brokers with SSDs.
+
+Partition count tuned for parallelism.
+
+Compression enabled (Snappy/LZ4).
+
+Batched producer sends (batch.size, linger.ms).
+
+Consumers with parallel workers.
+
+## Q33. How do you guarantee exactly-once delivery in a payment system using Kafka?
+
+Producers use transactions.
+
+Consumers commit offsets within the same transaction as DB updates.
+
+Use idempotent writes in DB.
+
+## Q34. How do you handle schema evolution in Kafka?
+
+Use Schema Registry (Avro/Protobuf/JSON).
+
+Support backward and forward compatibility.
+
+## Q35. How do you design a Dead Letter Queue (DLQ) in Kafka?
+
+Consumers push failed messages into a separate DLQ topic.
+
+Include error metadata (timestamp, cause).
+
+Monitor DLQ and replay messages after fix.
+
+## Q36. How do you implement rate limiting for consumers?
+
+Throttle consumption by adjusting poll size.
+
+Use external rate-limiting libraries (e.g., Guava RateLimiter).
+
+Apply quotas in Kafka broker config (consumer_byte_rate).
+
+## Q37. How do you handle multi-tenancy in Kafka?
+
+Topic-level quotas.
+
+Separate consumer groups.
+
+ACLs for access isolation.
+
+## Q38. How do you design Kafka for cross-region replication with low latency?
+
+Use MirrorMaker 2 async replication (low overhead but eventual consistency).
+
+Or use Confluent’s Cluster Linking for stronger guarantees.
+
+## Q39. What are idempotent consumers and how do you design them?
+
+Consumers that handle duplicate messages gracefully.
+
+Achieved by deduplication keys or transaction logs.
+
+## Q40. How do you migrate Kafka clusters without downtime?
+
+Use MirrorMaker for dual writes.
+
+Cut over consumers after data sync.
+
+Use topic renaming/versioning strategy.
