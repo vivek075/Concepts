@@ -675,57 +675,57 @@ Simulate network partitions.
 
 Test consumer lag recovery under stress.
 
-Chapter 1: Kafka Basics (Q1–Q15)
+# Chapter 1: Kafka Basics (Q1–Q15)
 
-Q1. What is Apache Kafka?
+## Q1. What is Apache Kafka?
 A distributed event streaming platform for real-time pipelines and event-driven applications.
 
-Q2. Difference between Kafka and traditional messaging systems (JMS/RabbitMQ)?
+## Q2. Difference between Kafka and traditional messaging systems (JMS/RabbitMQ)?
 
 Kafka = high throughput, partitioned log, durable storage.
 
 JMS = push-based, slower, not designed for big data scale.
 
-Q3. What is a Kafka Topic?
+## Q3. What is a Kafka Topic?
 Logical channel where producers write messages and consumers read.
 
-Q4. What are Kafka Partitions?
+## Q4. What are Kafka Partitions?
 
 Ordered, immutable logs.
 
 Enable scalability and parallelism.
 
-Q5. What is an Offset in Kafka?
+## Q5. What is an Offset in Kafka?
 A unique sequential ID per message in a partition.
 
-Q6. What is a Broker in Kafka?
+## Q6. What is a Broker in Kafka?
 Kafka server that stores data and serves clients.
 
-Q7. What is a Kafka Cluster?
+## Q7. What is a Kafka Cluster?
 Group of brokers working together.
 
-Q8. What is ZooKeeper’s role in Kafka?
+## Q8. What is ZooKeeper’s role in Kafka?
 Cluster metadata, leader election (replaced by KRaft in new versions).
 
-Q9. Difference between Kafka Controller and Broker?
+## Q9. Difference between Kafka Controller and Broker?
 Controller manages partition leaders, brokers handle storage/requests.
 
-Q10. What are Kafka Producers and Consumers?
+## Q10. What are Kafka Producers and Consumers?
 
 Producer = sends events.
 
 Consumer = reads events.
 
-Q11. Difference between push vs pull in Kafka consumers?
+## Q11. Difference between push vs pull in Kafka consumers?
 Kafka uses pull model, giving consumers control.
 
-Q12. What is a Consumer Group?
+## Q12. What is a Consumer Group?
 Set of consumers balancing partitions.
 
-Q13. How does Kafka handle slow consumers?
+## Q13. How does Kafka handle slow consumers?
 Messages retained until retention expires → lag increases.
 
-Q14. What is Kafka’s delivery guarantee?
+## Q14. What is Kafka’s delivery guarantee?
 
 At most once.
 
@@ -733,93 +733,93 @@ At least once (default).
 
 Exactly once (with idempotence + transactions).
 
-Q15. What is Kafka’s commit log architecture?
+## Q15. What is Kafka’s commit log architecture?
 Immutable append-only log, consumers track offset.
 
-Chapter 2: Kafka Producers (Q16–Q30)
+# Chapter 2: Kafka Producers (Q16–Q30)
 
-Q16. How does Kafka decide partition placement for a message?
+## Q16. How does Kafka decide partition placement for a message?
 
 Key-based hash.
 
 Round robin if no key.
 
-Q17. What are Producer Acks?
+## Q17. What are Producer Acks?
 
 acks=0, acks=1, acks=all.
 
-Q18. What is an Idempotent Producer?
+## Q18. What is an Idempotent Producer?
 Guarantees no duplicates when retries occur.
 
-Q19. What is a Transactional Producer?
+## Q19. What is a Transactional Producer?
 Enables atomic writes to multiple partitions + offsets.
 
-Q20. How does batching improve producer throughput?
+## Q20. How does batching improve producer throughput?
 Accumulating records into batch.size before sending.
 
-Q21. What is linger.ms in Kafka Producer?
+## Q21. What is linger.ms in Kafka Producer?
 Delay before sending batch → increases throughput.
 
-Q22. How does compression help Kafka producers?
+## Q22. How does compression help Kafka producers?
 Reduces payload size → network + disk efficiency.
 
-Q23. Common compression algorithms in Kafka?
+## Q23. Common compression algorithms in Kafka?
 Gzip, Snappy, LZ4, Zstd.
 
-Q24. What is max.in.flight.requests.per.connection?
+## Q24. What is max.in.flight.requests.per.connection?
 Controls retries and ordering guarantees.
 
-Q25. How does producer handle retries?
+## Q25. How does producer handle retries?
 retries, retry.backoff.ms configs.
 
-Q26. What is delivery.timeout.ms?
+## Q26. What is delivery.timeout.ms?
 Upper bound on message delivery attempts.
 
-Q27. What happens if producer buffer.memory is full?
+## Q27. What happens if producer buffer.memory is full?
 Producer blocks or throws exception.
 
-Q28. How do producers achieve load balancing?
+## Q28. How do producers achieve load balancing?
 By distributing messages across partitions.
 
-Q29. How do producers handle large messages?
+## Q29. How do producers handle large messages?
 Tune max.request.size or store externally.
 
-Q30. How do you ensure ordering in Kafka producers?
+## Q30. How do you ensure ordering in Kafka producers?
 Use same key → same partition.
 
-Chapter 3: Kafka Consumers (Q31–Q50)
+# Chapter 3: Kafka Consumers (Q31–Q50)
 
-Q31. What is consumer offset commit?
+## Q31. What is consumer offset commit?
 Position tracking to resume processing.
 
-Q32. Difference between auto vs manual commit?
+## Q32. Difference between auto vs manual commit?
 
 Auto → risk of reprocessing.
 
 Manual → precise control.
 
-Q33. What is max.poll.records?
+## Q33. What is max.poll.records?
 Number of messages per poll.
 
-Q34. What is max.poll.interval.ms?
+## Q34. What is max.poll.interval.ms?
 Timeout before consumer considered dead.
 
-Q35. What happens during consumer rebalance?
+## Q35. What happens during consumer rebalance?
 Partitions redistributed across group.
 
-Q36. How do you reduce rebalance disruptions?
+## Q36. How do you reduce rebalance disruptions?
 Static membership, cooperative rebalance.
 
-Q37. What is partition.assignment.strategy?
+## Q37. What is partition.assignment.strategy?
 How partitions are distributed: Range, RoundRobin, Sticky.
 
-Q38. How do you tune consumer throughput?
+## Q38. How do you tune consumer throughput?
 Increase fetch.min.bytes, fetch.max.wait.ms.
 
-Q39. How do you handle duplicate processing in consumers?
+## Q39. How do you handle duplicate processing in consumers?
 Idempotent consumers, external deduplication.
 
-Q40. What is consumer lag?
+## Q40. What is consumer lag?
 Difference between last produced offset vs last committed offset.
 
 Q41. How do you monitor consumer lag?
