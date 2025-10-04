@@ -2437,169 +2437,169 @@ Cause: Retained large objects per message or non-closed buffers.
 Fix: Profile heap, release resources, avoid large temporary allocations.
 Tip: Add memory usage alerts in producers.
 
-P73 — Payments stall because connector offset pointer corrupted
+## P73 — Payments stall because connector offset pointer corrupted
 
 Cause: Offsets topic corrupted or connector checkpoint bug.
 Fix: Reset connector offsets to known good point or recreate connector with snapshot.
 Tip: Keep periodic connector config snapshots for quick restore.
 
-P74 — Fraud detector consumes delayed event and misses window to block transaction
+## P74 — Fraud detector consumes delayed event and misses window to block transaction
 
 Cause: High consumer lag or late arrival beyond detection window.
 Fix: Prioritize fraud topic, scale fraud consumers, or increase detection window with compensations.
 Tip: Implement near-real-time alerting for suspicious increases.
 
-P75 — Payment file consumer duplicates when reprocessing historical data
+## P75 — Payment file consumer duplicates when reprocessing historical data
 
 Cause: Replayed messages processed into sink without dedup.
 Fix: Use idempotent writes (upsert) or add processed-run-id logic.
 Tip: Version-run markers in DB to ignore historical replays.
 
-P76 — Unexpected byte-order changes cause corruption in payment serialization across platforms
+## P76 — Unexpected byte-order changes cause corruption in payment serialization across platforms
 
 Cause: Different endianness or protocol mismatch.
 Fix: Use platform-agnostic serialization formats and test cross-platform.
 Tip: Include version and format identifiers in headers.
 
-P77 — Payment pipeline consuming from many small partitions causes thread overhead
+## P77 — Payment pipeline consuming from many small partitions causes thread overhead
 
 Cause: High partition count per consumer.
 Fix: Consolidate into fewer partitions or increase consumer parallelism.
 Tip: Balance partition count across brokers to avoid hotspots.
 
-P78 — Payment reconciliation job times out when joining with large external dataset
+## P78 — Payment reconciliation job times out when joining with large external dataset
 
 Cause: Join not optimized; external DB slow.
 Fix: Use pre-joined snapshots, compacted topic for reference data, or distributed join frameworks.
 Tip: Materialize join keys in advance to speed lookups.
 
-P79 — Settlement fails because connector transaction manager misconfigured
+## P79 — Settlement fails because connector transaction manager misconfigured
 
 Cause: Connector not using transactional producer settings.
 Fix: Enable transactions in connector and ensure isolation.level and transactional.id set.
 Tip: Monitor transaction commit failures and retries.
 
-P80 — Payment producers overwhelmed due to org-wide replay campaign
+## P80 — Payment producers overwhelmed due to org-wide replay campaign
 
 Cause: Bulk replays from other teams into shared topics.
 Fix: Enforce tenant quotas and schedule replays into dedicated maintenance windows.
 Tip: Provide a replay sandbox cluster to offload heavy reprocessing.
 
-P81 — Payment metadata TTL expired before downstream read (missing context)
+## P81 — Payment metadata TTL expired before downstream read (missing context)
 
 Cause: Compact topic retention misconfigured.
 Fix: Ensure compacted topics for metadata have appropriate retention and don't delete critical keys.
 Tip: Use changelog topics for state needed by many consumers.
 
-P82 — Consumer tasks stuck in long GC during large batch processing
+## P82 — Consumer tasks stuck in long GC during large batch processing
 
 Cause: Processing too many records per poll or huge aggregate objects.
 Fix: Reduce max.poll.records, stream process per-record or batch in smaller chunks.
 Tip: Use object pooling or streaming parsers to reduce GC churn.
 
-P83 — Payment ingestion errors spike after a library update
+## P83 — Payment ingestion errors spike after a library update
 
 Cause: Breaking change in serialization library.
 Fix: Rollback or fix library; add backward compatibility unit tests.
 Tip: Use semantic versioning and keep compatibility tests in CI.
 
-P84 — Payments pipeline logs show high RecordTooLargeException rates
+## P84 — Payments pipeline logs show high RecordTooLargeException rates
 
 Cause: Occasional oversized messages due to attachments or bad encoding.
 Fix: Enforce upper bound in ingress validation; move large payloads to external store.
 Tip: Reject or quarantine messages that exceed a safe threshold immediately.
 
-P85 — Payment consumers starve because of cooperative assignor bug
+## P85 — Payment consumers starve because of cooperative assignor bug
 
 Cause: Client assignor misconfiguration or client library bug.
 Fix: Fall back to sticky/roundrobin assignor; upgrade client libs.
 Tip: Test assignor behavior in integration environment.
 
-P86 — Payment integrity check fails after compression change
+## P86 — Payment integrity check fails after compression change
 
 Cause: Compression incompatible or corruption in transit.
 Fix: Ensure both producers and consumers support chosen compression; test end-to-end.
 Tip: Add checksum field to messages for end-to-end verification.
 
-P87 — Merchant onboarding spike causes many small topics and controller overload
+## P87 — Merchant onboarding spike causes many small topics and controller overload
 
 Cause: One topic per merchant approach.
 Fix: Multi-tenant topic model with tenant id in message; per-tenant partitions if needed.
 Tip: Provide tenant quotas and standard templates for ingestion.
 
-P88 — Payment reversal messages applied out of order causing incorrect balances
+## P88 — Payment reversal messages applied out of order causing incorrect balances
 
 Cause: Reversal and original messages routed to different partitions.
 Fix: Use same partition key for original and reversal (payment_id/account_id).
 Tip: Include sequence numbers and reconcile by sequence if late.
 
-P89 — Connector sinks inconsistent due to non-idempotent DB stored procedures
+## P89 — Connector sinks inconsistent due to non-idempotent DB stored procedures
 
 Cause: Stored procedure side effects cause duplicates on retries.
 Fix: Refactor to idempotent stored procs or use upsert patterns.
 Tip: Keep a dedup transaction log inside DB.
 
-P90 — Payments pipeline needs feature flag toggling per region causing inconsistency
+## P90 — Payments pipeline needs feature flag toggling per region causing inconsistency
 
 Cause: Inconsistent flag evaluation across consumers.
 Fix: Use central feature flag service and include flag version in message header.
 Tip: Roll flags with canary to a subset of consumers first.
 
-P91 — Broker metadata leader thrash during heavy payment topic creation
+## P91 — Broker metadata leader thrash during heavy payment topic creation
 
 Cause: Frequent topic create/delete churn.
 Fix: Batch topic creations and introduce quota/approval gateway for new topics.
 Tip: Auto-topic creation should be disabled in prod.
 
-P92 — Payment analytics consumer failing to join per-partition aggregations after partition increase
+## P92 — Payment analytics consumer failing to join per-partition aggregations after partition increase
 
 Cause: Repartition changes without reprocessing state.
 Fix: Use state migration or full replay into new topic with required partitions.
 Tip: Version output topics to handle topology changes.
 
-P93 — Payments pipeline reveals intermittent data corruption in payloads
+## P93 — Payments pipeline reveals intermittent data corruption in payloads
 
 Cause: Binary encoding issues or partial writes.
 Fix: Add schema validation, checksums, and reject corrupt messages early.
 Tip: Archive corrupt payloads for root-cause analysis.
 
-P94 — Consumer group cannot keep up due to network interface saturation
+## P94 — Consumer group cannot keep up due to network interface saturation
 
 Cause: NIC saturated by high throughput.
 Fix: Use multiple NICs, increase bandwidth, or co-locate consumers and brokers.
 Tip: Monitor per-NIC throughput and plan capacity.
 
-P95 — Payment event counts mismatch between Kafka and downstream DB over long period
+## P95 — Payment event counts mismatch between Kafka and downstream DB over long period
 
 Cause: Silent drops during producer errors or misconfigured connectors.
 Fix: Reconcile using archive logs and replay missing events; fix producer error handling.
 Tip: Daily automated reconciliation checks between Kafka counts and DB.
 
-P96 — Payment routing decisions require referential lookups that are slow
+## P96 — Payment routing decisions require referential lookups that are slow
 
 Cause: Doing synchronous HTTP/DB calls per-message during consumer processing.
 Fix: Preload reference data into compacted topic and local cache.
 Tip: Keep TTL and refresh policies for reference caches.
 
-P97 — Consumer time skew causes incorrect event-time windows in analytics
+## P97 — Consumer time skew causes incorrect event-time windows in analytics
 
 Cause: Producer clocks unsynced.
 Fix: Enforce NTP sync for all producers and consumers and use server-assigned timestamps if needed.
 Tip: Include both event and ingestion timestamps in payload.
 
-P98 — Payment processing blocked due to quota exceeded for a critical tenant
+## P98 — Payment processing blocked due to quota exceeded for a critical tenant
 
 Cause: Misconfigured quotas or sudden tenant spike.
 Fix: Increase quota temporarily and investigate rate; apply fair-share policies.
 Tip: Implement emergency throttle override for critical business flows.
 
-P99 — Long-lasting consumer offsets stuck due to immutable offset retention config
+## P99 — Long-lasting consumer offsets stuck due to immutable offset retention config
 
 Cause: Offsets retention too short and consumer cannot progress after downtime.
 Fix: Increase offsets.retention.minutes and add external checkpoints for long-running consumers.
 Tip: For long offline consumers, use snapshot/restore approach.
 
-P100 — Business requests a time-travel replay of payments for a month with 0 downtime
+## P100 — Business requests a time-travel replay of payments for a month with 0 downtime
 
 Cause: Need to reprocess without affecting live pipelines.
 Fix: Create parallel replay cluster/consumer group, reprocess archived events into separate output topics, and run reconciliation.
