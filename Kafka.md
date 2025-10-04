@@ -350,3 +350,39 @@ Monitor ISR and avoid unclean leader election.
 Kafka guarantees ordering only within a partition.
 
 To enforce order across events, use a partition key (e.g., accountId for payments).
+
+# 2. Producers & Consumers
+
+## Q6. What’s the role of an idempotent producer?
+Prevents duplicates when retries occur. Kafka assigns a producer ID (PID) and sequence numbers per partition to discard duplicates.
+
+## Q7. What is exactly-once delivery in Kafka?
+Achieved by idempotent producer + transactions.
+
+Producer writes messages within a transaction.
+
+Consumer commits offsets atomically with writes.
+
+Prevents both duplication and loss.
+
+## Q8. How do you handle consumer group rebalancing in production?
+
+Use static group membership (assign stable group.instance.id).
+
+Reduce rebalance frequency via session.timeout.ms, heartbeat.interval.ms.
+
+Consider incremental cooperative rebalancing (partition.assignment.strategy=CooperativeStickyAssignor).
+
+## Q9. How do you tune Kafka consumers for high throughput?
+
+Increase fetch.min.bytes and fetch.max.wait.ms for batching.
+
+Use max.poll.records to control processing batch size.
+
+Enable async commits for better throughput.
+
+## Q10. How do you ensure consumers don’t reprocess data after restart?
+
+Use manual offset commits only after processing is complete.
+
+Store processing status in external DB if exactly-once isn’t achievable.
