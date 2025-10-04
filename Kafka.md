@@ -432,3 +432,135 @@ batch.size: max size of batch (bytes).
 linger.ms: wait time to accumulate more records before sending.
 
 Together, they help optimize throughput vs latency.
+
+# 4. Replication & HA
+
+## Q16. How does Kafka handle broker failure?
+
+Controller elects a new partition leader from ISR.
+
+If ISR empty, and unclean.leader.election.enable=true, Kafka may elect out-of-sync replica (risk of data loss).
+
+## Q17. What is rack awareness in Kafka replication?
+
+Ensures replicas are placed across different racks/availability zones.
+
+Prevents data loss if one rack fails.
+
+## Q18. How do you configure Kafka for high availability in multi-datacenter setups?
+
+Use MirrorMaker 2 for replication.
+
+Or use Confluent Replicator.
+
+Typically: active-active or active-passive replication strategies.
+
+## Q19. How do you tune replication for performance?
+
+Increase replica.fetch.max.bytes.
+
+Set replica.lag.time.max.ms carefully.
+
+Ensure follower replication is not bottlenecked by slow disks.
+
+# 5. Kafka Streams & Connect
+
+## Q20. Difference between Kafka Streams and Kafka Connect?
+
+Streams: library for processing data inside applications.
+
+Connect: integration framework to connect Kafka with external systems (DBs, S3, Elastic).
+
+## Q21. How do you achieve stateful stream processing in Kafka Streams?
+
+Using RocksDB-backed state stores.
+
+Supports windowing, joins, and aggregations.
+
+## Q22. How do you handle stream state recovery after failure?
+
+Kafka Streams checkpoints state to changelog topics.
+
+On restart, it restores from changelog.
+
+## Q23. What are common pitfalls with Kafka Connect in production?
+
+Connector task imbalance.
+
+Handling large payloads.
+
+Backpressure when sink systems are slow.
+
+# 6. Security & Compliance
+
+## Q24. How do you secure Kafka in production?
+
+TLS for encryption.
+
+SASL/SCRAM for authentication.
+
+ACLs for authorization.
+
+Role-based access with fine-grained topic/group permissions.
+
+## Q25. How would you audit Kafka for compliance in a bank?
+
+Enable audit logging for producer/consumer access.
+
+Use Confluent RBAC or Apache Ranger.
+
+Persist DLQ for failed events (important for regulatory compliance).
+
+## Q26. How do you prevent replay attacks in Kafka?
+
+Use unique event IDs.
+
+Maintain deduplication logic downstream.
+
+Secure producer APIs with SASL/OAuth.
+
+# 7. Troubleshooting & Operations
+
+## Q27. A consumer is reading very slowly; how do you troubleshoot?
+
+Check consumer lag metrics.
+
+Verify if processing logic (DB writes, transformations) is slow.
+
+Increase max.poll.records or add more consumers.
+
+## Q28. Producers are timing out frequently. What could be the cause?
+
+Broker under high load.
+
+ISR shrinkage.
+
+Insufficient request.timeout.ms.
+
+Network latency.
+
+## Q29. What is the impact of increasing replication factor?
+
+More durability, but:
+
+Increased network usage.
+
+Slower writes.
+
+Higher storage costs.
+
+## Q30. How do you debug under-replicated partitions (URP)?
+
+Check slow broker disk/network.
+
+Increase replication threads.
+
+Replace failing broker.
+
+## Q31. What happens if producer sends messages faster than broker can handle?
+
+Producer buffers fill (buffer.memory).
+
+max.block.ms may block producers.
+
+Eventually, RecordTooLargeException or dropped messages if retries disabled.
