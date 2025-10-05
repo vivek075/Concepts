@@ -251,3 +251,79 @@ Distributed tracing to identify latency issues.
 Metrics dashboards (Grafana, Prometheus).
 
 Feature flagging to roll back risky code.
+
+## 41. What is Idempotency in APIs?
+
+Definition:
+An operation is idempotent if performing it multiple times has the same effect as performing it once.
+
+In API terms:
+
+An idempotent API guarantees that repeated calls with the same input produce the same result and do not cause unintended side effects.
+
+Example
+
+GET /account/12345 → Fetches account info → Always returns same data (if data unchanged).
+
+DELETE /user/101 → Deletes user 101 → Calling again still means user 101 is deleted (no new change).
+
+POST /payment → Creates a new payment → If retried, could create duplicates (⚠️ Not idempotent by default).
+
+## 42. Why/When is Idempotency Required?
+
+Idempotency is crucial in distributed systems, especially where:
+
+Network failures or timeouts can lead clients (or gateways) to retry the same request.
+
+APIs are part of financial transactions, order processing, or message delivery, where duplicate operations cause inconsistencies.
+
+✅ Common Scenarios Requiring Idempotency
+Use Case	                                                             Why Needed
+Payments / Transfers	                                                 To prevent duplicate debit or credit if client retries due to timeout
+Order Creation / Booking	                                             To avoid creating multiple identical orders
+Microservices communication via message queues (Kafka, MQ)	           To ensure at-least-once delivery does not cause double-processing
+External API calls with retries (Circuit breaker, Retry templates)	   To make retry-safe
+
+## 43. When Idempotency is Not Required
+
+GET, PUT, DELETE are naturally idempotent (as per REST semantics).
+
+POST is typically non-idempotent (creates new resources).
+
+If:
+
+The API is purely read-only (e.g., fetching data)
+
+The API’s retry logic is handled elsewhere (e.g., client has deduplication)
+
+The business allows multiple identical creations (e.g., adding comments, likes)
+
+Then you may not need to enforce idempotency.
+
+## How to Ensure Idempotency in APIs
+
+There are multiple ways depending on design:
+
+Option 1: Idempotency Key (Most Common)
+
+Client sends a unique key with every request.
+If the same key is received again, the server returns the previous result instead of performing the action again.
+
+How It Works
+
+Client sends a request:
+
+`
+POST /payments
+Headers: 
+  Idempotency-Key: a12f-xyz-998
+Body: { "amount": 100, "from": "A1", "to": "B1" }
+`
+
+Server checks if this key already exists:
+
+If not found, process and store result with that key.
+
+If found, return stored response.
+
+This guarantees exactly-once semantics from the client’s perspective.
