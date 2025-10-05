@@ -1,4 +1,4 @@
-1. Service-to-service communication is slow, causing latency. What do you do?
+## 1. Service-to-service communication is slow, causing latency. What do you do?
 
 Use async messaging (Kafka).
 
@@ -6,7 +6,7 @@ Add caching (Redis).
 
 Use gRPC instead of REST for faster binary communication.
 
-2. Kafka broker is down, messages are getting lost. Solution?
+## 2. Kafka broker is down, messages are getting lost. Solution?
 
 Enable acks=all + replication factor.
 
@@ -14,7 +14,7 @@ Use Dead Letter Queue (DLQ) for failed messages.
 
 Auto-retry with backoff.
 
-3. One service is overloaded while others are fine. How to scale?
+## 3. One service is overloaded while others are fine. How to scale?
 
 Apply Kubernetes HPA (Horizontal Pod Autoscaler).
 
@@ -22,7 +22,7 @@ Use load balancing (API Gateway, Envoy).
 
 Offload heavy tasks to async processing.
 
-4. How to migrate a database schema without downtime?
+## 4. How to migrate a database schema without downtime?
 
 Backward-compatible schema changes (add new columns, don’t drop old ones).
 
@@ -30,7 +30,7 @@ Expand & contract pattern (deploy schema first, then update code).
 
 Feature toggles for gradual migration.
 
-5. A service dependency is flaky. How do you prevent cascading failures?
+## 5. A service dependency is flaky. How do you prevent cascading failures?
 
 Use Circuit Breaker (Resilience4j).
 
@@ -38,13 +38,13 @@ Apply Bulkhead pattern to isolate failures.
 
 Use fallback responses.
 
-6. How do you ensure idempotency in APIs?
+## 6. How do you ensure idempotency in APIs?
 
 Generate unique request IDs (UUID, transaction ID).
 
 Store processed requests in DB/cache to avoid duplicate processing.
 
-7. How do you roll out new versions without downtime?
+## 7. How do you roll out new versions without downtime?
 
 Blue/Green deployments → switch traffic instantly.
 
@@ -52,7 +52,7 @@ Canary releases → route small % of traffic first.
 
 Kubernetes rolling updates.
 
-8. A service call is timing out. What’s your approach?
+## 8. A service call is timing out. What’s your approach?
 
 Check logs & tracing (Jaeger/Zipkin).
 
@@ -60,7 +60,7 @@ Tune timeout & retry policies.
 
 Use async event-driven design if possible.
 
-9. How to secure service-to-service communication?
+## 9. How to secure service-to-service communication?
 
 mTLS (mutual TLS).
 
@@ -68,13 +68,13 @@ Service mesh (Istio, Linkerd).
 
 OAuth2 + JWT for token-based auth.
 
-10. One service requires data from multiple DBs. How do you handle?
+## 10. One service requires data from multiple DBs. How do you handle?
 
 Use API Composition (aggregator service calls multiple services).
 
 Use CQRS + event-driven updates to maintain local read models.
 
-11. How do you test inter-service compatibility?
+## 11. How do you test inter-service compatibility?
 
 Contract testing with Pact.
 
@@ -82,7 +82,7 @@ Maintain API versioning.
 
 Use consumer-driven tests.
 
-12. You need to support millions of users. How do you optimize authentication?
+## 12. You need to support millions of users. How do you optimize authentication?
 
 Use stateless JWT tokens.
 
@@ -90,7 +90,7 @@ Centralized Auth server (Keycloak, Okta).
 
 Cache auth results (Redis).
 
-13. What if Redis cache goes down?
+## 13. What if Redis cache goes down?
 
 Fallback to DB (graceful degradation).
 
@@ -98,7 +98,7 @@ Use cache warming after restart.
 
 Add multi-tier caching (local + distributed).
 
-14. How do you implement distributed logging?
+## 14. How do you implement distributed logging?
 
 Use ELK stack (Elasticsearch, Logstash, Kibana).
 
@@ -106,7 +106,7 @@ Add correlation IDs in logs.
 
 Standardize JSON log format.
 
-15. How do you achieve strong consistency across services?
+## 15. How do you achieve strong consistency across services?
 
 Avoid it unless critical.
 
@@ -114,7 +114,7 @@ Use 2PC (rare, slow) only when necessary.
 
 Prefer Saga pattern for eventual consistency.
 
-16. A service memory usage keeps increasing. How do you debug?
+## 16. A service memory usage keeps increasing. How do you debug?
 
 Analyze with jmap, jstat, jvisualvm.
 
