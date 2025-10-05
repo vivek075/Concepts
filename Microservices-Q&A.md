@@ -304,7 +304,7 @@ Then you may not need to enforce idempotency.
 
 There are multiple ways depending on design:
 
-Option 1: Idempotency Key (Most Common)
+- Option 1: Idempotency Key (Most Common)
 
 Client sends a unique key with every request.
 If the same key is received again, the server returns the previous result instead of performing the action again.
@@ -327,3 +327,21 @@ If not found, process and store result with that key.
 If found, return stored response.
 
 This guarantees exactly-once semantics from the client’s perspective.
+
+- Option 2: Request Fingerprint / Hash
+
+Instead of relying on the client, server can generate a hash of the payload (like payment details, amount, etc.) and use it as an internal idempotency identifier.
+
+✅ Useful if:
+
+Client cannot send idempotency key.
+
+You want to enforce business-level deduplication.
+
+- Option 3: Database Unique Constraint
+
+Use a unique key or natural key (like transactionId, paymentRef, or orderNumber) in the database to prevent duplicates.
+
+✅ Example:
+In payment table, transaction_id is unique.
+If client retries with same transaction ID, the DB constraint prevents new record creation.
