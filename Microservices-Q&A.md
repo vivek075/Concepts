@@ -300,7 +300,7 @@ The business allows multiple identical creations (e.g., adding comments, likes)
 
 Then you may not need to enforce idempotency.
 
-## How to Ensure Idempotency in APIs
+## 43. How to Ensure Idempotency in APIs
 
 There are multiple ways depending on design:
 
