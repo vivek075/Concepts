@@ -1149,7 +1149,7 @@ Check CPU/network/disk saturation.
 
 Fix by: increasing linger.ms, batch.size, ensuring partition key distribution, or expanding cluster.
 
-6. Consumer Group Rebalances Frequently. What Could Be Wrong?
+## 6. Consumer Group Rebalances Frequently. What Could Be Wrong?
 
 Answer:
 
@@ -1169,7 +1169,7 @@ Use cooperative sticky assignor.
 
 Offload heavy processing out of consumer loop.
 
-7. You See “Offset Commit Failed” in Consumer Logs. Why?
+## 7. You See “Offset Commit Failed” in Consumer Logs. Why?
 
 Answer:
 
@@ -1181,7 +1181,7 @@ Offset retention expired in broker (offsets.retention.minutes).
 
 Solution: Tune commit frequency, monitor consumer liveness, increase retention.
 
-8. How Do You Handle a Use Case Where One Event Must Trigger Updates in Multiple Microservices?
+## 8. How Do You Handle a Use Case Where One Event Must Trigger Updates in Multiple Microservices?
 
 Answer:
 
@@ -1193,7 +1193,7 @@ For ordering, keep partition key consistent.
 
 For transactional integrity across services, use Saga pattern with Kafka events.
 
-9. Broker Disk Usage Suddenly Spikes. What’s Happening?
+## 9. Broker Disk Usage Suddenly Spikes. What’s Happening?
 
 Answer:
 
@@ -1207,7 +1207,7 @@ Producer spamming huge messages (check max.message.bytes).
 
 Fix: tune log.retention.*, enable compaction where needed, scale disk, monitor producers.
 
-10. A Consumer Needs Messages in Strict Order Across All Partitions. How Do You Handle?
+## 10. A Consumer Needs Messages in Strict Order Across All Partitions. How Do You Handle?
 
 Answer:
 
@@ -1221,7 +1221,7 @@ Or implement sequencing at application level using a central ordering service.
 
 Typically solved via design tradeoff: scale vs order.
 
-11. How Do You Ensure No Data Loss in Kafka?
+## 11. How Do You Ensure No Data Loss in Kafka?
 
 Answer:
 
@@ -1247,7 +1247,7 @@ Cluster:
 
 Rack awareness, monitoring ISR.
 
-12. A Consumer is Slower Than Others in Same Group. What Happens?
+## 12. A Consumer is Slower Than Others in Same Group. What Happens?
 
 Answer:
 
@@ -1257,7 +1257,7 @@ Other consumers cannot take over unless it leaves group.
 
 Fix: scale partitions/consumers, fix slow processing, use async worker pool per consumer.
 
-13. You’re Migrating Kafka Topics to a New Cluster With Zero Downtime. How?
+## 13. You’re Migrating Kafka Topics to a New Cluster With Zero Downtime. How?
 
 Answer:
 
@@ -1269,7 +1269,7 @@ Ensure offset sync using MirrorMaker offset translation.
 
 Validate lag, then decommission old cluster.
 
-14. What If Messages Are Too Large for Kafka Broker to Handle?
+## 14. What If Messages Are Too Large for Kafka Broker to Handle?
 
 Answer:
 
@@ -1283,7 +1283,7 @@ Or split large payload into chunks.
 
 Or store payload in object storage (S3/HDFS) and pass reference in Kafka.
 
-15. High CPU Usage on Broker. What’s the Checklist?
+## 15. High CPU Usage on Broker. What’s the Checklist?
 
 Answer:
 
@@ -1297,7 +1297,7 @@ Large number of clients frequently fetching metadata.
 
 Solution: expand cluster, rebalance partitions, tune GC, enable client-side caching of metadata.
 
-16. You Have Hot Partition Issue (One Partition Receives Most Traffic). Fix?
+## 16. You Have Hot Partition Issue (One Partition Receives Most Traffic). Fix?
 
 Answer:
 
@@ -1309,7 +1309,7 @@ Use custom partitioner.
 
 Add partitions (but note ordering semantics may break).
 
-17. A Downstream System Cannot Keep Up With Kafka Consumer Throughput. How Do You Protect It?
+## 17. A Downstream System Cannot Keep Up With Kafka Consumer Throughput. How Do You Protect It?
 
 Answer:
 
@@ -1321,7 +1321,7 @@ Use Dead Letter Queue for retries.
 
 Scale downstream system or batch writes.
 
-18. What If Offset Data in Kafka Is Lost (Compacted)?
+## 18. What If Offset Data in Kafka Is Lost (Compacted)?
 
 Answer:
 
@@ -1333,7 +1333,7 @@ Solution: increase offsets.retention.minutes.
 
 Alternatively, store checkpoint externally (DB, Redis).
 
-19. How Do You Handle Multi-Region Kafka Deployment?
+## 19. How Do You Handle Multi-Region Kafka Deployment?
 
 Answer:
 
@@ -1347,7 +1347,7 @@ Tradeoff: Latency vs consistency.
 
 Must tune replication flow carefully to avoid loops.
 
-20. How Do You Debug Message Loss in Production?
+## 20. How Do You Debug Message Loss in Production?
 
 Answer:
 
@@ -1361,29 +1361,9 @@ Check broker logs for unclean leader election.
 
 Use audit pipeline: compare source vs sink counts.
 
-👉 I can extend this into a full 40–50 scenario set, covering:
+---
 
-Security Issues (SASL/SSL misconfigs, Kerberos issues)
-
-Kafka Streams failures
-
-DLQ, retries, poison-pill handling
-
-Schema evolution & compatibility
-
-ZooKeeper → KRaft migration issues
-
-Chaos engineering scenarios (broker crash, network partition)
-
-Do you want me to expand this to a complete “Kafka Troubleshooting Playbook” (40–50 detailed scenarios) in one go (like a dedicated prep book), or should I build it in progressive chunks (10–15 scenarios at a time) so it’s easier to digest?
-
-You said:
- “Payments messages are duplicated across DB and Kafka, how do you fix?”)
-ChatGPT said:
-
-Perfect 👌 That’s exactly the type of production-grade scenario banks/fintech interviews love to ask. Let’s take your example:
-
-Scenario: “Payments messages are duplicated across DB and Kafka, how do you fix?”
+## Scenario: “Payments messages are duplicated across DB and Kafka, how do you fix?”
 🔹 Problem
 
 Payments are critical transactions — duplication = double debit/credit.
