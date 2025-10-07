@@ -1471,17 +1471,7 @@ Combine with EOS transactions if running Kafka Streams or Spring Kafka.
 
 "Payments duplication typically occurs due to retries, lack of idempotence, or DB/Kafka dual-write issues. In production, I’d fix this by enabling idempotence on the producer, enforcing uniqueness at the DB layer with payment_id, and adopting the Outbox pattern to ensure DB and Kafka are consistent. If strict exactly-once semantics are required, I’d also use Kafka transactions so that DB updates and offset commits happen atomically. This guarantees no double-processing of payment messages even during retries or crashes."
 
-🔥 Do you want me to build a full dedicated section of 20–25 “Payments/Banking Kafka Scenarios” like this (duplication, retries, ordering, settlement mismatches, DLQ for failed payments, cut-off batch processing, multi-region replication for payments)?
-
-That would make your prep bank-specific and interview-cracking level.
-
-You said:
-yes
-ChatGPT said:
-
-Perfect 🙌
-Let’s build a dedicated section: “Kafka in Banking/Payments – 20+ Real Scenarios with Solutions”.
-These are exactly the kind of problem-solving questions banks (Citi, JP Morgan, Barclays, UBS) ask when hiring senior engineers/VPs.
+---
 
 🔥 Kafka in Payments/Banking – Scenario-Based Q&A
 1. Payments messages are duplicated across DB and Kafka. How do you fix?
