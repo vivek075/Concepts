@@ -1788,151 +1788,151 @@ Cause: DLQ ingestion inconsistent, missing metadata (rejection reason, timestamp
 Fix: Standardize failure handling — always publish failed record to DLQ with enriched metadata. Make DLQ schema enforced via Schema Registry. Build a scheduled job to aggregate DLQ and produce regulatory report.
 Prod tip: Protect DLQ retention and backup to object storage for forensic audits.
 
-31. High-frequency trading (HFT) consumers need <1ms latency; Kafka tail latency spikes.
+## 31. High-frequency trading (HFT) consumers need <1ms latency; Kafka tail latency spikes.
 
 Cause: JVM GC pauses, large message batches, disk I/O, network jitter.
 Fix: Use tuned JVM (low pause GC), dedicate brokers for low-latency topics, reduce linger.ms and batch.size, use faster NICs and NVMe SSDs, minimize client-side serialization overhead (e.g., use binary formats).
 Prod tip: Consider using in-memory stores or specialized messaging for ultra-low-latency segments; reserve Kafka for near-real-time where ms-level SLAs are acceptable.
 
-32. Trade lifecycle requires atomic update across multiple services; two-phase commit not feasible. How to coordinate?
+## 32. Trade lifecycle requires atomic update across multiple services; two-phase commit not feasible. How to coordinate?
 
 Cause: Multiple microservices with independent datastores.
 Fix: Implement Saga pattern with compensating transactions coordinated by events in Kafka; use durable saga state (Kafka Streams or DB) and ensure idempotent compensating actions.
 Prod tip: Provide observability on saga progress; timeout and manual compensation processes.
 
-33. Market data spikes cause broker overload and price feed consumers drop. How to protect critical consumers?
+## 33. Market data spikes cause broker overload and price feed consumers drop. How to protect critical consumers?
 
 Cause: Burst traffic overwhelms bandwidth and IO.
 Fix: Apply broker-level quotas for non-critical producers, use topic-level throttling, provision high-throughput brokers for market-data topics, and implement priority consumer groups for critical services.
 Prod tip: Use separate clusters for market data vs business-critical transactional topics to isolate impact.
 
-34. Schema drift in trade messages breaks downstream analytic jobs. How to manage evolving schemas?
+## 34. Schema drift in trade messages breaks downstream analytic jobs. How to manage evolving schemas?
 
 Cause: Producers change schemas without compatibility guarantees.
 Fix: Use Schema Registry with enforced compatibility modes (BACKWARD / FORWARD / FULL); run contract tests; introduce fields as optional, not remove required fields.
 Prod tip: Automate schema validation in CI and have a staged rollout of new schemas with canary consumers.
 
-35. Settlement cycle fails when a broker upgrade causes leader churn. How to minimize impact?
+## 35. Settlement cycle fails when a broker upgrade causes leader churn. How to minimize impact?
 
 Cause: Rolling upgrade triggers leadership moves, causing brief unavailability.
 Fix: Use controlled rolling upgrades, pre-move leadership off a broker, ensure replication factor and ISR healthy before upgrade, enable controlled.shutdown.
 Prod tip: Upgrade during low-volume windows and monitor URP metrics in real time.
 
-36. Latency spikes caused by compaction tasks on compacted topics used for account state.
+## 36. Latency spikes caused by compaction tasks on compacted topics used for account state.
 
 Cause: Log cleaner consumes CPU/disk affecting I/O.
 Fix: Tune log.cleaner.threads, log.cleaner.io.max.bytes.per.second, and separate compacted topics onto dedicated disks/brokers.
 Prod tip: Schedule heavy compaction during off-peak hours for large state topics.
 
-37. Cross-system ID mapping (external trade IDs ↔ internal IDs) inconsistent across services.
+## 37. Cross-system ID mapping (external trade IDs ↔ internal IDs) inconsistent across services.
 
 Cause: Mapping updates not propagated or race conditions.
 Fix: Centralize mapping in a compacted Kafka topic as the single source of truth; services read mapping and cache locally; use changelog for updates.
 Prod tip: Use versioned mapping and include effective timestamps for rollbacks.
 
-38. Analytics models consume delayed features due to late enrichment jobs, model outputs stale.
+## 38. Analytics models consume delayed features due to late enrichment jobs, model outputs stale.
 
 Cause: Feature enrichment pipeline slower than model consumption.
 Fix: Add staging topics for raw features and enrichment events; use stream-table joins with change logs and retain enrichment history; fallback to last-known-good feature if enrichment missing.
 Prod tip: Add SLA metrics per feature and alerts when feature freshness drops.
 
-39. Regulatory audit requires tamper-proof audit trail of trade events. How to provide it?
+## 39. Regulatory audit requires tamper-proof audit trail of trade events. How to provide it?
 
 Cause: Need immutable, provable logs.
 Fix: Keep append-only Kafka topics with retention per regulation; replicate to immutable object storage (S3 with WORM/immutable buckets), compute and store checksums, sign batches. Use Kafka’s immutability + external archival for long-term.
 Prod tip: Maintain provenance metadata and digital signatures for legal admissibility.
 
-40. Massive consumer lag at month-end reporting job. How to prioritize critical reporting consumers?
+## 40. Massive consumer lag at month-end reporting job. How to prioritize critical reporting consumers?
 
 Cause: Batch spikes and many competing consumers.
 Fix: Apply consumer quotas and dedicate faster consumers/instances for reporting; create a high-priority topic copy via MirrorMaker to isolate reporting load.
 Prod tip: Build a backpressure-aware ingestion pipeline that can throttle non-critical producers temporarily.
 
-41. Stateful Kafka Streams job needs migration to bigger cluster without state loss. How to perform?
+## 41. Stateful Kafka Streams job needs migration to bigger cluster without state loss. How to perform?
 
 Cause: Need state store relocation while preserving correctness.
 Fix: Use Kafka Streams’ built-in repartitioning and state store changelog topics; perform rolling upgrades with state restoration from changelog topics; use interactive queries to drain traffic gradually.
 Prod tip: Pre-provision target cluster and validate state restoration under test before cutover.
 
-42. Regulatory ‘right to be forgotten’ (GDPR) conflicts with immutable audit logs. How to reconcile?
+## 42. Regulatory ‘right to be forgotten’ (GDPR) conflicts with immutable audit logs. How to reconcile?
 
 Cause: Regulations demand deletion; audit logs are append-only.
 Fix: Use tokenization/pseudonymization: replace PII with irreversible hashes in event stream while keeping audit metadata; maintain separate secure subject-access logs to satisfy requests; archive original PII in controlled vault and delete per policy.
 Prod tip: Consult legal/regulatory and design data minimization and encryption-at-rest with key rotation to limit exposure.
 
-43. Trade enrichment service is a single point of failure causing processing backlog. How to make it resilient?
+## 43. Trade enrichment service is a single point of failure causing processing backlog. How to make it resilient?
 
 Cause: Central enrichment service downtime slows pipeline.
 Fix: Cache enrichment data in a compacted Kafka topic and colocate enrichment lookup in consumers (local cache backed by changelog); make enrichment service horizontally scalable and idempotent.
 Prod tip: Keep enrichment data compact, TTL evictions, and health-check-based routing to healthy instances.
 
-44. Model-serving pipeline using Kafka has drifting feature distributions unnoticed (model staleness). How to detect and act?
+## 44. Model-serving pipeline using Kafka has drifting feature distributions unnoticed (model staleness). How to detect and act?
 
 Cause: No monitoring for feature distribution shifts.
 Fix: Stream feature statistics (means, histograms) to a monitoring topic; run drift detectors and generate alerts; automatically trigger model retraining pipelines.
 Prod tip: Keep sliding-window feature metrics and automate retraining threshold triggers.
 
-45. Broker disk failure requires emergency failover — risk of split-brain writes in active-active replication.
+## 45. Broker disk failure requires emergency failover — risk of split-brain writes in active-active replication.
 
 Cause: Multi-region active-active with unsafeguarded writes.
 Fix: Prefer active-passive for sensitive financial writes or implement conflict resolution logic (last-writer-wins with causal ordering or payment-id based dedup). Use MirrorMaker 2 with careful topology to avoid write loops.
 Prod tip: Run regular failover drills and verify idempotency/dedup safeguards.
 
-46. Regulatory reporting needs lineage of derived fields (how was margin calculated?). How to provide provenance?
+## 46. Regulatory reporting needs lineage of derived fields (how was margin calculated?). How to provide provenance?
 
 Cause: Derived computations lack traceability.
 Fix: Emit metadata with each derived event pointing to source event offsets/IDs and transformation version; use immutable changelog topics for intermediate stages. Provide a lineage service that can traverse upstream offsets to recreate derivations.
 Prod tip: Store transform code version and parameter snapshots along with derived events.
 
-47. Core banking system cannot accept replay storm when Kafka consumers reset offsets for debugging. How to prevent overload?
+## 47. Core banking system cannot accept replay storm when Kafka consumers reset offsets for debugging. How to prevent overload?
 
 Cause: Replay replays millions of messages causing DB overload.
 Fix: Implement replay rate limiting, consumer-side throttling, and batch writes on consumer; use a staging pipeline to rehydrate state without hitting core in real-time.
 Prod tip: Add circuit breakers and replay quotas per business unit.
 
-48. Cross-asset portfolio aggregation requires joins across very large topics — state store grows beyond capacity.
+## 48. Cross-asset portfolio aggregation requires joins across very large topics — state store grows beyond capacity.
 
 Cause: Stateful joins with high cardinality keys.
 Fix: Pre-aggregate upstream where possible; shard joins by time windows or by customer segments; offload large state to scalable external stores (Cassandra/Redis) and use compacted changelogs for snapshots.
 Prod tip: Re-evaluate windowing strategy and use incremental aggregation to reduce state size.
 
-49. FIX gateway publishes malformed messages causing downstream consumer crashes. How to contain?
+## 49. FIX gateway publishes malformed messages causing downstream consumer crashes. How to contain?
 
 Cause: Bad producer code or unexpected message variants.
 Fix: Introduce a validation/normalization layer near the producer (parsing and schema validation), reject or route malformed messages to a quarantine topic for inspection; enforce Schema Registry checks.
 Prod tip: Use SMTs in Kafka Connect to sanitize inputs and keep strict schema evolution rules.
 
-50. Back-pressure from a slow settlement DB causes producer timeouts and data loss. How to design backpressure handling end-to-end?
+## 50. Back-pressure from a slow settlement DB causes producer timeouts and data loss. How to design backpressure handling end-to-end?
 
 Cause: Downstream slowness cascades to upstream.
 Fix: Implement buffer queues, separate ingestion and settlement pipelines, use DLQs and retry topics with exponential backoff, apply quotas upstream, and scale settlement DB or use write-batching.
 Prod tip: Build health signals that can throttle upstream producers automatically when settlement lag is detected.
 
-51. Large-scale reprocessing required for a bug fix — how to replay while maintaining derived state correctness?
+## 51. Large-scale reprocessing required for a bug fix — how to replay while maintaining derived state correctness?
 
 Cause: Stateful processors will produce different outputs for older events.
 Fix: Version your processing logic and create a controlled replay pipeline: spin up a fresh processing cluster with corrected code and restore state from changelog topics or start from earliest offsets into a new output topic. Compare new output with previous and promote after verification.
 Prod tip: Use canary replays on subsets of data before full-scale reprocessing.
 
-52. Real-time exposure calculations must include late events up to 2 hours after trade. How do you handle?
+## 52. Real-time exposure calculations must include late events up to 2 hours after trade. How do you handle?
 
 Cause: Need to include late-arriving corrections.
 Fix: Use stream processing with event-time windows and a large grace period; keep changelog topics for state to allow corrections to update computed exposure; design idempotent updates for exposure re-calculation.
 Prod tip: Alert when corrections outside the expected window occur and provide reconciliation reports.
 
-53. Multiple teams share a Kafka cluster and noisy tenants affect others. How to enforce multi-tenancy fairness?
+## 53. Multiple teams share a Kafka cluster and noisy tenants affect others. How to enforce multi-tenancy fairness?
 
 Cause: One tenant floods cluster resources.
 Fix: Enforce quotas (producer_byte_rate, consumer_byte_rate), use separate topics/clusters per tenant for strict isolation, and set ACLs + quotas. Monitor per-tenant metrics.
 Prod tip: Offer self-service topic provisioning with limits and enforce tagging for billing.
 
-54. Trade confirmations must be compensated on failure (compensation workflows fail). How to improve reliability?
+## 54. Trade confirmations must be compensated on failure (compensation workflows fail). How to improve reliability?
 
 Cause: Missing retry logic and state reconciliation.
 Fix: Implement idempotent confirmation endpoints, create compensation events for reversals, persist saga state and retry logic in Kafka Streams or DB, and provide manual resolution path.
 Prod tip: Keep compensation metrics and SLA dashboards.
 
-55. Monthly regulatory deadline: export all trades with specific enrichment that requires joins; pipeline overwhelmed. What temporary & long-term fixes?
+## 55. Monthly regulatory deadline: export all trades with specific enrichment that requires joins; pipeline overwhelmed. What temporary & long-term fixes?
 
 Cause: Bulk query and join spikes for long historical windows.
 Fix (temp): Pause non-critical workloads, scale up consumer fleet, run batch jobs over archived data in data lake.
@@ -1971,43 +1971,43 @@ Cause: Wrong partition key or multiple partitions for same payment.
 Fix: Partition by payment_id or account_id requiring ordering.
 Tip: Document partitioning scheme and enforce upstream keys.
 
-P6 — Hot partition for major payer causing latency
+## P6 — Hot partition for major payer causing latency
 
 Cause: All messages for big payer hashed to one partition.
 Fix: Revisit key design — include sharding salt or composite key.
 Tip: Avoid deterministic single-key hotspots for big clients.
 
-P7 — Consumer lag spikes at cut-off time
+## P7 — Consumer lag spikes at cut-off time
 
 Cause: Burst of messages; insufficient consumers or DB slowness.
 Fix: Pre-scale consumers, batch DB writes, use async workers.
 Tip: Pre-warm consumers ahead of scheduled spikes.
 
-P8 — Poison-pill payment causing consumer crash
+## P8 — Poison-pill payment causing consumer crash
 
 Cause: Malformed payload or unexpected schema.
 Fix: Validate input; route invalid to quarantine DLQ with metadata.
 Tip: Add schema validation at ingress (SMT or dedicated parser).
 
-P9 — DLQ growing rapidly with payment failures
+## P9 — DLQ growing rapidly with payment failures
 
 Cause: Downstream system unavailable or bad data flood.
 Fix: Throttle retries, increase DLQ retention, fix root cause.
 Tip: Create dashboards for DLQ volume + top error reasons.
 
-P10 — Settlement file generated twice
+## P10 — Settlement file generated twice
 
 Cause: Job ran twice due to retry or lack of idempotent file name.
 Fix: Use atomic manifest entry in DB or unique EOD job idempotency check.
 Tip: Include checksum and job-run-id in manifest for verification.
 
-P11 — Payment latency high end-to-end
+## P11 — Payment latency high end-to-end
 
 Cause: Large serialization, sync DB calls, small batch sizes.
 Fix: Use binary serialization (Avro/Protobuf), async DB writes, tune batch/linger.
 Tip: Measure p95 and p99 latencies at each hop.
 
-P12 — Retention policy causing audit gaps
+## P12 — Retention policy causing audit gaps
 
 Cause: Topic retention too short for compliance.
 Fix: Archive to S3/HDFS via Connect and keep minimal retention in Kafka.
