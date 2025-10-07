@@ -1939,56 +1939,33 @@ Fix (temp): Pause non-critical workloads, scale up consumer fleet, run batch job
 Fix (long-term): Pre-compute and store enriched snapshots daily in compacted topics or data lake; provide APIs for exports rather than real-time joins.
 Prod tip: Automate capacity planning for known periodic spikes and pre-warm clusters.
 
-If you want, I can now:
+---
 
-Convert these into a printable PDF “Banking Kafka Playbook” with diagrams and checklists, or
-
-Expand any of the scenarios into step-by-step runbooks (commands, JMX metrics to check, sample configs), or
-
-Create mock interview questions based on these scenarios with ideal answer bullet points.
-
-Which would you prefer next?
-
-You said:
-focus deeper on Payments (100+ scenarios total) to make it like a mini “Payments + Kafka Troubleshooting Playbook”?
-ChatGPT said:
-Thought for 4 seconds
-Payments + Kafka — Troubleshooting Playbook (100 practical scenarios)
-
-Awesome — below is a compact, battle-tested Payments + Kafka troubleshooting playbook with 100 scenarios (P1–P100).
-Each scenario has: Problem → Likely cause → Short fix → Production tip. This is designed as an interview-ready reference and an on-call checklist you can memorize or paste into runbooks.
-
-How to use this
-
-Scan the problem statement, match metrics/logs, then follow the short fix and prod tip.
-
-If you want, I can expand any scenario into a full runbook (commands, JMX metrics, config snippets).
-
-P1 — Duplicate payments in DB and Kafka
+## P1 — Duplicate payments in DB and Kafka
 
 Cause: Dual-write or producer retries without idempotence.
 Fix: Outbox pattern OR idempotent producer + DB unique constraint on payment_id.
 Tip: Always have payment_id as business key and DB uniqueness.
 
-P2 — Payment written to DB but not in Kafka
+## P2 — Payment written to DB but not in Kafka
 
 Cause: Dual-write race or failed Kafka publish after DB commit.
 Fix: Outbox (write outbox in same DB tx → CDC/poller to Kafka).
 Tip: Monitor outbox backlog and publisher errors.
 
-P3 — Consumer processes payment twice (double debit)
+## P3 — Consumer processes payment twice (double debit)
 
 Cause: Processed DB insert before offset commit and crash.
 Fix: Transactional consumption (commit offset with DB update) or idempotent DB writes.
 Tip: Use INSERT ... ON CONFLICT DO NOTHING for payments.
 
-P4 — Producer TimeoutException when sending payments
+## P4 — Producer TimeoutException when sending payments
 
 Cause: Broker unreachable, wrong listeners, or network ACLs.
 Fix: Check advertised.listeners, network/firewall, broker health.
 Tip: Add producer-side retry/backoff with exponential backoff.
 
-P5 — Payment ordering violated across services
+## P5 — Payment ordering violated across services
 
 Cause: Wrong partition key or multiple partitions for same payment.
 Fix: Partition by payment_id or account_id requiring ordering.
