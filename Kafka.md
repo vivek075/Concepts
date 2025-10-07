@@ -1473,8 +1473,8 @@ Combine with EOS transactions if running Kafka Streams or Spring Kafka.
 
 ---
 
-🔥 Kafka in Payments/Banking – Scenario-Based Q&A
-1. Payments messages are duplicated across DB and Kafka. How do you fix?
+# 🔥 Kafka in Payments/Banking – Scenario-Based Q&A
+## 1. Payments messages are duplicated across DB and Kafka. How do you fix?
 
 ✅ Fix:
 
@@ -1486,7 +1486,7 @@ Use Outbox Pattern (write once to DB, stream to Kafka).
 
 Optionally, use EOS transactions (Kafka offset commit + DB insert atomic).
 
-2. A Payment Transaction is Stored in DB but Not Published to Kafka. How Do You Prevent Inconsistency?
+## 2. A Payment Transaction is Stored in DB but Not Published to Kafka. How Do You Prevent Inconsistency?
 
 ✅ Fix:
 
@@ -1498,7 +1498,7 @@ Kafka Connect/CDC reads outbox → publish to Kafka.
 
 Guarantees DB and Kafka are always consistent.
 
-3. Payment Consumer Processes the Same Message Twice (Double Debit). How Do You Handle?
+## 3. Payment Consumer Processes the Same Message Twice (Double Debit). How Do You Handle?
 
 ✅ Fix:
 
@@ -1512,7 +1512,7 @@ Enable EOS in Kafka Streams/Spring Kafka → atomic processing.
 
 DLQ for poison-pill messages.
 
-4. Cut-off Time Payments Must Be Batched at 5 PM Daily. How to Design in Kafka?
+## 4. Cut-off Time Payments Must Be Batched at 5 PM Daily. How to Design in Kafka?
 
 ✅ Fix:
 
@@ -1522,7 +1522,7 @@ Or schedule a batch job (Quartz, Airflow) → consumes payments till 5 PM, publi
 
 Store intermediate state in RocksDB / DB.
 
-5. Payment Settlement Service is Lagging. How to Avoid Delays?
+## 5. Payment Settlement Service is Lagging. How to Avoid Delays?
 
 ✅ Fix:
 
@@ -1534,7 +1534,7 @@ Apply backpressure + DLQ for failed payments.
 
 Profile DB writes (batch inserts instead of row-by-row).
 
-6. FX Payment Requires Multi-Step Workflow (Debit, FX Conversion, Credit). How Do You Ensure Consistency?
+## 6. FX Payment Requires Multi-Step Workflow (Debit, FX Conversion, Credit). How Do You Ensure Consistency?
 
 ✅ Fix:
 
@@ -1548,7 +1548,7 @@ If one step fails → compensating transaction (e.g., reverse debit).
 
 Store state machine in Kafka Streams.
 
-7. Same Payment Message Processed by Multiple Services (Fraud Check, AML, Settlement). How Do You Handle?
+## 7. Same Payment Message Processed by Multiple Services (Fraud Check, AML, Settlement). How Do You Handle?
 
 ✅ Fix:
 
@@ -1558,7 +1558,7 @@ Add DLQ per service for failures.
 
 Use Schema Registry + versioning to avoid breaking services.
 
-8. Payment Messages Require Strict Ordering. How Do You Ensure?
+## 8. Payment Messages Require Strict Ordering. How Do You Ensure?
 
 ✅ Fix:
 
@@ -1568,7 +1568,7 @@ This ensures all events for same payment/customer go to one partition → strict
 
 If global ordering required → use single partition (scalability trade-off).
 
-9. Payment Service Produces High Volume (100k TPS) → Broker Latency Increases. How Do You Scale?
+## 9. Payment Service Produces High Volume (100k TPS) → Broker Latency Increases. How Do You Scale?
 
 ✅ Fix:
 
@@ -1582,7 +1582,7 @@ Add brokers (rebalance partitions).
 
 Optimize disk → SSDs, increase page cache.
 
-10. Bank Audit Requires 7 Years of Payment Records. How Do You Store in Kafka?
+## 10. Bank Audit Requires 7 Years of Payment Records. How Do You Store in Kafka?
 
 ✅ Fix:
 
@@ -1596,7 +1596,7 @@ Stream older events to HDFS/S3 via Kafka Connect → store for 7 years.
 
 Query via Presto/Trino.
 
-11. AML (Anti-Money Laundering) Engine Needs Real-Time Payment Alerts. How Do You Build?
+## 11. AML (Anti-Money Laundering) Engine Needs Real-Time Payment Alerts. How Do You Build?
 
 ✅ Fix:
 
@@ -1606,7 +1606,7 @@ Emit suspicious events to AML Alert topic.
 
 Integrate with monitoring/dashboard.
 
-12. Payment Messages Must Be Masked Before Sending to Downstream Services. How?
+## 12. Payment Messages Must Be Masked Before Sending to Downstream Services. How?
 
 ✅ Fix:
 
@@ -1616,7 +1616,7 @@ Or, Kafka Streams pipeline → mask PAN/SSN before publishing downstream.
 
 Use encryption for sensitive payloads.
 
-13. Cross-Border Payments Require Multi-Region Kafka. How Do You Ensure Reliability?
+## 13. Cross-Border Payments Require Multi-Region Kafka. How Do You Ensure Reliability?
 
 ✅ Fix:
 
@@ -1628,7 +1628,7 @@ Active-active: careful conflict resolution (payment_id key).
 
 Ensure idempotency + deduplication in multi-region setup.
 
-14. Payment Replay Is Required for Reconciliation. How Do You Design This?
+## 14. Payment Replay Is Required for Reconciliation. How Do You Design This?
 
 ✅ Fix:
 
@@ -1638,7 +1638,7 @@ Consumers can reset offsets (--from-beginning) to replay payments.
 
 For reconciliation jobs, consume snapshot + reapply transactions.
 
-15. What If Payment Consumer Crashes Mid-Processing (after DB write, before offset commit)?
+## 15. What If Payment Consumer Crashes Mid-Processing (after DB write, before offset commit)?
 
 ✅ Fix:
 
@@ -1648,7 +1648,7 @@ Or enforce idempotency at DB level (payment_id uniqueness).
 
 Upon restart → duplicate ignored.
 
-16. Payments Fail Due to Schema Evolution (Producer Added a Field). How Do You Handle?
+## 16. Payments Fail Due to Schema Evolution (Producer Added a Field). How Do You Handle?
 
 ✅ Fix:
 
@@ -1658,7 +1658,7 @@ Consumers ignore unknown fields → no crash.
 
 Rolling upgrades possible.
 
-17. Large Payment Batch Messages Fail Due to Kafka Message Size. What Do You Do?
+## 17. Large Payment Batch Messages Fail Due to Kafka Message Size. What Do You Do?
 
 ✅ Fix:
 
@@ -1672,7 +1672,7 @@ Split batch into smaller chunks.
 
 Store bulk payload in S3, send reference ID via Kafka.
 
-18. Duplicate Settlement Instructions Are Received from External Systems. How Do You Handle?
+## 18. Duplicate Settlement Instructions Are Received from External Systems. How Do You Handle?
 
 ✅ Fix:
 
@@ -1682,7 +1682,7 @@ Consumer maintains state (Kafka Streams state store, Redis, DB).
 
 Ignore duplicate keys.
 
-19. Kafka Lag Suddenly Spikes at Market Close When Millions of Payments Arrive. How Do You Scale?
+## 19. Kafka Lag Suddenly Spikes at Market Close When Millions of Payments Arrive. How Do You Scale?
 
 ✅ Fix:
 
@@ -1694,7 +1694,7 @@ Use batch inserts in DB (instead of row-by-row).
 
 Spread load by partitioning by account/customer.
 
-20. How Do You Handle Regulatory Reporting of Failed/Delayed Payments?
+## 20. How Do You Handle Regulatory Reporting of Failed/Delayed Payments?
 
 ✅ Fix:
 
@@ -1704,7 +1704,7 @@ Build reporting service consuming DLQ, generating reports.
 
 Use Kafka Connect → ElasticSearch/Splunk for dashboards.
 
-21. Payments in Kafka Must Never Be Lost Even During Broker Crash. What’s Your Config?
+## 21. Payments in Kafka Must Never Be Lost Even During Broker Crash. What’s Your Config?
 
 ✅ Fix:
 
@@ -1714,7 +1714,7 @@ Broker: replication.factor=3, min.insync.replicas=2, rack-awareness enabled.
 
 Consumers: commit offsets only after successful processing.
 
-22. How Do You Detect Payment Message “Poison Pills” (Always Failing Processing)?
+## 22. How Do You Detect Payment Message “Poison Pills” (Always Failing Processing)?
 
 ✅ Fix:
 
@@ -1726,7 +1726,7 @@ Monitor DLQ for manual resolution.
 
 Prevent entire consumer group from stalling.
 
-23. Payment Producers Send Duplicate Records After Network Timeout. How Do You Ensure Exactly-Once?
+## 23. Payment Producers Send Duplicate Records After Network Timeout. How Do You Ensure Exactly-Once?
 
 ✅ Fix:
 
@@ -1738,7 +1738,7 @@ acks=all
 
 Use Kafka Transactions if writing to multiple partitions/topics.
 
-24. How Do You Guarantee Ordering for Debit/Credit of Same Account but Scale Across Many Accounts?
+## 24. How Do You Guarantee Ordering for Debit/Credit of Same Account but Scale Across Many Accounts?
 
 ✅ Fix:
 
@@ -1748,7 +1748,7 @@ Ensures ordering for same account.
 
 Accounts are spread across partitions → parallelism.
 
-25. A Compliance Officer Requests “Replay All Payments from Last Month for Audit”. How Do You Achieve This?
+## 25. A Compliance Officer Requests “Replay All Payments from Last Month for Audit”. How Do You Achieve This?
 
 ✅ Fix:
 
@@ -1758,31 +1758,31 @@ Use offset reset tool or new consumer group to reprocess events.
 
 For long-term, maintain immutable payment log archive outside Kafka.
 
-26. Trade matching events arrive out of order — settlements break. How do you fix?
+## 26. Trade matching events arrive out of order — settlements break. How do you fix?
 
 Cause: Events split across partitions or multiple sources with different latencies.
 Fix: Partition by tradeId so all events for a trade land on same partition; use sequence numbers per trade and check ordering in consumer; buffer and wait-for-missing-sequence within a bounded window; use Kafka Streams state store for per-trade reassembly.
 Prod tip: Enforce upstream system to emit tradeId and sequenceNo. Add monitoring for reordered events and thresholds for human intervention.
 
-27. End-of-day (EOD) settlement file must be built exactly once — intermittent duplicates appear.
+## 27. End-of-day (EOD) settlement file must be built exactly once — intermittent duplicates appear.
 
 Cause: Dual-processing or retries; offset commit after file write not atomic.
 Fix: Generate EOD file after consumer verifies all partitions processed up to an offset watermark; use transactional writes (Kafka transaction or DB transaction + outbox) or write file to immutable storage and record its checksum/metadata in DB with unique key before publishing completion event.
 Prod tip: Use idempotent file naming (date + job-run-id) and store manifest in a reliable DB.
 
-28. Real-time risk analytics needs low-latency market data joins with trades; joins are missing late-arriving market ticks.
+## 28. Real-time risk analytics needs low-latency market data joins with trades; joins are missing late-arriving market ticks.
 
 Cause: Windowing too small; late events beyond watermark dropped.
 Fix: Increase allowed lateness and use tumbling/sliding windows with grace period; keep changelog for late arrivals; implement event-time processing with watermarking.
 Prod tip: Balance lateness tolerance vs state size; persist state to RocksDB and scale stateful processors horizontally.
 
-29. Massive reconciliation mismatch between ledger DB and Kafka-derived positions. How to debug and fix?
+## 29. Massive reconciliation mismatch between ledger DB and Kafka-derived positions. How to debug and fix?
 
 Cause: Reprocessing logic divergent, missing events, faulty enrichment, or duplicate consumption.
 Fix: Re-run replay from authoritative offset, compare hashes/checksums of intermediate aggregates, enable end-to-end tracing (trace-id across systems), reconcile counts per partition, use compacted topics for canonical state.
 Prod tip: Keep immutable event archive (S3) and a reconciliation microservice that compares snapshots.
 
-30. Regulatory report needs all rejected trade records within 24 hours but DLQ contains partial data.
+## 30. Regulatory report needs all rejected trade records within 24 hours but DLQ contains partial data.
 
 Cause: DLQ ingestion inconsistent, missing metadata (rejection reason, timestamps).
 Fix: Standardize failure handling — always publish failed record to DLQ with enriched metadata. Make DLQ schema enforced via Schema Registry. Build a scheduled job to aggregate DLQ and produce regulatory report.
