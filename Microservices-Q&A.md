@@ -122,7 +122,7 @@ Look for memory leaks (unclosed DB connections, caches).
 
 Enable heap dump on OOM and inspect.
 
-17. How to handle API versioning in microservices?
+## 17. How to handle API versioning in microservices?
 
 URI-based (/v1/orders).
 
@@ -130,7 +130,7 @@ Header-based (Accept: application/vnd.company.v1+json).
 
 Backward-compatible changes to minimize versions.
 
-18. What if DB is a bottleneck?
+## 18. What if DB is a bottleneck?
 
 Apply sharding & replication.
 
@@ -140,7 +140,7 @@ Add caching layer.
 
 Move to event sourcing if suitable.
 
-19. How do you trace a request across 10+ microservices?
+## 19. How do you trace a request across 10+ microservices?
 
 Use Distributed Tracing (OpenTelemetry, Sleuth, Jaeger).
 
