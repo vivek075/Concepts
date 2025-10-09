@@ -278,11 +278,16 @@ Network failures or timeouts can lead clients (or gateways) to retry the same re
 APIs are part of financial transactions, order processing, or message delivery, where duplicate operations cause inconsistencies.
 
 ✅ Common Scenarios Requiring Idempotency
-Use Case	                                                             Why Needed
-Payments / Transfers	                                                 To prevent duplicate debit or credit if client retries due to timeout
-Order Creation / Booking	                                             To avoid creating multiple identical orders
-Microservices communication via message queues (Kafka, MQ)	           To ensure at-least-once delivery does not cause double-processing
-External API calls with retries (Circuit breaker, Retry templates)	   To make retry-safe
+
+Use Case	                                                             - Why Needed
+
+Payments / Transfers	                                                 - To prevent duplicate debit or credit if client retries due to timeout
+
+Order Creation / Booking	                                             - To avoid creating multiple identical orders
+
+Microservices communication via message queues (Kafka, MQ)	           - To ensure at-least-once delivery does not cause double-processing
+
+External API calls with retries (Circuit breaker, Retry templates)	   - To make retry-safe
 
 ## 43. When Idempotency is Not Required
 
