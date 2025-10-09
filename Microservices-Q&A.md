@@ -215,23 +215,23 @@ Ensure idempotency in event handling.
 
 Implement reconciliation jobs.
 
-## 34. Q: How do you roll back a failed deployment?
+## 34. How do you roll back a failed deployment?
 A: Keep old version running (Blue/Green). Roll back traffic via feature flag or routing switch in Kubernetes.
 
-## 35. Q: How do you prevent a single client from overwhelming your services?
+## 35. How do you prevent a single client from overwhelming your services?
 A: Implement rate limiting (token bucket, leaky bucket) at API Gateway (Kong, Spring Cloud Gateway).
 
-## 36. Q: How do you handle huge payloads between services (e.g., 50MB JSON)?
+## 36. How do you handle huge payloads between services (e.g., 50MB JSON)?
 A: Switch to gRPC with Protobuf (binary, smaller size).
 
 Chunk uploads.
 
 Store in S3-like storage, pass reference IDs instead of raw payload.
 
-## 37. Q: How do you migrate a monolith to microservices?
+## 37. How do you migrate a monolith to microservices?
 A: Use Strangler Fig Pattern → gradually carve out modules as microservices, integrate via API Gateway.
 
-## 38. Q: How do you test microservices that depend on other services?
+## 38. How do you test microservices that depend on other services?
 A: Unit Tests → isolated.
 
 Contract Tests (Pact).
@@ -240,10 +240,10 @@ Integration Tests with Testcontainers.
 
 Stub/mock services for dependencies.
 
-## 39. Q: How do you manage DB passwords and API keys securely?
+## 39. How do you manage DB passwords and API keys securely?
 A: Use Vault / K8s Secrets / AWS Secrets Manager, never hardcode. Rotate periodically.
 
-## 40. Q: A service misbehaves only in production. How do you debug?
+## 40. A service misbehaves only in production. How do you debug?
 A: Use centralized logging (ELK/EFK).
 
 Distributed tracing to identify latency issues.
