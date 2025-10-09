@@ -2021,145 +2021,145 @@ Cause: Topic retention too short for compliance.
 Fix: Archive to S3/HDFS via Connect and keep minimal retention in Kafka.
 Tip: Keep immutable archive with indexes for fast lookup.
 
-P13 — Multi-region duplicate payment due to active-active writes
+## P13 — Multi-region duplicate payment due to active-active writes
 
 Cause: Bidirectional replication without dedup logic.
 Fix: Use single-writer per key or global dedup with business key and idempotent processing.
 Tip: Prefer active-passive for payments unless dedup is rock-solid.
 
-P14 — Payments missing enrichment (e.g., FX rates)
+## P14 — Payments missing enrichment (e.g., FX rates)
 
 Cause: Enricher service down or joining misconfigured.
 Fix: Fallback to cached rates or mark payment as pending until enrichment available.
 Tip: Keep compacted topic of enrichment data for local lookup.
 
-P15 — Large payment batches exceed max.message.bytes
+## P15 — Large payment batches exceed max.message.bytes
 
 Cause: Batch message > broker/topic max.
 Fix: Increase max.message.bytes or split batches; better: store payload in S3 and send reference.
 Tip: Prefer chunking or references for large attachments.
 
-P16 — Offset commit lost due to offsets topic cleanup
+## P16 — Offset commit lost due to offsets topic cleanup
 
 Cause: __consumer_offsets retention too low.
 Fix: Increase offset retention or store consumer checkpoints externally.
 Tip: For long offline consumers, use external checkpointing.
 
-P17 — Payment reconciliation mismatches (counts differ)
+## P17 — Payment reconciliation mismatches (counts differ)
 
 Cause: Partial publishes, consumer crashes, or transform bugs.
 Fix: Add end-to-end tracing (trace-id), compare counts per partition + time window.
 Tip: Store message checksums to detect silent corruption.
 
-P18 — Rate limiter kicks in for large corporate client
+## P18 — Rate limiter kicks in for large corporate client
 
 Cause: Single client floods cluster throughput.
 Fix: Apply per-client quotas on producer or topic.
 Tip: Implement client-tiered SLAs and quota enforcement.
 
-P19 — Payment event schema change breaks consumers
+## P19 — Payment event schema change breaks consumers
 
 Cause: Non-backward-compatible schema change.
 Fix: Use Schema Registry with compatibility rules and staged rollout.
 Tip: Add consumer-side tolerant parsing (ignore unknown fields).
 
-P20 — Retry storms when downstream DB recovers
+## P20 — Retry storms when downstream DB recovers
 
 Cause: Many consumers retrying simultaneously after outage.
 Fix: Exponential backoff and jitter in retry logic; use retry topics with delays.
 Tip: Use a token bucket for controlled re-ingestion.
 
-P21 — Payment correlation lost across events (traceability)
+## P21 — Payment correlation lost across events (traceability)
 
 Cause: Missing correlation id in messages or inconsistent propagation.
 Fix: Propagate a trace_id / payment_id across all services and logs.
 Tip: Index trace_id in logs and Kafka headers for fast forensics.
 
-P22 — Producers blocked because buffer.memory full
+## P22 — Producers blocked because buffer.memory full
 
 Cause: Broker slow to acknowledge, or producers burst.
 Fix: Increase buffer.memory, tune max.block.ms, or slow producers.
 Tip: Alert when producer buffer usage > 80%.
 
-P23 — Broker under-replicated partitions causing risk of data loss
+## P23 — Broker under-replicated partitions causing risk of data loss
 
 Cause: Broker failure or network issues.
 Fix: Restore broker, reassign partitions, ensure replication factor >=3.
 Tip: Monitor UnderReplicatedPartitions metric constantly.
 
-P24 — Payment dedup cache growth causes OOM in consumers
+## P24 — Payment dedup cache growth causes OOM in consumers
 
 Cause: Dedup store unbounded.
 Fix: Use TTL, LRU cache, or external store (Redis) for dedup.
 Tip: Use time-windowed deduplication and compacted store for longer-term.
 
-P25 — Payments not delivered to downstream due to ACL issues
+## P25 — Payments not delivered to downstream due to ACL issues
 
 Cause: Misconfigured ACLs for service account.
 Fix: Review and apply correct ACLs (produce/consume) for topics and groups.
 Tip: Automate ACL provisioning with IaC.
 
-P26 — Kafka Connect sink to DB duplicates during restarts
+## P26 — Kafka Connect sink to DB duplicates during restarts
 
 Cause: At-least-once semantics + connector retries.
 Fix: Enable exactly-once connectors if available or add idempotent sink logic (upsert).
 Tip: Use tombstones and key-based upserts in sink.
 
-P27 — Payment audit trail fails to export nightly
+## P27 — Payment audit trail fails to export nightly
 
 Cause: Connector task failing or offset mismanagement.
 Fix: Fix connector errors; replay offsets after fix; ensure checkpointing.
 Tip: Alert on connector task failure immediately.
 
-P28 — Consumer group keeps rebalancing during peak
+## P28 — Consumer group keeps rebalancing during peak
 
 Cause: max.poll.interval.ms too small or long processing inside poll.
 Fix: Move heavy processing to separate threads and increase max.poll.interval.ms.
 Tip: Use cooperative rebalance assignor to reduce disruption.
 
-P29 — Payment processing stuck due to DB deadlock
+## P29 — Payment processing stuck due to DB deadlock
 
 Cause: Concurrent consumers causing conflicting DB locks.
 Fix: Use idempotent writes, order-preserving partitioning, or single writer per account.
 Tip: Use batch DB writes and optimistic concurrency control.
 
-P30 — Delayed payments due to GC pauses on JVM consumers
+## P30 — Delayed payments due to GC pauses on JVM consumers
 
 Cause: Poor GC tuning or large heap with long pauses.
 Fix: Tune GC (G1/ZGC), reduce heap, avoid large object creation.
 Tip: Monitor GC pause metrics and set alerts for long pauses.
 
-P31 — Kafka Streams job computing balances shows incorrect state after restart
+## P31 — Kafka Streams job computing balances shows incorrect state after restart
 
 Cause: State store restore incomplete or changelog inconsistencies.
 Fix: Ensure changelog topics retained and topics healthy; validate restoration logs.
 Tip: Keep changelog topics replicated and separate for quick recoveries.
 
-P32 — Payment consumers skipping messages after crash
+## P32 — Payment consumers skipping messages after crash
 
 Cause: Auto-commit before processing.
 Fix: Use manual commit after successful processing.
 Tip: Use idempotent processing to be safe.
 
-P33 — Settlement instructions delayed due to slow network between DCs
+## P33 — Settlement instructions delayed due to slow network between DCs
 
 Cause: Cross-region replication latency.
 Fix: Localize settlement-critical processing in same region or use sync replication with failover.
 Tip: Use MirrorMaker for async replication and bounded-latency SLA.
 
-P34 — Misrouted payment messages sent to wrong topic
+## P34 — Misrouted payment messages sent to wrong topic
 
 Cause: Misconfiguration in producer topic name or router logic.
 Fix: Add validation and topic ACL restrictions; implement naming conventions.
 Tip: Add a policy service that validates topic targets before publish.
 
-P35 — Payment metadata missing (timestamps or currency)
+## P35 — Payment metadata missing (timestamps or currency)
 
 Cause: Upstream producer bug or schema contract not enforced.
 Fix: Enforce schema registry validation and reject messages missing required fields.
 Tip: Add mandatory header checks in ingress layer.
 
-P36 — High producer CPU due to compression overhead
+## P36 — High producer CPU due to compression overhead
 
 Cause: CPU-bound compression selection (gzip CPU heavy).
 Fix: Use faster compression like LZ4 or Snappy.
