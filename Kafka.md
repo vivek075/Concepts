@@ -391,13 +391,21 @@ Store processing status in external DB if exactly-once isn’t achievable.
 
 ## Q11. How does Kafka achieve high throughput compared to JMS/RabbitMQ?
 
-Sequential disk I/O.
+Kafka achieves significantly higher throughput than JMS and RabbitMQ by leveraging a distributed log architecture, zero-copy I/O, and pull-based batching—enabling it to process over 10 million messages per second compared to RabbitMQ’s ~1 million/sec and JMS’s ~50K/sec.
 
-OS page cache.
+Sequential disk I/O. - Kafka writes messages sequentially to disk, avoiding random access and reducing disk I/O overhead.
 
-Zero-copy (sendfile).
+OS page cache. 
 
-Partition-based parallelism.
+Zero-copy (sendfile). - - Kafka uses the sendfile system call to transfer data directly from disk to network socket, bypassing user space and reducing CPU usage.
+
+Partition-based parallelism. - Topics are split into partitions across brokers, allowing parallelism and horizontal scalability.
+
+Consumer groups - Each partition is consumed by one member of a group, enabling load-balanced consumption.
+
+Batching and compression - Producers batch messages and optionally compress them, reducing network overhead and improving throughput.
+
+Pull-based consumption - Consumers fetch messages at their own pace, reducing backpressure and allowing efficient prefetching
 
 ## Q12. How do you configure Kafka for long-term message storage?
 
