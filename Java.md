@@ -1,4 +1,4 @@
-##🔹 1. What is the Object class in Java?
+## 🔹 1. What is the Object class in Java?
 
 Answer:
 
