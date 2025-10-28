@@ -161,6 +161,8 @@ IllegalMonitorStateException is thrown.
 
 Because the current thread doesn’t hold the monitor lock on the object.
 
+---
+
 ```
 | Question                                                    | Key Point                                                     |
 | ----------------------------------------------------------- | ------------------------------------------------------------- |
