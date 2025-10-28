@@ -160,3 +160,12 @@ Answer:
 IllegalMonitorStateException is thrown.
 
 Because the current thread doesn’t hold the monitor lock on the object.
+
+```
+| Question                                                    | Key Point                                                     |
+| ----------------------------------------------------------- | ------------------------------------------------------------- |
+| What happens if `equals()` is symmetric but not transitive? | Violates contract; unpredictable behavior in collections.     |
+| Can you override `hashCode()` to always return constant?    | Yes but inefficient — all objects go into same bucket.        |
+| Why is `Object.clone()` protected?                          | To enforce that subclass explicitly decides cloning behavior. |
+| How `hashCode()` affects `HashMap` performance?             | Poor hashCode → more collisions → slower retrieval.           |
+```
