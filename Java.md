@@ -171,3 +171,186 @@ Because the current thread doesn’t hold the monitor lock on the object.
 | Why is `Object.clone()` protected?                          | To enforce that subclass explicitly decides cloning behavior. |
 | How `hashCode()` affects `HashMap` performance?             | Poor hashCode → more collisions → slower retrieval.           |
 ```
+
+---
+
+🧵 PART 2 — java.lang.Thread Class
+
+## 🔹 1. What is the Thread class in Java?
+
+Answer:
+
+Represents a single thread of execution in JVM.
+
+Can be created by:
+
+Extending Thread class and overriding run()
+
+Implementing Runnable and passing it to a Thread constructor.
+
+## 🔹 2. How do you create a thread in Java?
+
+Option 1: Extend Thread
+```
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread running: " + Thread.currentThread().getName());
+    }
+}
+new MyThread().start();
+```
+
+Option 2: Implement Runnable
+```
+Runnable task = () -> System.out.println("Thread running");
+new Thread(task).start();
+```
+
+## 🔹 3. Difference between start() and run()?
+Method	Behavior
+start()	Creates a new thread and calls run() in that new thread
+run()	Executes in current thread (no new thread created)
+
+## 🔹 4. Thread Lifecycle
+
+States:
+NEW → RUNNABLE → RUNNING → WAITING / TIMED_WAITING / BLOCKED → TERMINATED
+
+## 🔹 5. What happens if you call start() twice on same thread?
+
+Answer:
+
+IllegalThreadStateException
+
+A thread can only be started once.
+
+## 🔹 6. Difference between sleep() and wait()
+```
+| Feature                         | `sleep()`                   | `wait()`            |
+| ------------------------------- | --------------------------- | ------------------- |
+| Belongs To                      | Thread class                | Object class        |
+| Lock release                    | ❌ Doesn’t release lock      | ✅ Releases lock     |
+| Usage                           | Temporarily pause execution | Thread coordination |
+| Call inside synchronized block? | Optional                    | Mandatory           |
+```
+
+## 🔹 7. Explain join() method
+
+Answer:
+
+Used for thread synchronization — makes one thread wait until another finishes.
+```
+Thread t = new Thread(task);
+t.start();
+t.join(); // waits until t finishes
+```
+
+## 🔹 8. Explain yield() method
+
+Answer:
+
+Suggests that the current thread is willing to pause to let others run.
+
+Scheduler may ignore the hint.
+
+## 🔹 9. What is thread priority?
+
+Threads have a priority (1–10).
+
+Higher priority doesn’t guarantee execution order — it’s a hint to scheduler.
+
+## 🔹 10. Daemon vs User Threads
+Type	Description
+User Thread	Keeps JVM alive
+Daemon Thread	Runs in background (e.g., GC) — JVM exits when only daemons remain
+
+Example:
+```
+Thread t = new Thread(task);
+t.setDaemon(true);
+t.start();
+```
+
+## 🔹 11. How do you stop a thread safely?
+
+Answer:
+
+Never use deprecated stop(), suspend(), resume().
+
+Use a volatile boolean flag or interruption mechanism.
+
+Example:
+```
+volatile boolean running = true;
+
+public void run() {
+    while (running && !Thread.currentThread().isInterrupted()) {
+        // work
+    }
+}
+public void stopThread() { running = false; }
+```
+
+## 🔹 12. How does interrupt() work?
+
+Answer:
+
+Sets the interrupt flag of the thread.
+
+If thread is blocked (e.g., in sleep() or wait()), it throws InterruptedException.
+
+You can check using:
+```
+Thread.currentThread().isInterrupted();
+```
+
+## 🔹 13. Explain ThreadLocal usage
+
+Answer:
+Provides thread-local variables — each thread has its own independent copy.
+
+Example:
+```
+private static ThreadLocal<Integer> counter = ThreadLocal.withInitial(() -> 0);
+```
+Used in frameworks like Spring, Hibernate to store context per thread (e.g., DB sessions, user context).
+
+## 🔹 14. Difference between Thread and Runnable
+```
+| Aspect      | `Thread`                   | `Runnable`                  |
+| ----------- | -------------------------- | --------------------------- |
+| Inheritance | Extends Thread             | Interface                   |
+| Reusability | Can’t extend other classes | Can                         |
+| Recommended | ❌                          | ✅ Preferred (more flexible) |
+```
+
+## 🔹 15. Can we start a thread twice?
+
+Answer:
+No. Will throw IllegalThreadStateException.
+
+## 🔹 16. How to create multiple threads efficiently?
+
+Answer:
+Use ExecutorService / ThreadPoolExecutor instead of manually creating threads.
+
+Example:
+```
+ExecutorService pool = Executors.newFixedThreadPool(10);
+pool.submit(() -> System.out.println("Task executed"));
+pool.shutdown();
+```
+
+---
+
+```
+| Question                                                       | Explanation                                                                 |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Why `Thread` implements `Runnable`?                            | To separate **task (Runnable)** from **thread control (Thread)**.           |
+| What is the difference between `Thread.yield()` and `sleep()`? | `yield()` doesn’t guarantee pause time; `sleep()` guarantees a fixed pause. |
+| What is thread starvation?                                     | When low-priority threads never get CPU because higher ones keep running.   |
+| What is a race condition?                                      | When multiple threads access shared data without synchronization.           |
+| How to prevent race condition?                                 | Synchronization, locks, atomic variables.                                   |
+| What’s difference between `synchronized` and `Lock` API?       | `Lock` gives more fine-grained control (tryLock, fairness, reentrancy).     |
+
+```
