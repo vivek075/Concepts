@@ -1292,3 +1292,30 @@ ThreadLocal<Integer> threadLocalValue = ThreadLocal.withInitial(() -> 0);
 **10. Use Executors Instead of Manual Thread Management**
 - Prefer ExecutorService for managing thread pools and task execution
 
+---
+
+**How Immutability Enhances Thread Safety**
+
+**1. No Shared Mutable State**
+
+- Immutable objects cannot be changed after construction.
+
+- Multiple threads can safely read the same instance without synchronization because there's no risk of one thread modifying it while another reads it.
+
+**2. Eliminates Race Conditions**
+
+- Since state never changes, there's no competition between threads to update or read values — no need for locks or atomic operations.
+
+**3. Safe Publication Without Synchronization**
+
+- Immutable objects can be safely shared across threads without volatile or synchronized blocks.
+
+- Once constructed, they can be freely published (e.g., via static fields, caches, or thread-local storage).
+
+**4. Simplifies Design**
+
+- You don’t need to worry about locking, deadlocks, or visibility issues.
+
+- Immutable classes are easier to reason about and test in concurrent environments
+
+---
