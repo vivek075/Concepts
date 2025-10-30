@@ -1244,3 +1244,51 @@ protected void configure(HttpSecurity http) throws Exception {
 
 Summary:
 Implementing security in a Java backend application involves a multi-layered approach, including secure coding practices, robust authentication and authorization mechanisms, secure communication, data protection, security headers, logging and monitoring, security testing, and adherence to a secure development lifecycle. By following these practices, we can build a secure Java backend application that protects sensitive data and resists various types of attacks.
+
+---
+
+# Best Practices for Creating Thread-Safe Classes in Java
+
+**1. Use Immutable Objects**
+- Make fields final and set them only once in the constructor.
+- Avoid exposing internal state via getters that return mutable objects.
+
+**2. Use Synchronized Blocks or Methods**
+- Synchronize access to shared mutable state.
+- Prefer synchronized blocks over synchronized methods for finer control.
+
+```
+public synchronized void update() {
+    // thread-safe logic
+}
+```
+
+**3. Leverage Atomic Classes**
+- Use AtomicInteger, AtomicBoolean, AtomicReference, etc., for lock-free thread-safe operations.
+
+**4. Use Concurrent Collections**
+- Replace HashMap, ArrayList, etc., with ConcurrentHashMap, CopyOnWriteArrayList, etc.
+
+**5. Avoid Sharing Mutable State**
+- Share only read-only or immutable data between threads.
+- If mutable state must be shared, protect it with synchronization or concurrent utilities.
+
+**6. Use ThreadLocal for Thread Confinement**
+- Store data that should be isolated per thread using ThreadLocal
+```
+ThreadLocal<Integer> threadLocalValue = ThreadLocal.withInitial(() -> 0);
+```
+
+**7. Minimize Lock Scope**
+- Keep synchronized blocks as short as possible to reduce contention.
+
+**8. Use Volatile for Visibility**
+- Use volatile for variables that are read/written by multiple threads but not compound actions
+
+**9. Avoid Deadlocks**
+- Acquire locks in a consistent order.
+- Use timeout-based locking (tryLock) when possible
+
+**10. Use Executors Instead of Manual Thread Management**
+- Prefer ExecutorService for managing thread pools and task execution
+
