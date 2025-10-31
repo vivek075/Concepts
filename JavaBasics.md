@@ -1319,3 +1319,92 @@ ThreadLocal<Integer> threadLocalValue = ThreadLocal.withInitial(() -> 0);
 - Immutable classes are easier to reason about and test in concurrent environments
 
 ---
+
+# Implement a lazy-loaded thread-safe Singleton class
+
+Lazy-Loaded Thread-Safe Singleton (Bill Pugh Pattern)
+
+```
+public class LazySingleton {
+    // Private constructor prevents instantiation from other classes
+    private LazySingleton() {
+        System.out.println("Singleton instance created");
+    }
+
+    // Inner static class responsible for holding the Singleton instance
+    private static class SingletonHolder {
+        private static final LazySingleton INSTANCE = new LazySingleton();
+    }
+
+    // Global access point
+    public static LazySingleton getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+}
+```
+
+Why This Works
+
+- Lazy loading: The instance is created only when getInstance() is called.
+
+- Thread safety: The JVM guarantees that static inner classes are loaded only once, and safely.
+
+- No synchronization overhead: Unlike synchronized blocks or volatile double-checked locking.
+
+uasge:
+```
+public class Main {
+    public static void main(String[] args) {
+        LazySingleton s1 = LazySingleton.getInstance();
+        LazySingleton s2 = LazySingleton.getInstance();
+        System.out.println(s1 == s2); // true
+    }
+}
+```
+
+Full Class: Bill Pugh Singleton with Reflection & Serialization Protection
+
+```
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+
+public class SecureSingleton implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    // Flag to detect reflection-based instantiation
+    private static boolean instanceCreated = false;
+
+    // Private constructor with reflection guard
+    private SecureSingleton() {
+        if (instanceCreated) {
+            throw new RuntimeException("Use getInstance() method to create");
+        }
+        instanceCreated = true;
+        System.out.println("SecureSingleton instance created");
+    }
+
+    // Static inner class for lazy-loaded instance
+    private static class SingletonHolder {
+        private static final SecureSingleton INSTANCE = new SecureSingleton();
+    }
+
+    // Global access point
+    public static SecureSingleton getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
+    // Prevents breaking singleton via deserialization
+    protected Object readResolve() throws ObjectStreamException {
+        return getInstance();
+    }
+}
+```
+
+Protection Summary
+
+- Reflection Guard: Throws exception if constructor is called more than once.
+
+- Serialization Guard: readResolve() ensures deserialization returns the same instance.
+
+- Thread Safety: Guaranteed by JVM class loading of SingletonHolder
