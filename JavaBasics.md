@@ -1408,3 +1408,65 @@ Protection Summary
 - Serialization Guard: readResolve() ensures deserialization returns the same instance.
 
 - Thread Safety: Guaranteed by JVM class loading of SingletonHolder
+
+---
+
+# Double-Checked Locking Singleton (Thread-Safe + Fast)
+
+```
+public class Singleton {
+
+    // volatile ensures visibility and prevents reordering
+    private static volatile Singleton instance;
+
+    // private constructor prevents external instantiation
+    private Singleton() {
+        // optionally prevent reflection
+        if (instance != null) {
+            throw new RuntimeException("Use getInstance() method to create");
+        }
+    }
+
+    public static Singleton getInstance() {
+        if (instance == null) { // First check (no locking)
+            synchronized (Singleton.class) {
+                if (instance == null) { // Second check (with locking)
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
+⚙️ How it works
+
+- First check (if (instance == null)):
+
+Avoids unnecessary synchronization once the instance is initialized.
+
+- Synchronization block:
+
+Only one thread at a time can enter if initialization is needed.
+
+- Second check inside synchronized:
+
+Ensures that no other thread created an instance while the current thread was waiting.
+
+- volatile keyword:
+
+Prevents instruction reordering where a reference to a partially constructed object might become visible to another thread.
+
+🧩 Why volatile is critical
+
+Without volatile, the following sequence can happen (due to instruction reordering):
+
+1. Memory allocated.
+
+2. instance reference set (non-null but object not fully constructed).
+
+3. Constructor executes.
+
+→ Another thread sees non-null instance and uses an incompletely initialized object.
+volatile prevents this by enforcing a happens-before relationship between construction and visibility.
